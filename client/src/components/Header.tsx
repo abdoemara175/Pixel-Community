@@ -3,7 +3,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-white border-b border-border shadow-sm">
       <div className="container py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="Pixel Community" className="h-10 w-10" />
+          <img src="logo.png" alt="Pixel Community" className="h-10 w-10" />
           <div>
             <h1 className="text-xl font-bold text-primary">Pixel Community</h1>
             <p className="text-xs text-muted-foreground">UX Design Learning Hub</p>

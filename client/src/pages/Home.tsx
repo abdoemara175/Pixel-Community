@@ -17,7 +17,7 @@ export default function Home() {
       <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/5 py-20 md:py-32">
         <div className="container text-center space-y-6">
           <div className="inline-block">
-            <img src="/logo.png" alt="Pixel Community" className="h-20 w-20 mx-auto mb-4" />
+            <img src="logo.png" alt="Pixel Community" className="h-20 w-20 mx-auto mb-4" />
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-primary">
             Pixel Community
