@@ -10,7 +10,7 @@
  */
 
 import { useState } from 'react';
-import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award } from 'lucide-react';
+import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X } from 'lucide-react';
 import type { Topic, Step } from '@/lib/content';
 
 interface TopicCardProps {
@@ -25,8 +25,18 @@ const getStepIcon = (type: string) => {
       return <BookOpen className="w-5 h-5" />;
     case 'concept':
       return <Lightbulb className="w-5 h-5" />;
+    case 'why-it-matters':
+      return <CheckCircle className="w-5 h-5" />;
+    case 'breakdown':
+      return <ChevronDown className="w-5 h-5" />;
     case 'example':
       return <Eye className="w-5 h-5" />;
+    case 'bad-vs-good':
+      return <Zap className="w-5 h-5" />;
+    case 'mistakes':
+      return <X className="w-5 h-5" />;
+    case 'tips':
+      return <CheckCircle className="w-5 h-5" />;
     case 'activity':
       return <Zap className="w-5 h-5" />;
     case 'summary':
@@ -40,10 +50,15 @@ const getStepIcon = (type: string) => {
 const getStepTypeLabel = (type: string) => {
   const labels: Record<string, string> = {
     introduction: 'مقدمة',
-    concept: 'مفهوم',
-    example: 'مثال',
-    activity: 'نشاط',
-    summary: 'خلاصة',
+    concept: 'المفهوم',
+    'why-it-matters': 'لماذا يهم؟',
+    breakdown: 'التفاصيل',
+    example: 'مثال عملي',
+    'bad-vs-good': 'جيد مقابل سيء',
+    mistakes: 'أخطاء شائعة',
+    tips: 'نصائح عملية',
+    activity: 'نشاط صغير',
+    summary: 'الخلاصة',
   };
   return labels[type] || type;
 };
@@ -52,8 +67,13 @@ const getStepTypeLabel = (type: string) => {
 const getStepTypeColor = (type: string) => {
   const colors: Record<string, string> = {
     introduction: 'bg-blue-50 border-blue-200 text-blue-700',
-    concept: 'bg-purple-50 border-purple-200 text-purple-700',
-    example: 'bg-green-50 border-green-200 text-green-700',
+    concept: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+    'why-it-matters': 'bg-emerald-50 border-emerald-200 text-emerald-700',
+    breakdown: 'bg-slate-50 border-slate-200 text-slate-700',
+    example: 'bg-cyan-50 border-cyan-200 text-cyan-700',
+    'bad-vs-good': 'bg-amber-50 border-amber-200 text-amber-700',
+    mistakes: 'bg-rose-50 border-rose-200 text-rose-700',
+    tips: 'bg-teal-50 border-teal-200 text-teal-700',
     activity: 'bg-orange-50 border-orange-200 text-orange-700',
     summary: 'bg-pink-50 border-pink-200 text-pink-700',
   };

@@ -4,15 +4,14 @@
  * This file defines the complete learning journey structure with:
  * - Multiple learning tracks (UX, UI, Integration, Bonus)
  * - Topics organized by track
- * - Step-by-step learning content for each topic
- * - Interactive activities and assessments
+ * - Step-by-step learning content for each topic (10 cards per topic)
  */
 
 export interface Step {
   id: string;
   title: string;
   content: string;
-  type: 'introduction' | 'concept' | 'example' | 'activity' | 'summary';
+  type: 'introduction' | 'concept' | 'why-it-matters' | 'breakdown' | 'example' | 'bad-vs-good' | 'mistakes' | 'tips' | 'activity' | 'summary';
 }
 
 export interface Topic {
@@ -34,45 +33,49 @@ export interface Track {
   topics: Topic[];
 }
 
-// Helper to create empty topic
-const createEmptyTopic = (id: string, title: string, emoji: string, description: string): Topic => ({
+// Helper to create empty topic with 10 cards
+const createEmptyTopicWith10Cards = (id: string, title: string, emoji: string, description: string): Topic => ({
   id,
   trackId: 'ux-track',
   title,
   emoji,
   description,
-  estimatedTime: 10,
+  estimatedTime: 20,
   steps: [
-    {
-      id: 'placeholder',
-      title: 'قريباً',
-      content: 'سيتم إضافة المحتوى لهذا الموضوع قريباً.',
-      type: 'introduction',
-    }
+    { id: 'intro', title: '1. Introduction', content: 'قريباً...', type: 'introduction' },
+    { id: 'concept', title: '2. Concept', content: 'قريباً...', type: 'concept' },
+    { id: 'why', title: '3. Why it matters', content: 'قريباً...', type: 'why-it-matters' },
+    { id: 'breakdown', title: '4. Breakdown', content: 'قريباً...', type: 'breakdown' },
+    { id: 'example', title: '5. Example', content: 'قريباً...', type: 'example' },
+    { id: 'bad-vs-good', title: '6. Bad vs Good', content: 'قريباً...', type: 'bad-vs-good' },
+    { id: 'mistakes', title: '7. Common Mistakes', content: 'قريباً...', type: 'mistakes' },
+    { id: 'tips', title: '8. Practical Tips', content: 'قريباً...', type: 'tips' },
+    { id: 'activity', title: '9. Mini Activity', content: 'قريباً...', type: 'activity' },
+    { id: 'summary', title: '10. Summary', content: 'قريباً...', type: 'summary' },
   ],
 });
 
-// UX Track Topics (New List)
-const uxFoundations = createEmptyTopic('ux-foundations', 'UX Foundations', '🧠', 'أساسيات تجربة المستخدم');
-const designThinking = createEmptyTopic('design-thinking', 'Design Thinking Process', '💡', 'عملية التفكير التصميمي');
-const userResearch = createEmptyTopic('user-research', 'User Research', '🔍', 'البحث عن المستخدمين');
-const competitiveAnalysis = createEmptyTopic('competitive-analysis', 'Competitive Analysis', '📊', 'تحليل المنافسين');
-const problemDefinition = createEmptyTopic('problem-definition', 'Problem Definition', '🎯', 'تحديد المشكلة');
-const userNeeds = createEmptyTopic('user-needs', 'User Needs & Pain Points', '🩹', 'احتياجات المستخدم ونقاط الألم');
-const personas = createEmptyTopic('personas', 'Personas', '👤', 'شخصيات المستخدمين');
-const empathyMap = createEmptyTopic('empathy-map', 'Empathy Map', '🗺️', 'خريطة التعاطف');
-const userStories = createEmptyTopic('user-stories', 'User Stories / JTBD', '📝', 'قصص المستخدمين');
-const userFlow = createEmptyTopic('user-flow', 'User Flow', '🔄', 'تدفق المستخدم');
-const userJourneyMap = createEmptyTopic('user-journey-map', 'User Journey Map', '🛤️', 'خريطة رحلة المستخدم');
-const infoArchitecture = createEmptyTopic('info-architecture', 'Information Architecture', '🏗️', 'هندسة المعلومات');
-const sitemapNav = createEmptyTopic('sitemap-nav', 'Sitemap & Navigation', '🗺️', 'خريطة الموقع والتنقل');
-const wireframing = createEmptyTopic('wireframing', 'Wireframing (Low / Mid Fidelity)', '✏️', 'التخطيط الشبكي');
-const uxPrototyping = createEmptyTopic('ux-prototyping', 'UX Prototyping', '📱', 'النماذج الأولية للـ UX');
-const usabilityTesting = createEmptyTopic('usability-testing', 'Usability Testing', '🧪', 'اختبار الاستخدام');
-const uxIteration = createEmptyTopic('ux-iteration', 'UX Iteration & Validation', '🔄', 'التكرار والتحقق من الصحة');
-const uxDocumentation = createEmptyTopic('ux-documentation', 'UX Documentation & Handoff', '📄', 'التوثيق والتسليم');
+// UX Track Topics
+const uxFoundations = createEmptyTopicWith10Cards('ux-foundations', 'UX Foundations', '🧠', 'أساسيات تجربة المستخدم');
+const designThinking = createEmptyTopicWith10Cards('design-thinking', 'Design Thinking Process', '💡', 'عملية التفكير التصميمي');
+const userResearch = createEmptyTopicWith10Cards('user-research', 'User Research', '🔍', 'البحث عن المستخدمين');
+const competitiveAnalysis = createEmptyTopicWith10Cards('competitive-analysis', 'Competitive Analysis', '📊', 'تحليل المنافسين');
+const problemDefinition = createEmptyTopicWith10Cards('problem-definition', 'Problem Definition', '🎯', 'تحديد المشكلة');
+const userNeeds = createEmptyTopicWith10Cards('user-needs', 'User Needs & Pain Points', '🩹', 'احتياجات المستخدم ونقاط الألم');
+const personas = createEmptyTopicWith10Cards('personas', 'Personas', '👤', 'شخصيات المستخدمين');
+const empathyMap = createEmptyTopicWith10Cards('empathy-map', 'Empathy Map', '🗺️', 'خريطة التعاطف');
+const userStories = createEmptyTopicWith10Cards('user-stories', 'User Stories / JTBD', '📝', 'قصص المستخدمين');
+const userFlow = createEmptyTopicWith10Cards('user-flow', 'User Flow', '🔄', 'تدفق المستخدم');
+const userJourneyMap = createEmptyTopicWith10Cards('user-journey-map', 'User Journey Map', '🛤️', 'خريطة رحلة المستخدم');
+const infoArchitecture = createEmptyTopicWith10Cards('info-architecture', 'Information Architecture', '🏗️', 'هندسة المعلومات');
+const sitemapNav = createEmptyTopicWith10Cards('sitemap-nav', 'Sitemap & Navigation', '🗺️', 'خريطة الموقع والتنقل');
+const wireframing = createEmptyTopicWith10Cards('wireframing', 'Wireframing (Low / Mid Fidelity)', '✏️', 'التخطيط الشبكي');
+const uxPrototyping = createEmptyTopicWith10Cards('ux-prototyping', 'UX Prototyping', '📱', 'النماذج الأولية للـ UX');
+const usabilityTesting = createEmptyTopicWith10Cards('usability-testing', 'Usability Testing', '🧪', 'اختبار الاستخدام');
+const uxIteration = createEmptyTopicWith10Cards('ux-iteration', 'UX Iteration & Validation', '🔄', 'التكرار والتحقق من الصحة');
+const uxDocumentation = createEmptyTopicWith10Cards('ux-documentation', 'UX Documentation & Handoff', '📄', 'التوثيق والتسليم');
 
-// UI Track Topics (Keeping existing for now or adding placeholders if needed)
+// UI Track Topics (Keeping simplified for now)
 const uiFoundations: Topic = {
   id: 'ui-foundations',
   trackId: 'ui-track',
@@ -81,93 +84,8 @@ const uiFoundations: Topic = {
   description: 'فهم المبادئ الأساسية لتصميم الواجهات',
   estimatedTime: 15,
   steps: [
-    {
-      id: 'intro',
-      title: 'مقدمة',
-      content: 'UI تعني "User Interface" - واجهة المستخدم. هي كل ما يراه ويتفاعل معه المستخدم على الشاشة.',
-      type: 'introduction',
-    },
-    {
-      id: 'concept',
-      title: 'الفرق بين UX و UI',
-      content: 'UX هو الشعور والتجربة الكلية، بينما UI هو التصميم البصري والعناصر التفاعلية.',
-      type: 'concept',
-    },
-    {
-      id: 'summary',
-      title: 'الخلاصة',
-      content: 'UI الجيد يجعل التفاعل مع المنتج سهلاً وممتعاً.',
-      type: 'summary',
-    },
-  ],
-};
-
-const colorSystem: Topic = {
-  id: 'color-system',
-  trackId: 'ui-track',
-  title: 'نظام الألوان',
-  emoji: '🌈',
-  description: 'تعلم كيفية اختيار واستخدام الألوان بفعالية',
-  estimatedTime: 17,
-  steps: [
-    {
-      id: 'intro',
-      title: 'مقدمة',
-      content: 'الألوان تؤثر على المشاعر والسلوك. اختيار الألوان الصحيحة يحسن من تجربة المستخدم.',
-      type: 'introduction',
-    },
-    {
-      id: 'summary',
-      title: 'الخلاصة',
-      content: 'نظام الألوان القوي يعزز العلامة التجارية ويسهل الاستخدام.',
-      type: 'summary',
-    },
-  ],
-};
-
-const typography: Topic = {
-  id: 'typography',
-  trackId: 'ui-track',
-  title: 'الخطوط والتايبوجرافي',
-  emoji: '🔤',
-  description: 'فهم كيفية استخدام الخطوط لتحسين القراءة والوضوح',
-  estimatedTime: 16,
-  steps: [
-    {
-      id: 'intro',
-      title: 'مقدمة',
-      content: 'التايبوجرافي هو فن ترتيب الخطوط لجعل النص مقروءاً وجذاباً.',
-      type: 'introduction',
-    },
-    {
-      id: 'summary',
-      title: 'الخلاصة',
-      content: 'الخطوط الجيدة تحسن من تجربة القراءة وتوصل الرسالة بوضوح.',
-      type: 'summary',
-    },
-  ],
-};
-
-const layoutGrid: Topic = {
-  id: 'layout-grid',
-  trackId: 'ui-track',
-  title: 'التخطيط والشبكات (Layout)',
-  emoji: '📏',
-  description: 'تعلم كيفية تنظيم العناصر على الشاشة باستخدام الشبكات',
-  estimatedTime: 18,
-  steps: [
-    {
-      id: 'intro',
-      title: 'مقدمة',
-      content: 'التخطيط الجيد ينظم المحتوى ويوجه عين المستخدم.',
-      type: 'introduction',
-    },
-    {
-      id: 'summary',
-      title: 'الخلاصة',
-      content: 'استخدام الشبكات يضمن تناسق التصميم عبر مختلف الشاشات.',
-      type: 'summary',
-    },
+    { id: 'intro', title: 'مقدمة', content: 'قريباً...', type: 'introduction' },
+    { id: 'summary', title: 'الخلاصة', content: 'قريباً...', type: 'summary' },
   ],
 };
 
@@ -180,24 +98,10 @@ export const tracks: Track[] = [
     color: '#0E2A57',
     description: 'تعلم كيفية فهم المستخدمين وحل مشاكلهم بطريقة إبداعية ومنظمة.',
     topics: [
-      uxFoundations,
-      designThinking,
-      userResearch,
-      competitiveAnalysis,
-      problemDefinition,
-      userNeeds,
-      personas,
-      empathyMap,
-      userStories,
-      userFlow,
-      userJourneyMap,
-      infoArchitecture,
-      sitemapNav,
-      wireframing,
-      uxPrototyping,
-      usabilityTesting,
-      uxIteration,
-      uxDocumentation,
+      uxFoundations, designThinking, userResearch, competitiveAnalysis, problemDefinition,
+      userNeeds, personas, empathyMap, userStories, userFlow, userJourneyMap,
+      infoArchitecture, sitemapNav, wireframing, uxPrototyping, usabilityTesting,
+      uxIteration, uxDocumentation,
     ],
   },
   {
@@ -206,12 +110,7 @@ export const tracks: Track[] = [
     emoji: '🎨',
     color: '#1F4B8F',
     description: 'تعلم كيفية تصميم واجهات جميلة وجذابة وسهلة الاستخدام.',
-    topics: [
-      uiFoundations,
-      colorSystem,
-      typography,
-      layoutGrid,
-    ],
+    topics: [uiFoundations],
   },
   {
     id: 'integration-track',
