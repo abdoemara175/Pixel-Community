@@ -157,7 +157,26 @@ const userNeeds: Topic = {
     { id: 'summary', title: '10. Summary', content: 'كل مشكلة = فرصة تصميم', type: 'summary' },
   ],
 };
-const personas = createEmptyTopicWith10Cards('personas', 'Personas', '👤', 'شخصيات المستخدمين');
+const personas: Topic = {
+  id: 'personas',
+  trackId: 'ux-track',
+  title: 'Personas',
+  emoji: '👤',
+  description: 'شخصيات المستخدمين',
+  estimatedTime: 20,
+  steps: [
+    { id: 'intro', title: '1. Introduction', content: 'هل ينفع نصمم من غير ما نعرف بنصمم لمين؟', type: 'introduction' },
+    { id: 'concept', title: '2. Concept', content: 'Persona هي شخصية خيالية تمثل المستخدم الحقيقي.', type: 'concept' },
+    { id: 'why', title: '3. Why it matters', content: 'بتخليك تصمم بتركيز', type: 'why-it-matters' },
+    { id: 'breakdown', title: '4. Breakdown', content: '- Name\n- Age\n- Goals\n- Pain Points\n- Behavior', type: 'breakdown' },
+    { id: 'example', title: '5. Example', content: 'طالب بيعاني من تنظيم الوقت', type: 'example' },
+    { id: 'bad-vs-good', title: '6. Bad vs Good', content: 'Bad: Persona عشوائية\nGood: مبنية على Data', type: 'bad-vs-good' },
+    { id: 'mistakes', title: '7. Common Mistakes', content: '- اختراع بيانات', type: 'mistakes' },
+    { id: 'tips', title: '8. Practical Tips', content: '- خليها واقعية\n- اربطها بالبحث', type: 'tips' },
+    { id: 'activity', title: '9. Mini Activity', content: 'اعمل Persona بسيطة لمستخدم تطبيقك', type: 'activity' },
+    { id: 'summary', title: '10. Summary', content: 'Persona = المستخدم بقى واضح', type: 'summary' },
+  ],
+};
 const empathyMap = createEmptyTopicWith10Cards('empathy-map', 'Empathy Map', '🗺️', 'خريطة التعاطف');
 const userStories = createEmptyTopicWith10Cards('user-stories', 'User Stories / JTBD', '📝', 'قصص المستخدمين');
 const userFlow = createEmptyTopicWith10Cards('user-flow', 'User Flow', '🔄', 'تدفق المستخدم');
