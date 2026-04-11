@@ -137,7 +137,26 @@ const problemDefinition: Topic = {
     { id: 'summary', title: '10. Summary', content: 'مشكلة واضحة = حل صح', type: 'summary' },
   ],
 };
-const userNeeds = createEmptyTopicWith10Cards('user-needs', 'User Needs & Pain Points', '🩹', 'احتياجات المستخدم ونقاط الألم');
+const userNeeds: Topic = {
+  id: 'user-needs',
+  trackId: 'ux-track',
+  title: 'User Needs & Pain Points',
+  emoji: '🩹',
+  description: 'احتياجات المستخدم ونقاط الألم',
+  estimatedTime: 20,
+  steps: [
+    { id: 'intro', title: '1. Introduction', content: 'ليه المستخدم بيشتكي؟ وإيه اللي فعلاً محتاجه؟', type: 'introduction' },
+    { id: 'concept', title: '2. Concept', content: 'Pain Points = المشاكل\nNeeds = اللي محتاجه عشان يحلها', type: 'concept' },
+    { id: 'why', title: '3. Why it matters', content: 'بيوضح انت هتصمم ليه', type: 'why-it-matters' },
+    { id: 'breakdown', title: '4. Breakdown', content: '- Goal: هدف المستخدم\n- Pain: المشكلة\n- Need: الحل', type: 'breakdown' },
+    { id: 'example', title: '5. Example', content: 'بينسى المواعيد → محتاج Reminder', type: 'example' },
+    { id: 'bad-vs-good', title: '6. Bad vs Good', content: 'Bad: تركز على Features\nGood: تركز على المشكلة', type: 'bad-vs-good' },
+    { id: 'mistakes', title: '7. Common Mistakes', content: '- تجاهل السبب الحقيقي', type: 'mistakes' },
+    { id: 'tips', title: '8. Practical Tips', content: '- اسأل “ليه” أكتر من مرة', type: 'tips' },
+    { id: 'activity', title: '9. Mini Activity', content: 'اكتب Pain + Need لمشكلة شائعة', type: 'activity' },
+    { id: 'summary', title: '10. Summary', content: 'كل مشكلة = فرصة تصميم', type: 'summary' },
+  ],
+};
 const personas = createEmptyTopicWith10Cards('personas', 'Personas', '👤', 'شخصيات المستخدمين');
 const empathyMap = createEmptyTopicWith10Cards('empathy-map', 'Empathy Map', '🗺️', 'خريطة التعاطف');
 const userStories = createEmptyTopicWith10Cards('user-stories', 'User Stories / JTBD', '📝', 'قصص المستخدمين');
