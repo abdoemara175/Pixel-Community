@@ -56,7 +56,26 @@ const createEmptyTopicWith10Cards = (id: string, title: string, emoji: string, d
 });
 
 // UX Track Topics
-const uxFoundations = createEmptyTopicWith10Cards('ux-foundations', 'UX Foundations', '🧠', 'أساسيات تجربة المستخدم');
+const uxFoundations: Topic = {
+  id: 'ux-foundations',
+  trackId: 'ux-track',
+  title: 'UX Foundations',
+  emoji: '🧠',
+  description: 'أساسيات تجربة المستخدم',
+  estimatedTime: 20,
+  steps: [
+    { id: 'intro', title: '1. Introduction', content: 'ليه في Apps بنستخدمها يوميًا… وApps تانية بنمسحها بعد أول استخدام؟', type: 'introduction' },
+    { id: 'concept', title: '2. Concept', content: 'UX هو تجربة المستخدم أثناء استخدام المنتج، مش بس شكله، لكن إحساسه وهو بيتعامل معاه وهل قدر يحقق هدفه بسهولة ولا لأ.', type: 'concept' },
+    { id: 'why', title: '3. Why it matters', content: 'لو المستخدم اتلخبط أو تعب أثناء الاستخدام → هيسيب المنتج حتى لو شكله حلو\nUX الجيد بيزود رضا المستخدم وبيخليه يرجع تاني', type: 'why-it-matters' },
+    { id: 'breakdown', title: '4. Breakdown', content: '- Usability: هل سهل الاستخدام؟\n- Clarity: هل واضح؟\n- Efficiency: هل بيوصل لهدفه بسرعة؟\n- Satisfaction: هل التجربة مريحة؟', type: 'breakdown' },
+    { id: 'example', title: '5. Example', content: 'تطبيق طلب أكل:\nلو خلّصت الطلب في خطوات قليلة → UX كويس\nلو تهت بين الصفحات → UX سيء', type: 'example' },
+    { id: 'bad-vs-good', title: '6. Bad vs Good', content: 'Bad: خطوات كتير + لخبطة\nGood: خطوات واضحة وسريعة', type: 'bad-vs-good' },
+    { id: 'mistakes', title: '7. Common Mistakes', content: '- التركيز على الشكل بس\n- تجاهل تجربة المستخدم', type: 'mistakes' },
+    { id: 'tips', title: '8. Practical Tips', content: '- خلي كل خطوة واضحة\n- قلل عدد الخطوات\n- اختبر على حد حقيقي', type: 'tips' },
+    { id: 'activity', title: '9. Mini Activity', content: 'قول مثال على App UX بتاعه سيء وليه', type: 'activity' },
+    { id: 'summary', title: '10. Summary', content: 'UX = سهولة + وضوح + راحة المستخدم', type: 'summary' },
+  ],
+};
 const designThinking = createEmptyTopicWith10Cards('design-thinking', 'Design Thinking Process', '💡', 'عملية التفكير التصميمي');
 const userResearch = createEmptyTopicWith10Cards('user-research', 'User Research', '🔍', 'البحث عن المستخدمين');
 const competitiveAnalysis = createEmptyTopicWith10Cards('competitive-analysis', 'Competitive Analysis', '📊', 'تحليل المنافسين');
