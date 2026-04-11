@@ -1,42 +1,44 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Router, Switch } from "wouter";
+import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 
 
-function AppRouter() {
+function Router() {
   return (
-    <Router base="/Pixel-Community">
-      <Switch>
-        <Route path={"/"} component={Home} />
-        <Route path={"/404"} component={NotFound} />
-        {/* Final fallback route */}
-        <Route component={NotFound} />
-      </Switch>
-    </Router>
+    <Switch>
+      <Route path={"/"} component={Home} />
+      <Route path={"/404"} component={NotFound} />
+      {/* Final fallback route */}
+      <Route component={NotFound} />
+    </Switch>
   );
 }
 
-// Pixel Community - UX Design Learning Hub
-// Modern minimalist design with pixel-inspired accents
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
+/**
+ * PIXEL UX Learning Platform
+ * 
+ * Modern minimalist educational design
+ * Color palette: Deep Navy primary (#0E2A57), Bright Blue secondary (#1F4B8F)
+ * 
+ * NOTE: About Theme
+ * - Light theme by default for educational clarity
+ * - Color palette defined in index.css with OKLCH format
+ * - Fonts: Poppins (display), Inter (body)
+ */
 
 function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider
         defaultTheme="light"
-        // switchable
       >
         <TooltipProvider>
           <Toaster />
-          <AppRouter />
+          <Router />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
