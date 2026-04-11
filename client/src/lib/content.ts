@@ -117,7 +117,26 @@ const competitiveAnalysis: Topic = {
     { id: 'summary', title: '10. Summary', content: 'اتعلم من غيرك… مش تنسخه', type: 'summary' },
   ],
 };
-const problemDefinition = createEmptyTopicWith10Cards('problem-definition', 'Problem Definition', '🎯', 'تحديد المشكلة');
+const problemDefinition: Topic = {
+  id: 'problem-definition',
+  trackId: 'ux-track',
+  title: 'Problem Definition',
+  emoji: '🎯',
+  description: 'تحديد المشكلة',
+  estimatedTime: 20,
+  steps: [
+    { id: 'intro', title: '1. Introduction', content: 'ليه أحيانًا بنشتغل كتير… وفي الآخر نكتشف إننا بنحل مشكلة مش مهمة؟', type: 'introduction' },
+    { id: 'concept', title: '2. Concept', content: 'تحديد المشكلة بشكل واضح بناءً على البحث.', type: 'concept' },
+    { id: 'why', title: '3. Why it matters', content: 'بيحدد اتجاه الشغل كله\nولو غلط → كل اللي بعده غلط', type: 'why-it-matters' },
+    { id: 'breakdown', title: '4. Breakdown', content: '- مين المستخدم؟\n- ايه المشكلة؟\n- ليه بتحصل؟', type: 'breakdown' },
+    { id: 'example', title: '5. Example', content: 'طالب مش بينظم وقته بسبب عدم وجود طريقة واضحة', type: 'example' },
+    { id: 'bad-vs-good', title: '6. Bad vs Good', content: 'Bad: “نعمل App”\nGood: “User عنده مشكلة”', type: 'bad-vs-good' },
+    { id: 'mistakes', title: '7. Common Mistakes', content: '- مشكلة عامة\n- بدون User', type: 'mistakes' },
+    { id: 'tips', title: '8. Practical Tips', content: '- خليك محدد\n- اربط المشكلة بالمستخدم', type: 'tips' },
+    { id: 'activity', title: '9. Mini Activity', content: 'اكتب Problem Statement لمشكلة واجهتك', type: 'activity' },
+    { id: 'summary', title: '10. Summary', content: 'مشكلة واضحة = حل صح', type: 'summary' },
+  ],
+};
 const userNeeds = createEmptyTopicWith10Cards('user-needs', 'User Needs & Pain Points', '🩹', 'احتياجات المستخدم ونقاط الألم');
 const personas = createEmptyTopicWith10Cards('personas', 'Personas', '👤', 'شخصيات المستخدمين');
 const empathyMap = createEmptyTopicWith10Cards('empathy-map', 'Empathy Map', '🗺️', 'خريطة التعاطف');
