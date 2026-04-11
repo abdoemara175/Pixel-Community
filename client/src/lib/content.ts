@@ -177,7 +177,26 @@ const personas: Topic = {
     { id: 'summary', title: '10. Summary', content: 'Persona = المستخدم بقى واضح', type: 'summary' },
   ],
 };
-const empathyMap = createEmptyTopicWith10Cards('empathy-map', 'Empathy Map', '🗺️', 'خريطة التعاطف');
+const empathyMap: Topic = {
+  id: 'empathy-map',
+  trackId: 'ux-track',
+  title: 'Empathy Map',
+  emoji: '🗺️',
+  description: 'خريطة التعاطف',
+  estimatedTime: 20,
+  steps: [
+    { id: 'intro', title: '1. Introduction', content: 'هل احنا فاهمين المستخدم… ولا بس شايفينه من بره؟', type: 'introduction' },
+    { id: 'concept', title: '2. Concept', content: 'Empathy Map أداة لفهم المستخدم بشكل أعمق (مشاعره وسلوكه)', type: 'concept' },
+    { id: 'why', title: '3. Why it matters', content: 'بيخليك تشوف من وجهة نظر المستخدم', type: 'why-it-matters' },
+    { id: 'breakdown', title: '4. Breakdown', content: '- Says\n- Thinks\n- Does\n- Feels', type: 'breakdown' },
+    { id: 'example', title: '5. Example', content: '“مش لاقي وقت” → توتر', type: 'example' },
+    { id: 'bad-vs-good', title: '6. Bad vs Good', content: 'Bad: كلام عام\nGood: كلام حقيقي', type: 'bad-vs-good' },
+    { id: 'mistakes', title: '7. Common Mistakes', content: '- عدم الربط بالـ Persona', type: 'mistakes' },
+    { id: 'tips', title: '8. Practical Tips', content: '- استخدم كلام المستخدم\n- اربط كل حاجة بالواقع', type: 'tips' },
+    { id: 'activity', title: '9. Mini Activity', content: 'اعمل Empathy Map بسيطة لمستخدمك', type: 'activity' },
+    { id: 'summary', title: '10. Summary', content: 'افهم المستخدم من جوه مش من بره', type: 'summary' },
+  ],
+};
 const userStories = createEmptyTopicWith10Cards('user-stories', 'User Stories / JTBD', '📝', 'قصص المستخدمين');
 const userFlow = createEmptyTopicWith10Cards('user-flow', 'User Flow', '🔄', 'تدفق المستخدم');
 const userJourneyMap = createEmptyTopicWith10Cards('user-journey-map', 'User Journey Map', '🛤️', 'خريطة رحلة المستخدم');
