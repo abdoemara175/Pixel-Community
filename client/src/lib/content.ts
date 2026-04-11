@@ -76,7 +76,26 @@ const uxFoundations: Topic = {
     { id: 'summary', title: '10. Summary', content: 'UX = سهولة + وضوح + راحة المستخدم', type: 'summary' },
   ],
 };
-const designThinking = createEmptyTopicWith10Cards('design-thinking', 'Design Thinking Process', '💡', 'عملية التفكير التصميمي');
+const designThinking: Topic = {
+  id: 'design-thinking',
+  trackId: 'ux-track',
+  title: 'Design Thinking Process',
+  emoji: '💡',
+  description: 'عملية التفكير التصميمي',
+  estimatedTime: 20,
+  steps: [
+    { id: 'intro', title: '1. Introduction', content: 'ليه أحيانًا بنحل مشكلة… ونكتشف إننا حلينا المشكلة الغلط؟', type: 'introduction' },
+    { id: 'concept', title: '2. Concept', content: 'Design Thinking هو أسلوب لحل المشاكل بيركز على فهم المستخدم قبل ما نبدأ نحل.', type: 'concept' },
+    { id: 'why', title: '3. Why it matters', content: 'بيمنعك تشتغل على افتراضات\nوبيخليك تبني حلول مبنية على الواقع', type: 'why-it-matters' },
+    { id: 'breakdown', title: '4. Breakdown', content: '- Empathize: افهم المستخدم\n- Define: حدد المشكلة\n- Ideate: فكر في حلول\n- Prototype: جرب\n- Test: اختبر', type: 'breakdown' },
+    { id: 'example', title: '5. Example', content: 'طالب مش بينظم وقته → نفهم السبب → نحدد المشكلة → نجرب حل', type: 'example' },
+    { id: 'bad-vs-good', title: '6. Bad vs Good', content: 'Bad: تبدأ تصميم على طول\nGood: تفهم المشكلة الأول', type: 'bad-vs-good' },
+    { id: 'mistakes', title: '7. Common Mistakes', content: '- تجاهل مرحلة الفهم\n- القفز للحل بسرعة', type: 'mistakes' },
+    { id: 'tips', title: '8. Practical Tips', content: '- اسأل كتير قبل ما تصمم\n- خليك مرن', type: 'tips' },
+    { id: 'activity', title: '9. Mini Activity', content: 'اختار مشكلة وامشي عليها بالمراحل', type: 'activity' },
+    { id: 'summary', title: '10. Summary', content: 'افهم → حدد → حل → جرّب', type: 'summary' },
+  ],
+};
 const userResearch = createEmptyTopicWith10Cards('user-research', 'User Research', '🔍', 'البحث عن المستخدمين');
 const competitiveAnalysis = createEmptyTopicWith10Cards('competitive-analysis', 'Competitive Analysis', '📊', 'تحليل المنافسين');
 const problemDefinition = createEmptyTopicWith10Cards('problem-definition', 'Problem Definition', '🎯', 'تحديد المشكلة');
