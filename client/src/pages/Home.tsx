@@ -14,7 +14,8 @@ import TrackSection from '@/components/TrackSection';
 import { getTracks } from '@/lib/content';
 import { ArrowRight, Zap, Users, BookOpen, Award } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getTranslation } from '@/lib/i18n';
+import { getTranslation, getDirection } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
 export default function Home() {
@@ -86,7 +87,7 @@ export default function Home() {
                 className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 gap-2"
               >
                 {t('startLearning')}
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className={cn("w-5 h-5 transition-transform", getDirection(language) === 'rtl' && "rotate-180")} />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(var(--primary), 0.05)" }}
@@ -190,7 +191,7 @@ export default function Home() {
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors"
             >
               {t('startJourneyNow')}
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className={cn("w-5 h-5 transition-transform", getDirection(language) === 'rtl' && "rotate-180")} />
             </a>
           </div>
         </div>

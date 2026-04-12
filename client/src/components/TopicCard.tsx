@@ -10,10 +10,11 @@
  */
 
 import { useState } from 'react';
-import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X } from 'lucide-react';
+import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Topic, Step } from '@/lib/content';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getTranslation } from '@/lib/i18n';
+import { getTranslation, getDirection } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
 
 interface TopicCardProps {
   topic: Topic;
@@ -219,9 +220,10 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
         <button
           onClick={onPrev}
           disabled={index === 0}
-          className="px-6 py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+          className="px-6 py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center gap-2"
         >
-          {language === 'ar' ? '← ' : ''}{t('previousStep')}{language === 'en' ? ' →' : ''}
+          {getDirection(language) === 'rtl' ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+          {t('previousStep')}
         </button>
 
         <div className="flex gap-2">
@@ -243,10 +245,11 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
         <button
           onClick={onNext}
           disabled={index === totalSteps - 1}
-          className="px-6 py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-6 py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           style={{ backgroundColor: trackColor }}
         >
-          {t('nextStep')}{language === 'ar' ? ' ←' : ' →'}
+          {t('nextStep')}
+          {getDirection(language) === 'rtl' ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </button>
       </div>
 
@@ -302,7 +305,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
           setCurrentStepIndex(0);
           setViewMode('grid');
         }}
-        className="w-full text-left flex items-start justify-between gap-4 hover:opacity-80 transition-opacity"
+        className="w-full text-start flex items-start justify-between gap-4 hover:opacity-80 transition-opacity"
       >
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">

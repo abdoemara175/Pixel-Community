@@ -310,3 +310,7 @@ export function getTranslation(lang: Language, key: keyof Translations): string 
 export function getAllTranslations(lang: Language): Translations {
   return translations[lang];
 }
+
+export function getDirection(lang: Language): 'rtl' | 'ltr' {
+  return lang === 'ar' ? 'rtl' : 'ltr';
+}
