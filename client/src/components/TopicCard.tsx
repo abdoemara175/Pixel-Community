@@ -221,7 +221,7 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
           disabled={index === 0}
           className="px-6 py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
         >
-          {language === 'ar' ? '← ' : ''}{t('previousStep')}{language === 'en' ? ' →' : ''}
+          {language === 'ar' ? '→ ' : ''}{t('previousStep')}{language === 'en' ? ' ←' : ''}
         </button>
 
         <div className="flex gap-2">
@@ -310,10 +310,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
             <h3 className="text-2xl font-bold text-foreground">{topic.title}</h3>
           </div>
           <p className="text-muted-foreground mb-3">{topic.description}</p>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Clock className="w-4 h-4" />
-            <span>{t('estimatedTime')}: {topic.estimatedTime} {t('minutes')}</span>
-          </div>
+
         </div>
         <ChevronDown
           className={`w-6 h-6 text-primary transition-transform flex-shrink-0 mt-1 ${

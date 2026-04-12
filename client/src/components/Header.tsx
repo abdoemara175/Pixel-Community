@@ -46,13 +46,6 @@ export default function Header() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-3"
           >
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-md border border-border overflow-hidden">
-              <img 
-                src="/pixel-new-logo.png" 
-                alt="PIXEL Logo" 
-                className="w-full h-full object-cover"
-              />
-            </div>
             <div className="hidden sm:block">
               <h1 className="text-lg md:text-xl font-bold text-primary tracking-tight">PIXEL</h1>
               <p className="text-xs md:text-sm text-muted-foreground">{t('platformSubtitle')}</p>
