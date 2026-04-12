@@ -34,8 +34,10 @@ export default function Header() {
     { label: t('contact'), href: '#contact' },
   ];
 
+  const isRtl = language === 'ar';
+
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border shadow-sm">
       <div className="container">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo and Brand */}

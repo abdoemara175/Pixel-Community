@@ -11,7 +11,7 @@
 
 import Header from '@/components/Header';
 import TrackSection from '@/components/TrackSection';
-import { tracks } from '@/lib/content';
+import { getTracks } from '@/lib/content';
 import { ArrowRight, Zap, Users, BookOpen, Award } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation } from '@/lib/i18n';
@@ -20,9 +20,10 @@ import { motion } from 'framer-motion';
 export default function Home() {
   const { language } = useLanguage();
   const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+  const tracks = getTracks(language);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pt-16 md:pt-20">
       <Header />
 
       {/* Hero Section */}
