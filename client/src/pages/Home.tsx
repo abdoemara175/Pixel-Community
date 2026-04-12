@@ -40,11 +40,11 @@ export default function Home() {
               transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
               className="inline-block"
             >
-              <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center text-4xl font-bold text-white mx-auto overflow-hidden shadow-2xl shadow-primary/30">
+              <div className="w-24 h-24 bg-white rounded-2xl flex items-center justify-center mx-auto overflow-hidden shadow-xl border-2 border-primary/10">
                 <img 
-                  src="/logo.png" 
+                  src="/pixel-new-logo.png" 
                   alt="PIXEL" 
-                  className="w-16 h-16 object-contain brightness-0 invert"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </motion.div>

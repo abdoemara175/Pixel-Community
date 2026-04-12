@@ -44,11 +44,11 @@ export default function Header() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-3"
           >
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary/20">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-md border border-border overflow-hidden">
               <img 
-                src="/logo.png" 
+                src="/pixel-new-logo.png" 
                 alt="PIXEL Logo" 
-                className="w-8 h-8 md:w-10 md:h-10 object-contain brightness-0 invert"
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="hidden sm:block">

@@ -44,12 +44,12 @@
 
 :root {
   /* PIXEL UX Platform - Modern Clean Educational Design */
-  /* Primary: Deep Indigo/Blue from PIXEL Logo */
-  --primary: oklch(0.28 0.18 265);
+  /* Primary: Deep Indigo/Blue from PIXEL Logo - Refined to match new logo */
+  --primary: oklch(0.25 0.15 265);
   --primary-foreground: oklch(0.98 0.001 0);
   
   /* Secondary: Bright Blue for focus and clarity */
-  --secondary: oklch(0.45 0.20 255);
+  --secondary: oklch(0.40 0.18 255);
   --secondary-foreground: oklch(0.98 0.001 0);
   
   /* Sidebar styling */
