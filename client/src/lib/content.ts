@@ -123,6 +123,38 @@ const getUXTrack = (lang: Language): Track => {
     ],
   };
 
+  const userResearch: Topic = {
+    id: 'user-research',
+    trackId: 'ux-track',
+    title: lang === 'ar' ? 'بحث المستخدم' : 'User Research',
+    emoji: '📦',
+    description: lang === 'ar' ? 'تعلم كيف تجمع المعلومات عن المستخدمين.' : 'Learn how to collect information about users.',
+    estimatedTime: 20,
+    steps: lang === 'ar' ? [
+      { id: 'intro', title: '1. المقدمة', content: 'هل عمرك صممت حاجة وطلعت مش مناسبة للمستخدم؟', type: 'introduction' },
+      { id: 'concept', title: '2. المفهوم', content: 'User Research هو جمع معلومات عن المستخدمين عشان نفهم سلوكهم واحتياجاتهم.', type: 'concept' },
+      { id: 'why', title: '3. لماذا يهم', content: 'بيخليك تبني على بيانات مش تخمين\nوبيوفر وقت ومجهود', type: 'why-it-matters' },
+      { id: 'breakdown', title: '4. التفصيل', content: '- Survey: بيانات من عدد كبير\n- Interview: فهم عميق\n- Observation: ملاحظة السلوك', type: 'breakdown' },
+      { id: 'example', title: '5. مثال', content: 'تسأل الطلبة عن مشاكلهم في المذاكرة', type: 'example' },
+      { id: 'bad-vs-good', title: '6. السيء مقابل الجيد', content: 'Bad: تسأل أسئلة عامة\nGood: تسأل عن سلوك حقيقي', type: 'bad-vs-good' },
+      { id: 'mistakes', title: '7. الأخطاء الشائعة', content: '- الاعتماد على رأيك\n- تجاهل النتائج', type: 'mistakes' },
+      { id: 'tips', title: '8. نصائح عملية', content: '- اسأل “بتعمل ايه؟” مش “شايف ايه؟”\n- سجل الإجابات', type: 'tips' },
+      { id: 'activity', title: '9. نشاط صغير', content: 'اكتب 3 أسئلة تفهم بيها مشكلة', type: 'activity' },
+      { id: 'summary', title: '10. الملخص', content: 'Research = فهم حقيقي للمستخدم', type: 'summary' },
+    ] : [
+      { id: 'intro', title: '1. Introduction', content: 'Have you ever designed something that turned out not suitable for the user?', type: 'introduction' },
+      { id: 'concept', title: '2. Concept', content: 'User Research is collecting information about users to understand their behavior and needs.', type: 'concept' },
+      { id: 'why', title: '3. Why it matters', content: 'It makes you build on data, not guesswork, and saves time and effort.', type: 'why-it-matters' },
+      { id: 'breakdown', title: '4. Breakdown', content: '- Survey: Data from a large number\n- Interview: Deep understanding\n- Observation: Observing behavior', type: 'breakdown' },
+      { id: 'example', title: '5. Example', content: 'Asking students about their study problems', type: 'example' },
+      { id: 'bad-vs-good', title: '6. Bad vs Good', content: 'Bad: Asking general questions\nGood: Asking about real behavior', type: 'bad-vs-good' },
+      { id: 'mistakes', title: '7. Common Mistakes', content: '- Relying on your opinion\n- Ignoring results', type: 'mistakes' },
+      { id: 'tips', title: '8. Practical Tips', content: '- Ask "What do you do?" not "What do you think?"\n- Record answers', type: 'tips' },
+      { id: 'activity', title: '9. Mini Activity', content: 'Write 3 questions to understand a problem', type: 'activity' },
+      { id: 'summary', title: '10. Summary', content: 'Research = Real understanding of the user', type: 'summary' },
+    ],
+  };
+
   return {
     id: 'ux-track',
     title: lang === 'ar' ? 'مسار تجربة المستخدم (UX)' : 'UX Design Track',
@@ -132,7 +164,7 @@ const getUXTrack = (lang: Language): Track => {
     topics: [
       uxFoundations,
       designThinking,
-      createEmptyTopicWith10Cards('user-research', 'ux-track', lang === 'ar' ? 'البحث عن المستخدمين' : 'User Research', '🔍', lang === 'ar' ? 'البحث عن المستخدمين' : 'User Research', lang),
+      userResearch,
       createEmptyTopicWith10Cards('competitive-analysis', 'ux-track', lang === 'ar' ? 'تحليل المنافسين' : 'Competitive Analysis', '📊', lang === 'ar' ? 'تحليل المنافسين' : 'Competitive Analysis', lang),
       createEmptyTopicWith10Cards('problem-definition', 'ux-track', lang === 'ar' ? 'تحديد المشكلة' : 'Problem Definition', '🎯', lang === 'ar' ? 'تحديد المشكلة' : 'Problem Definition', lang),
       createEmptyTopicWith10Cards('user-needs', 'ux-track', lang === 'ar' ? 'احتياجات المستخدم' : 'User Needs', '🩹', lang === 'ar' ? 'احتياجات المستخدم ونقاط الألم' : 'User Needs & Pain Points', lang),
