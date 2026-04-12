@@ -65,6 +65,7 @@
   
   /* Spacing and radius */
   --radius: 0.75rem;
+  --primary-rgb: 11, 18, 32;
   
   /* Background: Pure White (#FFFFFF) for clarity */
   --background: oklch(1 0 0);
@@ -145,6 +146,7 @@
   --sidebar-accent-foreground: oklch(0.98 0.001 0);
   --sidebar-border: oklch(0.25 0.01 265);
   --sidebar-ring: oklch(0.52 0.20 255);
+  --primary-rgb: 224, 224, 224;
 }
 
 @layer base {
@@ -221,8 +223,9 @@
   
   /* Educational card styling with pixel-inspired borders */
   .topic-card {
-    @apply bg-card text-card-foreground rounded-lg shadow-sm border border-border transition-all duration-300 hover:shadow-md;
+    @apply bg-card text-card-foreground rounded-lg shadow-sm border border-border transition-all duration-500;
     position: relative;
+    overflow: hidden;
   }
   
   .topic-card::before {
@@ -233,11 +236,58 @@
     right: 0;
     bottom: 0;
     background-image: 
-      linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent),
-      linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent);
-    background-size: 50px 50px;
+      linear-gradient(90deg, transparent 24%, rgba(var(--primary-rgb), 0.05) 25%, rgba(var(--primary-rgb), 0.05) 26%, transparent 27%, transparent 74%, rgba(var(--primary-rgb), 0.05) 75%, rgba(var(--primary-rgb), 0.05) 76%, transparent 77%, transparent),
+      linear-gradient(0deg, transparent 24%, rgba(var(--primary-rgb), 0.05) 25%, rgba(var(--primary-rgb), 0.05) 26%, transparent 27%, transparent 74%, rgba(var(--primary-rgb), 0.05) 75%, rgba(var(--primary-rgb), 0.05) 76%, transparent 77%, transparent);
+    background-size: 20px 20px;
     border-radius: 0.5rem;
     pointer-events: none;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+  }
+
+  .topic-card:hover::before {
+    opacity: 0.8;
+    animation: pixelShift 20s linear infinite;
+  }
+
+  /* Pixelated hover effect for buttons */
+  .pixel-button {
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+  }
+
+  .pixel-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+    background-size: 4px 4px;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .pixel-button:hover::after {
+    opacity: 0.2;
+  }
+
+  /* Smooth transitions for theme and language */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark body {
+    background-color: var(--background);
+    color: var(--foreground);
   }
   
   /* Section styling */

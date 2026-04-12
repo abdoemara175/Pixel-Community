@@ -15,6 +15,7 @@ import { tracks } from '@/lib/content';
 import { ArrowRight, Zap, Users, BookOpen, Award } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation } from '@/lib/i18n';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const { language } = useLanguage();
@@ -25,43 +26,82 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section id="home" className="py-16 md:py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            <div className="inline-block">
-              <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center text-4xl font-bold text-white mx-auto overflow-hidden">
+      <section id="home" className="py-16 md:py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
+        <div className="container relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl mx-auto text-center space-y-6"
+          >
+            <motion.div 
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+              className="inline-block"
+            >
+              <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center text-4xl font-bold text-white mx-auto overflow-hidden shadow-2xl shadow-primary/30">
                 <img 
-                  src="/pixel-logo.png" 
+                  src="/logo.png" 
                   alt="PIXEL" 
-                  className="w-16 h-16 object-contain"
+                  className="w-16 h-16 object-contain brightness-0 invert"
                 />
               </div>
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-foreground">
+            </motion.div>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-5xl md:text-6xl font-bold text-foreground tracking-tight"
+            >
               PIXEL
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground font-medium">
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="text-xl md:text-2xl text-muted-foreground font-medium"
+            >
               {t('heroSubtitle')}
-            </p>
-            <p className="text-lg text-foreground max-w-2xl mx-auto leading-relaxed">
+            </motion.p>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="text-lg text-foreground max-w-2xl mx-auto leading-relaxed"
+            >
               {t('heroDescription')}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <a
+            </motion.p>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center pt-4"
+            >
+              <motion.a
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 href="#ux-track"
-                className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors gap-2"
+                className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 gap-2"
               >
                 {t('startLearning')}
                 <ArrowRight className="w-5 h-5" />
-              </a>
-              <a
+              </motion.a>
+              <motion.a
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(var(--primary), 0.05)" }}
+                whileTap={{ scale: 0.95 }}
                 href="#about"
-                className="inline-flex items-center justify-center px-8 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary/5 transition-colors"
+                className="inline-flex items-center justify-center px-8 py-3 border-2 border-primary text-primary font-semibold rounded-lg transition-all"
               >
                 {t('learnMore')}
-              </a>
-            </div>
-          </div>
+              </motion.a>
+            </motion.div>
+          </motion.div>
+        </div>
+        {/* Decorative background elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
         </div>
       </section>
 
@@ -75,45 +115,30 @@ export default function Home() {
             
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               {/* Feature Cards */}
-              <div className="topic-card p-8 space-y-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <BookOpen className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground">{t('learnFromZero')}</h3>
-                <p className="text-muted-foreground">
-                  {t('learnFromZeroDesc')}
-                </p>
-              </div>
-
-              <div className="topic-card p-8 space-y-4">
-                <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-secondary" />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground">{t('practicalUnderstanding')}</h3>
-                <p className="text-muted-foreground">
-                  {t('practicalUnderstandingDesc')}
-                </p>
-              </div>
-
-              <div className="topic-card p-8 space-y-4">
-                <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                  <Award className="w-6 h-6 text-blue-500" />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground">{t('organizedLearning')}</h3>
-                <p className="text-muted-foreground">
-                  {t('organizedLearningDesc')}
-                </p>
-              </div>
-
-              <div className="topic-card p-8 space-y-4">
-                <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                  <Users className="w-6 h-6 text-purple-500" />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground">{t('communitySupport')}</h3>
-                <p className="text-muted-foreground">
-                  {t('communitySupportDesc')}
-                </p>
-              </div>
+              {[
+                { icon: BookOpen, title: t('learnFromZero'), desc: t('learnFromZeroDesc'), color: 'primary' },
+                { icon: Zap, title: t('practicalUnderstanding'), desc: t('practicalUnderstandingDesc'), color: 'secondary' },
+                { icon: Award, title: t('organizedLearning'), desc: t('organizedLearningDesc'), color: 'blue-500' },
+                { icon: Users, title: t('communitySupport'), desc: t('communitySupportDesc'), color: 'purple-500' }
+              ].map((feature, index) => (
+                <motion.div 
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -5, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
+                  className="topic-card p-8 space-y-4 group"
+                >
+                  <div className={`w-12 h-12 bg-${feature.color}/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                    <feature.icon className={`w-6 h-6 text-${feature.color}`} />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground">{feature.title}</h3>
+                  <p className="text-muted-foreground">
+                    {feature.desc}
+                  </p>
+                </motion.div>
+              ))}
             </div>
 
             <div className="bg-primary text-primary-foreground rounded-lg p-8 text-center">
@@ -134,22 +159,27 @@ export default function Home() {
           
           <div className="grid md:grid-cols-4 gap-6 mb-12">
             {tracks.map((track, index) => (
-              <div
+              <motion.div
                 key={track.id}
-                className="topic-card p-6 text-center hover:shadow-lg transition-shadow"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                className="topic-card p-6 text-center hover:shadow-xl transition-all duration-300 cursor-pointer group"
               >
                 <div
-                  className="w-16 h-16 rounded-lg flex items-center justify-center text-3xl mx-auto mb-4"
+                  className="w-16 h-16 rounded-lg flex items-center justify-center text-3xl mx-auto mb-4 group-hover:rotate-12 transition-transform"
                   style={{ backgroundColor: `${track.color}20` }}
                 >
                   {track.emoji}
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-2">{track.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4">{track.description}</p>
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-muted-foreground font-semibold">
                   {track.topics.length} {t('topics')}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 

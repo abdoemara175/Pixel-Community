@@ -16,6 +16,7 @@ import { Link } from 'wouter';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation } from '@/lib/i18n';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,61 +39,92 @@ export default function Header() {
       <div className="container">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo and Brand */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3"
+          >
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary/20">
               <img 
-                src="/pixel-logo.png" 
+                src="/logo.png" 
                 alt="PIXEL Logo" 
-                className="w-8 h-8 md:w-10 md:h-10 object-contain"
+                className="w-8 h-8 md:w-10 md:h-10 object-contain brightness-0 invert"
               />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg md:text-xl font-bold text-primary">PIXEL</h1>
+              <h1 className="text-lg md:text-xl font-bold text-primary tracking-tight">PIXEL</h1>
               <p className="text-xs md:text-sm text-muted-foreground">{t('platformSubtitle')}</p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <a
+            {navItems.map((item, index) => (
+              <motion.a
                 key={item.href}
                 href={item.href}
-                className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-all duration-200"
               >
                 {item.label}
-              </a>
+              </motion.a>
             ))}
           </nav>
 
           {/* Theme & Language Controls */}
           <div className="flex items-center gap-2">
             {/* Theme Toggle */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 15 }}
+              whileTap={{ scale: 0.9 }}
               onClick={toggleTheme}
               className="p-2 hover:bg-muted rounded-md transition-colors"
               aria-label="تبديل الوضع"
               title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
             >
-              {theme === 'light' ? (
-                <Moon className="w-5 h-5 text-foreground" />
-              ) : (
-                <Sun className="w-5 h-5 text-foreground" />
-              )}
-            </button>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={theme}
+                  initial={{ y: -20, opacity: 0, rotate: -90 }}
+                  animate={{ y: 0, opacity: 1, rotate: 0 }}
+                  exit={{ y: 20, opacity: 0, rotate: 90 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {theme === 'light' ? (
+                    <Moon className="w-5 h-5 text-foreground" />
+                  ) : (
+                    <Sun className="w-5 h-5 text-foreground" />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </motion.button>
 
             {/* Language Toggle */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={toggleLanguage}
               className="p-2 hover:bg-muted rounded-md transition-colors flex items-center gap-1"
               aria-label="تبديل اللغة"
               title={language === 'ar' ? 'English' : 'العربية'}
             >
               <Globe className="w-5 h-5 text-foreground" />
-              <span className="text-xs font-semibold text-foreground hidden sm:inline">
-                {language === 'ar' ? 'EN' : 'AR'}
-              </span>
-            </button>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span 
+                  key={language}
+                  initial={{ opacity: 0, x: language === 'ar' ? 10 : -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: language === 'ar' ? -10 : 10 }}
+                  className="text-xs font-semibold text-foreground hidden sm:inline"
+                >
+                  {language === 'ar' ? 'EN' : 'AR'}
+                </motion.span>
+              </AnimatePresence>
+            </motion.button>
 
             {/* Mobile Menu Button */}
             <button
