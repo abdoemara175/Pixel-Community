@@ -9,6 +9,8 @@
 
 import TopicCard from './TopicCard';
 import type { Track } from '@/lib/content';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 interface TrackSectionProps {
   track: Track;
@@ -16,6 +18,11 @@ interface TrackSectionProps {
 }
 
 export default function TrackSection({ track, id }: TrackSectionProps) {
+  const { language } = useLanguage();
+  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+
+  const totalMinutes = track.topics.reduce((sum, topic) => sum + topic.estimatedTime, 0);
+
   return (
     <section id={id} className="py-12 md:py-16 border-b border-border last:border-b-0">
       <div className="container">
@@ -35,10 +42,10 @@ export default function TrackSection({ track, id }: TrackSectionProps) {
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span className="inline-block px-3 py-1 bg-muted rounded-full">
-              {track.topics.length} موضوع
+              {track.topics.length} {t('topics')}
             </span>
             <span className="inline-block px-3 py-1 bg-muted rounded-full">
-              {track.topics.reduce((sum, topic) => sum + topic.estimatedTime, 0)} دقيقة
+              {totalMinutes} {t('minutes')}
             </span>
           </div>
         </div>

@@ -12,6 +12,8 @@
 import { useState } from 'react';
 import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X } from 'lucide-react';
 import type { Topic, Step } from '@/lib/content';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 interface TopicCardProps {
   topic: Topic;
@@ -46,49 +48,66 @@ const getStepIcon = (type: string) => {
   }
 };
 
-// Get step type label in Arabic
-const getStepTypeLabel = (type: string) => {
-  const labels: Record<string, string> = {
-    introduction: 'مقدمة',
-    concept: 'المفهوم',
-    'why-it-matters': 'لماذا يهم؟',
-    breakdown: 'التفاصيل',
-    example: 'مثال عملي',
-    'bad-vs-good': 'جيد مقابل سيء',
-    mistakes: 'أخطاء شائعة',
-    tips: 'نصائح عملية',
-    activity: 'نشاط صغير',
-    summary: 'الخلاصة',
+// Get step type label based on language
+const getStepTypeLabel = (type: string, language: 'ar' | 'en') => {
+  const labels: Record<string, Record<string, string>> = {
+    ar: {
+      introduction: 'مقدمة',
+      concept: 'المفهوم',
+      'why-it-matters': 'لماذا يهم؟',
+      breakdown: 'التفاصيل',
+      example: 'مثال عملي',
+      'bad-vs-good': 'جيد مقابل سيء',
+      mistakes: 'أخطاء شائعة',
+      tips: 'نصائح عملية',
+      activity: 'نشاط صغير',
+      summary: 'الخلاصة',
+    },
+    en: {
+      introduction: 'Introduction',
+      concept: 'Concept',
+      'why-it-matters': 'Why It Matters',
+      breakdown: 'Breakdown',
+      example: 'Example',
+      'bad-vs-good': 'Bad vs Good',
+      mistakes: 'Common Mistakes',
+      tips: 'Practical Tips',
+      activity: 'Mini Activity',
+      summary: 'Summary',
+    },
   };
-  return labels[type] || type;
+  return labels[language][type] || type;
 };
 
-// Get step type color
+// Get step type color (light theme and dark theme compatible)
 const getStepTypeColor = (type: string) => {
   const colors: Record<string, string> = {
-    introduction: 'bg-blue-50 border-blue-200 text-blue-700',
-    concept: 'bg-indigo-50 border-indigo-200 text-indigo-700',
-    'why-it-matters': 'bg-emerald-50 border-emerald-200 text-emerald-700',
-    breakdown: 'bg-slate-50 border-slate-200 text-slate-700',
-    example: 'bg-cyan-50 border-cyan-200 text-cyan-700',
-    'bad-vs-good': 'bg-amber-50 border-amber-200 text-amber-700',
-    mistakes: 'bg-rose-50 border-rose-200 text-rose-700',
-    tips: 'bg-teal-50 border-teal-200 text-teal-700',
-    activity: 'bg-orange-50 border-orange-200 text-orange-700',
-    summary: 'bg-pink-50 border-pink-200 text-pink-700',
+    introduction: 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300',
+    concept: 'bg-indigo-50 dark:bg-indigo-950 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300',
+    'why-it-matters': 'bg-emerald-50 dark:bg-emerald-950 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300',
+    breakdown: 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300',
+    example: 'bg-cyan-50 dark:bg-cyan-950 border-cyan-200 dark:border-cyan-800 text-cyan-700 dark:text-cyan-300',
+    'bad-vs-good': 'bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300',
+    mistakes: 'bg-rose-50 dark:bg-rose-950 border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300',
+    tips: 'bg-teal-50 dark:bg-teal-950 border-teal-200 dark:border-teal-800 text-teal-700 dark:text-teal-300',
+    activity: 'bg-orange-50 dark:bg-orange-950 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300',
+    summary: 'bg-pink-50 dark:bg-pink-950 border-pink-200 dark:border-pink-800 text-pink-700 dark:text-pink-300',
   };
-  return colors[type] || 'bg-gray-50 border-gray-200 text-gray-700';
+  return colors[type] || 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300';
 };
 
 // Step Card Component
-const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick }: {
+const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick, language }: {
   step: Step;
   index: number;
   totalSteps: number;
   trackColor: string;
   isActive: boolean;
   onClick: () => void;
+  language: 'ar' | 'en';
 }) => {
+  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+
   return (
     <div
       onClick={onClick}
@@ -109,7 +128,7 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick }: {
           <h4 className="text-lg font-semibold text-foreground mb-1">{step.title}</h4>
           <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-medium ${getStepTypeColor(step.type)}`}>
             {getStepIcon(step.type)}
-            {getStepTypeLabel(step.type)}
+            {getStepTypeLabel(step.type, language)}
           </div>
         </div>
       </div>
@@ -121,7 +140,7 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick }: {
 
       {/* Progress Indicator */}
       <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>الخطوة {index + 1} من {totalSteps}</span>
+        <span>{t('step')} {index + 1} {t('of')} {totalSteps}</span>
         <div className="flex gap-1">
           {Array.from({ length: totalSteps }).map((_, i) => (
             <div
@@ -140,14 +159,17 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick }: {
 };
 
 // Full Step View Component
-const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev }: {
+const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, language }: {
   step: Step;
   index: number;
   totalSteps: number;
   trackColor: string;
   onNext: () => void;
   onPrev: () => void;
+  language: 'ar' | 'en';
 }) => {
+  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+
   return (
     <div className="space-y-6">
       {/* Full Step Card */}
@@ -162,9 +184,9 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev }: {
           </div>
           <div className="flex-1">
             <h3 className="text-2xl font-bold mb-2">{step.title}</h3>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border-2 font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-card rounded-full border-2 font-medium">
               {getStepIcon(step.type)}
-              {getStepTypeLabel(step.type)}
+              {getStepTypeLabel(step.type, language)}
             </div>
           </div>
         </div>
@@ -177,10 +199,10 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev }: {
         {/* Progress Bar */}
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm font-medium">
-            <span>التقدم</span>
+            <span>{t('progress')}</span>
             <span>{Math.round(((index + 1) / totalSteps) * 100)}%</span>
           </div>
-          <div className="w-full bg-white/50 rounded-full h-3 overflow-hidden">
+          <div className="w-full bg-card/50 rounded-full h-3 overflow-hidden">
             <div
               className="h-full transition-all duration-300 rounded-full"
               style={{
@@ -199,7 +221,7 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev }: {
           disabled={index === 0}
           className="px-6 py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
         >
-          ← السابق
+          {language === 'ar' ? '← ' : ''}{t('previousStep')}{language === 'en' ? ' →' : ''}
         </button>
 
         <div className="flex gap-2">
@@ -213,7 +235,7 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev }: {
                     ? 'bg-primary/50'
                     : 'bg-border'
               }`}
-              aria-label={`الخطوة ${i + 1}`}
+              aria-label={`${t('step')} ${i + 1}`}
             />
           ))}
         </div>
@@ -224,19 +246,19 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev }: {
           className="px-6 py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           style={{ backgroundColor: trackColor }}
         >
-          التالي →
+          {t('nextStep')}{language === 'ar' ? ' ←' : ' →'}
         </button>
       </div>
 
       {/* Completion Message */}
       {index === totalSteps - 1 && (
-        <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 text-center">
-          <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-3" />
-          <p className="text-green-700 font-semibold text-lg">
-            ✓ مبروك! لقد أكملت هذا الموضوع بنجاح
+        <div className="bg-green-50 dark:bg-green-950 border-2 border-green-200 dark:border-green-800 rounded-lg p-6 text-center">
+          <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400 mx-auto mb-3" />
+          <p className="text-green-700 dark:text-green-300 font-semibold text-lg">
+            ✓ {language === 'ar' ? 'مبروك! لقد أكملت هذا الموضوع بنجاح' : 'Congratulations! You completed this topic successfully'}
           </p>
-          <p className="text-green-600 text-sm mt-2">
-            انتقل إلى الموضوع التالي لمواصلة رحلة التعلم
+          <p className="text-green-600 dark:text-green-400 text-sm mt-2">
+            {language === 'ar' ? 'انتقل إلى الموضوع التالي لمواصلة رحلة التعلم' : 'Move to the next topic to continue your learning journey'}
           </p>
         </div>
       )}
@@ -247,7 +269,9 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev }: {
 export default function TopicCard({ topic, trackColor }: TopicCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [viewMode, setViewMode] = useState<'grid' | 'full'>('grid'); // 'grid' or 'full'
+  const [viewMode, setViewMode] = useState<'grid' | 'full'>('grid');
+  const { language } = useLanguage();
+  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
 
   const currentStep = topic.steps[currentStepIndex];
   const totalSteps = topic.steps.length;
@@ -288,7 +312,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
           <p className="text-muted-foreground mb-3">{topic.description}</p>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Clock className="w-4 h-4" />
-            <span>وقت التعلم: {topic.estimatedTime} دقيقة</span>
+            <span>{t('estimatedTime')}: {topic.estimatedTime} {t('minutes')}</span>
           </div>
         </div>
         <ChevronDown
@@ -311,7 +335,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
                   : 'bg-muted text-foreground hover:bg-muted/80'
               }`}
             >
-              عرض شبكة
+              {language === 'ar' ? 'عرض شبكة' : 'Grid View'}
             </button>
             <button
               onClick={() => {
@@ -323,7 +347,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
                   : 'bg-muted text-foreground hover:bg-muted/80'
               }`}
             >
-              عرض كامل
+              {language === 'ar' ? 'عرض كامل' : 'Full View'}
             </button>
           </div>
 
@@ -339,6 +363,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
                   trackColor={trackColor}
                   isActive={index === currentStepIndex}
                   onClick={() => handleStepClick(index)}
+                  language={language}
                 />
               ))}
             </div>
@@ -353,6 +378,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
               trackColor={trackColor}
               onNext={handleNextStep}
               onPrev={handlePreviousStep}
+              language={language}
             />
           )}
         </div>
