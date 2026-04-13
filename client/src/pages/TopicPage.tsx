@@ -174,12 +174,12 @@ export default function TopicPage({ params }: TopicPageProps) {
               {/* Step Header */}
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
-                  <div
-                    className="w-16 h-16 rounded-lg flex items-center justify-center text-2xl flex-shrink-0"
-                    style={{ backgroundColor: track.color }}
-                  >
-                    {getStepIcon(currentStep.type)}
-                  </div>
+              <div
+                className="w-16 h-16 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 text-white font-bold"
+                style={{ backgroundColor: track.color }}
+              >
+                {getStepIcon(currentStep.type)}
+              </div>
                   <div className="flex-1">
                     <h1 className="text-3xl md:text-4xl font-bold text-foreground">
                       {currentStep.title}
@@ -237,26 +237,26 @@ export default function TopicPage({ params }: TopicPageProps) {
           )}
 
           {/* Navigation Buttons */}
-          <div className="flex items-center justify-between gap-4 mt-12">
+          <div className={`flex items-center justify-between gap-4 mt-12 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
             <motion.button
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: language === 'ar' ? 20 : -20 }}
               animate={{ opacity: 1, x: 0 }}
-              whileHover={!isFirstStep ? { x: -5 } : {}}
+              whileHover={!isFirstStep ? { x: language === 'ar' ? 5 : -5 } : {}}
               onClick={handlePrev}
               disabled={isFirstStep}
-              className="px-6 py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center gap-2"
+              className={`px-6 py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}
             >
               {language === 'ar' ? '→' : '←'}
               {t('previousStep')}
             </motion.button>
 
             <motion.button
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: language === 'ar' ? -20 : 20 }}
               animate={{ opacity: 1, x: 0 }}
-              whileHover={!isLastStep ? { x: 5 } : {}}
+              whileHover={!isLastStep ? { x: language === 'ar' ? -5 : 5 } : {}}
               onClick={handleNext}
               disabled={isLastStep}
-              className="px-6 py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+              className={`px-6 py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}
               style={{ backgroundColor: track.color }}
             >
               {t('nextStep')}

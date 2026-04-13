@@ -60,6 +60,9 @@ export interface Translations {
   markAsComplete: string;
   completed: string;
   progress: string;
+  steps: string;
+  backHome: string;
+  notFound: string;
 
   // Step Types
   introduction: string;
@@ -73,7 +76,7 @@ export interface Translations {
   miniActivity: string;
   summary: string;
 
-  // Track Descriptions
+  // Track Descriptions & Navigation
   uxFoundationsDesc: string;
   designThinkingDesc: string;
   userResearchDesc: string;
@@ -160,6 +163,9 @@ const translations: Record<Language, Translations> = {
     markAsComplete: 'تحديد كمكتمل',
     completed: 'مكتمل',
     progress: 'التقدم',
+    steps: 'خطوات',
+    backHome: 'العودة للرئيسية',
+    notFound: 'الصفحة غير موجودة',
 
     // Step Types
     introduction: 'المقدمة',
@@ -258,6 +264,9 @@ const translations: Record<Language, Translations> = {
     markAsComplete: 'Mark as Complete',
     completed: 'Completed',
     progress: 'Progress',
+    steps: 'steps',
+    backHome: 'Back to Home',
+    notFound: 'Page Not Found',
 
     // Step Types
     introduction: 'Introduction',

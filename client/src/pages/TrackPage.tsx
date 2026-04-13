@@ -27,7 +27,7 @@ export default function TrackPage({ params }: TrackPageProps) {
   const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
   const tracks = getTracks(language);
   
-  const track = tracks.find(t => t.id === params.trackId);
+  const track = tracks.find(tr => tr.id === params.trackId);
 
   if (!track) {
     return (
@@ -85,7 +85,7 @@ export default function TrackPage({ params }: TrackPageProps) {
               className="inline-block"
             >
               <div
-                className="w-20 h-20 rounded-lg flex items-center justify-center text-4xl"
+                className="w-20 h-20 rounded-lg flex items-center justify-center text-4xl hover:scale-110 transition-transform"
                 style={{ backgroundColor: `${track.color}20` }}
               >
                 {track.emoji}
@@ -132,7 +132,7 @@ export default function TrackPage({ params }: TrackPageProps) {
                 transition={{ delay: index * 0.05 }}
                 whileHover={{ y: -8, boxShadow: "0 20px 40px -10px rgba(0,0,0,0.1)" }}
                 onClick={() => handleTopicClick(topic.id)}
-                className="topic-card p-6 cursor-pointer group transition-all duration-300"
+                className="topic-card p-6 cursor-pointer group transition-all duration-300 hover:border-primary/50"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div
@@ -141,7 +141,7 @@ export default function TrackPage({ params }: TrackPageProps) {
                   >
                     {topic.emoji}
                   </div>
-                  <ArrowRight className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ArrowRight className={`w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity ${language === 'ar' ? 'rotate-180' : ''}`} />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                   {topic.title}

@@ -46,11 +46,9 @@ export default function Home() {
               className="inline-block"
             >
               <div className="w-24 h-24 bg-white rounded-2xl flex items-center justify-center mx-auto overflow-hidden shadow-xl border-2 border-primary/10">
-                <img 
-                  src="/pixel-new-logo.png" 
-                  alt="PIXEL" 
-                  className="w-full h-full object-cover"
-                />
+                <div className="w-full h-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-2xl">
+                  P
+                </div>
               </div>
             </motion.div>
             <motion.h1 
