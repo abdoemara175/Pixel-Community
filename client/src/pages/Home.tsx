@@ -1,26 +1,30 @@
 /**
  * Home Page - PIXEL UX Learning Platform
  * 
- * Main learning platform with:
+ * Main landing page with:
  * - Hero section introducing the platform
  * - About/Vision section
- * - Learning journey roadmap
- * - Track sections with topics
+ * - Four learning tracks as clickable cards
  * - Footer
  */
 
 import Header from '@/components/Header';
-import TrackSection from '@/components/TrackSection';
 import { getTracks } from '@/lib/content';
 import { ArrowRight, Zap, Users, BookOpen, Award } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation } from '@/lib/i18n';
 import { motion } from 'framer-motion';
+import { useLocation } from 'wouter';
 
 export default function Home() {
   const { language } = useLanguage();
+  const [, setLocation] = useLocation();
   const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
   const tracks = getTracks(language);
+
+  const handleTrackClick = (trackId: string) => {
+    setLocation(`/track/${trackId}`);
+  };
 
   return (
     <div className="min-h-screen bg-background pt-16 md:pt-20">
@@ -79,15 +83,15 @@ export default function Home() {
               transition={{ delay: 0.7 }}
               className="flex flex-col sm:flex-row gap-4 justify-center pt-4"
             >
-              <motion.a
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                href="#ux-track"
+                onClick={() => handleTrackClick('ux-track')}
                 className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 gap-2"
               >
                 {t('startLearning')}
                 <ArrowRight className="w-5 h-5" />
-              </motion.a>
+              </motion.button>
               <motion.a
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(var(--primary), 0.05)" }}
                 whileTap={{ scale: 0.95 }}
@@ -151,14 +155,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Learning Journey Section */}
-      <section id="journey" className="py-16 md:py-24">
+      {/* Learning Tracks Section */}
+      <section id="tracks" className="py-16 md:py-24">
         <div className="container">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-12 text-center">
             {t('learningJourney')}
           </h2>
           
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {tracks.map((track, index) => (
               <motion.div
                 key={track.id}
@@ -167,6 +171,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -10, scale: 1.02 }}
+                onClick={() => handleTrackClick(track.id)}
                 className="topic-card p-6 text-center hover:shadow-xl transition-all duration-300 cursor-pointer group"
               >
                 <div
@@ -183,27 +188,8 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
-
-          <div className="text-center">
-            <a
-              href="#ux-track"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              {t('startJourneyNow')}
-              <ArrowRight className="w-5 h-5" />
-            </a>
-          </div>
         </div>
       </section>
-
-      {/* Track Sections */}
-      {tracks.map((track) => (
-        <TrackSection
-          key={track.id}
-          track={track}
-          id={track.id}
-        />
-      ))}
 
       {/* Footer */}
       <footer className="bg-foreground/5 border-t border-border py-12 mt-20">
@@ -218,10 +204,16 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-foreground mb-4">{t('tracks')}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#ux-track" className="hover:text-primary transition-colors">{t('uxTrack')}</a></li>
-                <li><a href="#ui-track" className="hover:text-primary transition-colors">{t('uiTrack')}</a></li>
-                <li><a href="#integration-track" className="hover:text-primary transition-colors">{t('integration')}</a></li>
-                <li><a href="#bonus-track" className="hover:text-primary transition-colors">{t('bonus')}</a></li>
+                {tracks.map((track) => (
+                  <li key={track.id}>
+                    <button 
+                      onClick={() => handleTrackClick(track.id)}
+                      className="hover:text-primary transition-colors"
+                    >
+                      {track.title}
+                    </button>
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
