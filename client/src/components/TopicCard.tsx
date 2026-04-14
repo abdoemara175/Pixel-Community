@@ -10,7 +10,8 @@
  */
 
 import { useState } from 'react';
-import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X } from 'lucide-react';
+import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X, ExternalLink } from 'lucide-react';
+import { Link } from 'wouter';
 import type { Topic, Step } from '@/lib/content';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation } from '@/lib/i18n';
@@ -310,7 +311,18 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
             <h3 className="text-2xl font-bold text-foreground">{topic.title}</h3>
           </div>
           <p className="text-muted-foreground mb-3">{topic.description}</p>
-
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              <span>{topic.estimatedTime} {t('minutes')}</span>
+            </div>
+            <Link href={`/track/${topic.trackId}/topic/${topic.id}`}>
+              <span className="flex items-center gap-1 text-primary hover:underline font-medium">
+                <ExternalLink className="w-4 h-4" />
+                {language === 'ar' ? 'عرض في صفحة منفصلة' : 'View in separate page'}
+              </span>
+            </Link>
+          </div>
         </div>
         <ChevronDown
           className={`w-6 h-6 text-primary transition-transform flex-shrink-0 mt-1 ${

@@ -36,7 +36,7 @@ export default function Header() {
   const t = (key: keyof Translations) => getTranslation(language, key);
 
   const navItems: NavItem[] = [
-    { label: t('home'), href: 'https://abdoemara175.github.io/Pixel-Community/', isExternal: true },
+    { label: t('home'), href: '/', isExternal: false },
     { label: t('uxTrack'), href: '#ux-track', isExternal: false },
     { label: t('uiTrack'), href: '#ui-track', isExternal: false },
     { label: t('integrationTrack'), href: '#integration-track', isExternal: false },
@@ -66,8 +66,8 @@ export default function Header() {
 
   // Handle smooth scroll to section
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isExternal?: boolean) => {
-    if (isExternal) {
-      return; // Let the browser handle external links
+    if (isExternal || !href.startsWith('#')) {
+      return; // Let the browser or wouter handle external links or page routes
     }
     
     e.preventDefault();
@@ -124,28 +124,6 @@ export default function Header() {
     },
   };
 
-  const navLinkVariants: Variants = {
-    rest: {
-      backgroundColor: 'transparent',
-      x: 0,
-    },
-    hover: {
-      backgroundColor: 'var(--muted)',
-      x: isRtl ? -4 : 4,
-      transition: {
-        duration: 0.35,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-    tap: {
-      scale: 0.98,
-      transition: {
-        duration: 0.15,
-        ease: 'easeInOut',
-      },
-    },
-  };
-
   const iconButtonVariants: Variants = {
     rest: {
       scale: 1,
@@ -180,31 +158,27 @@ export default function Header() {
       <div className="container">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo and Brand - Enhanced Animation */}
-          <motion.a
-            href="https://abdoemara175.github.io/Pixel-Community/"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="flex items-center gap-3 flex-shrink-0 hover:opacity-80 transition-opacity"
-          >
-            <div className="hidden sm:block">
-              <motion.h1
-                className="text-lg md:text-xl font-bold text-primary tracking-tight"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                PIXEL
-              </motion.h1>
-              <motion.p
-                className="text-xs md:text-sm text-muted-foreground"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-              >
-                {t('platformSubtitle')}
-              </motion.p>
+          <Link href="/">
+            <div className="flex items-center gap-3 flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer">
+              <div className="hidden sm:block text-left">
+                <motion.h1
+                  className="text-lg md:text-xl font-bold text-primary tracking-tight"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  PIXEL
+                </motion.h1>
+                <motion.p
+                  className="text-xs md:text-sm text-muted-foreground"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  {t('platformSubtitle')}
+                </motion.p>
+              </div>
             </div>
-          </motion.a>
+          </Link>
 
           {/* Desktop Navigation - Enhanced with smooth transitions */}
           <motion.nav
@@ -219,9 +193,6 @@ export default function Header() {
                 href={item.href}
                 onClick={(e) => handleSmoothScroll(e, item.href, item.isExternal)}
                 variants={itemVariants}
-                initial="rest"
-                whileHover="hover"
-                whileTap="tap"
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 relative overflow-hidden ${
                   activeSection === item.href
                     ? 'text-primary bg-primary/10'
@@ -229,7 +200,7 @@ export default function Header() {
                 }`}
               >
                 {/* Animated background indicator */}
-                {activeSection === item.href && !item.isExternal && (
+                {activeSection === item.href && !item.isExternal && item.href.startsWith('#') && (
                   <motion.div
                     layoutId="navIndicator"
                     className="absolute inset-0 bg-primary/5 rounded-lg -z-10"
@@ -353,9 +324,6 @@ export default function Header() {
                     href={item.href}
                     onClick={(e) => handleSmoothScroll(e, item.href, item.isExternal)}
                     variants={itemVariants}
-                    initial="rest"
-                    whileHover="hover"
-                    whileTap="tap"
                     className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                       activeSection === item.href
                         ? 'text-primary bg-primary/10'
