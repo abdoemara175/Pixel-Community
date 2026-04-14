@@ -33,8 +33,8 @@ export default function Header() {
     { label: t('home'), href: '#home' },
     { label: t('uxTrack'), href: '#ux-track' },
     { label: t('uiTrack'), href: '#ui-track' },
-    { label: t('integration'), href: '#integration-track' },
-    { label: t('bonus'), href: '#bonus-track' },
+    { label: t('integrationTrack'), href: '#ux-x-ui-integration-track' },
+    { label: t('bonusTrack'), href: '#bonus-track' },
     { label: t('contact'), href: '#contact' },
   ];
 

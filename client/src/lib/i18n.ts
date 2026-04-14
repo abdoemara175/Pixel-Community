@@ -10,8 +10,8 @@ export interface Translations {
   home: string;
   uxTrack: string;
   uiTrack: string;
-  integration: string;
-  bonus: string;
+  integrationTrack: string;
+  bonusTrack: string;
   contact: string;
   platformSubtitle: string;
 
@@ -111,10 +111,10 @@ const translations: Record<Language, Translations> = {
   ar: {
     // Header & Navigation
     home: 'الرئيسية',
-    uxTrack: 'مسار UX',
-    uiTrack: 'مسار UI',
-    integration: 'التكامل',
-    bonus: 'محتوى إضافي',
+    uxTrack: 'مسار تجربة المستخدم (UX)',
+    uiTrack: 'مسار واجهة المستخدم (UI)',
+    integrationTrack: 'تكامل UX × UI',
+    bonusTrack: 'محتوى إضافي',
     contact: 'تواصل',
     platformSubtitle: 'منصة تعلم UX/UI',
 
@@ -214,8 +214,8 @@ const translations: Record<Language, Translations> = {
     home: 'Home',
     uxTrack: 'UX Track',
     uiTrack: 'UI Track',
-    integration: 'Integration',
-    bonus: 'Bonus Content',
+    integrationTrack: 'UX × UI Integration',
+    bonusTrack: 'Bonus Content',
     contact: 'Contact',
     platformSubtitle: 'UX/UI Learning Platform',
 
