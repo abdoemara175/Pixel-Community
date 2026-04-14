@@ -71,6 +71,28 @@ export default function TopicPage({ params }: TopicPageProps) {
     window.scrollTo(0, 0);
   }, [currentStepIndex]);
 
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight') {
+        if (language === 'ar') {
+          handlePrev();
+        } else {
+          handleNext();
+        }
+      } else if (event.key === 'ArrowLeft') {
+        if (language === 'ar') {
+          handleNext();
+        } else {
+          handlePrev();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentStepIndex, language, topic?.steps.length]);
+
   if (!track || !topic) {
     return (
       <div className="min-h-screen bg-background pt-16 md:pt-20">
