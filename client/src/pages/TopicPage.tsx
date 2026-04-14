@@ -11,7 +11,7 @@
 import Header from '@/components/Header';
 import { getTracks } from '@/lib/content';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getTranslation } from '@/lib/i18n';
+import { getTranslation, type Translations } from '@/lib/i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 import { ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
@@ -60,7 +60,7 @@ const getStepTypeColor = (type: string) => {
 export default function TopicPage({ params }: TopicPageProps) {
   const { language } = useLanguage();
   const [, setLocation] = useLocation();
-  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+  const t = (key: keyof Translations) => getTranslation(language, key);
   const tracks = getTracks(language);
   
   const track = tracks.find(tr => tr.id === params.trackId);
@@ -191,7 +191,34 @@ export default function TopicPage({ params }: TopicPageProps) {
               {/* Step Content */}
               <div className="prose dark:prose-invert max-w-none">
                 <div className="text-foreground text-lg leading-relaxed whitespace-pre-wrap">
-                  {currentStep.content}
+                  {currentStep.type === 'activity' ? (
+                    <div className="bg-white/50 dark:bg-black/20 p-6 rounded-xl border-2 border-dashed border-primary/30 shadow-inner">
+                      <p className="font-bold text-primary mb-4 flex items-center gap-2">
+                        <span className="text-2xl">🎯</span> {language === 'ar' ? 'نشاط تفاعلي:' : 'Interactive Activity:'}
+                      </p>
+                      {currentStep.content}
+                      <div className="mt-6">
+                        <textarea 
+                          className="w-full p-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary outline-none transition-all"
+                          placeholder={language === 'ar' ? 'اكتب إجابتك هنا للتفكير...' : 'Write your answer here to reflect...'}
+                          rows={3}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    currentStep.content.split('\n').map((line, i) => {
+                      if (line.startsWith('✅')) {
+                        return <p key={i} className="flex items-start gap-2 text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20 my-2">{line}</p>;
+                      }
+                      if (line.startsWith('❌')) {
+                        return <p key={i} className="flex items-start gap-2 text-rose-600 dark:text-rose-400 font-medium bg-rose-500/10 p-3 rounded-lg border border-rose-500/20 my-2">{line}</p>;
+                      }
+                      if (line.startsWith('•')) {
+                        return <li key={i} className="list-none flex items-start gap-2 my-1"><span className="text-primary">•</span> {line.substring(1).trim()}</li>;
+                      }
+                      return <p key={i} className="my-2">{line}</p>;
+                    })
+                  )}
                 </div>
               </div>
 
