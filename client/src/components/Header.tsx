@@ -19,6 +19,12 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation, type Translations } from '@/lib/i18n';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 
+interface NavItem {
+  label: string;
+  href: string;
+  isExternal?: boolean;
+}
+
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('#home');
@@ -29,13 +35,13 @@ export default function Header() {
 
   const t = (key: keyof Translations) => getTranslation(language, key);
 
-  const navItems = [
-    { label: t('home'), href: '#home' },
-    { label: t('uxTrack'), href: '#ux-track' },
-    { label: t('uiTrack'), href: '#ui-track' },
-    { label: t('integrationTrack'), href: '#ux-x-ui-integration-track' },
-    { label: t('bonusTrack'), href: '#bonus-track' },
-    { label: t('contact'), href: '#contact' },
+  const navItems: NavItem[] = [
+    { label: t('home'), href: 'https://abdoemara175.github.io/Pixel-Community/', isExternal: true },
+    { label: t('uxTrack'), href: '#ux-track', isExternal: false },
+    { label: t('uiTrack'), href: '#ui-track', isExternal: false },
+    { label: t('integrationTrack'), href: '#integration-track', isExternal: false },
+    { label: t('bonusTrack'), href: '#bonus-track', isExternal: false },
+    { label: t('contact'), href: '#contact', isExternal: false },
   ];
 
   const isRtl = language === 'ar';
@@ -51,9 +57,27 @@ export default function Header() {
   }, []);
 
   // Close mobile menu when navigating
-  const handleNavClick = (href: string) => {
-    setActiveSection(href);
+  const handleNavClick = (href: string, isExternal?: boolean) => {
+    if (!isExternal) {
+      setActiveSection(href);
+    }
     setIsMobileMenuOpen(false);
+  };
+
+  // Handle smooth scroll to section
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isExternal?: boolean) => {
+    if (isExternal) {
+      return; // Let the browser handle external links
+    }
+    
+    e.preventDefault();
+    handleNavClick(href, isExternal);
+    
+    // Smooth scroll to section
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   // Animation variants for staggered menu items
@@ -156,11 +180,12 @@ export default function Header() {
       <div className="container">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo and Brand - Enhanced Animation */}
-          <motion.div
+          <motion.a
+            href="https://abdoemara175.github.io/Pixel-Community/"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="flex items-center gap-3 flex-shrink-0"
+            className="flex items-center gap-3 flex-shrink-0 hover:opacity-80 transition-opacity"
           >
             <div className="hidden sm:block">
               <motion.h1
@@ -179,7 +204,7 @@ export default function Header() {
                 {t('platformSubtitle')}
               </motion.p>
             </div>
-          </motion.div>
+          </motion.a>
 
           {/* Desktop Navigation - Enhanced with smooth transitions */}
           <motion.nav
@@ -192,7 +217,7 @@ export default function Header() {
               <motion.a
                 key={item.href}
                 href={item.href}
-                onClick={() => handleNavClick(item.href)}
+                onClick={(e) => handleSmoothScroll(e, item.href, item.isExternal)}
                 variants={itemVariants}
                 initial="rest"
                 whileHover="hover"
@@ -204,7 +229,7 @@ export default function Header() {
                 }`}
               >
                 {/* Animated background indicator */}
-                {activeSection === item.href && (
+                {activeSection === item.href && !item.isExternal && (
                   <motion.div
                     layoutId="navIndicator"
                     className="absolute inset-0 bg-primary/5 rounded-lg -z-10"
@@ -326,7 +351,7 @@ export default function Header() {
                   <motion.a
                     key={item.href}
                     href={item.href}
-                    onClick={() => handleNavClick(item.href)}
+                    onClick={(e) => handleSmoothScroll(e, item.href, item.isExternal)}
                     variants={itemVariants}
                     initial="rest"
                     whileHover="hover"

@@ -31,7 +31,7 @@ export default function Home() {
       <Header />
 
       {/* Hero Section - Redesigned for better impact */}
-      <section id="home" className="relative py-20 md:py-32 overflow-hidden">
+      <section id="home" className="relative py-20 md:py-32 overflow-hidden" data-section="home">
         {/* Background Gradients */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-full bg-[radial-gradient(circle_at_center,rgba(var(--primary),0.08)_0%,transparent_70%)]" />
@@ -158,7 +158,13 @@ export default function Home() {
       </section>
 
       {/* Learning Tracks Section */}
-      <section id="tracks" className="py-16 md:py-24">
+      <section id="tracks" className="py-16 md:py-24" data-section="tracks">
+        {/* Track Anchor Points */}
+        <div id="ux-track" className="scroll-mt-20"></div>
+        <div id="ui-track" className="scroll-mt-20"></div>
+        <div id="integration-track" className="scroll-mt-20"></div>
+        <div id="bonus-track" className="scroll-mt-20"></div>
+        
         <div className="container">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-12 text-center">
             {t('learningJourney')}
@@ -194,8 +200,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer - Professional Design */}
-      <footer className="bg-gradient-to-b from-background to-foreground/3 border-t border-border/50 py-16 md:py-20 mt-20">
+      {/* Footer - Contact Section */}
+      <footer id="contact" className="bg-gradient-to-b from-background to-foreground/3 border-t border-border/50 py-16 md:py-20 mt-20">
         <div className="container">
           {/* Main Footer Content */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
