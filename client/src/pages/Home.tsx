@@ -10,7 +10,7 @@
 
 import Header from '@/components/Header';
 import { getTracks } from '@/lib/content';
-import { ArrowRight, Zap, Users, BookOpen, Award } from 'lucide-react';
+import { ArrowRight, Zap, Users, BookOpen, Award, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation } from '@/lib/i18n';
 import { motion } from 'framer-motion';
@@ -30,81 +30,85 @@ export default function Home() {
     <div className="min-h-screen bg-background pt-16 md:pt-20">
       <Header />
 
-      {/* Hero Section */}
-      <section id="home" className="py-16 md:py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
+      {/* Hero Section - Redesigned for better impact */}
+      <section id="home" className="relative py-20 md:py-32 overflow-hidden">
+        {/* Background Gradients */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-full bg-[radial-gradient(circle_at_center,rgba(var(--primary),0.08)_0%,transparent_70%)]" />
+          <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-secondary/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+        </div>
+
         <div className="container relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto text-center space-y-6"
-          >
-            <motion.div 
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
-              className="inline-block"
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Badge - New Element */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8"
             >
-              <div className="w-24 h-24 bg-white rounded-2xl flex items-center justify-center mx-auto overflow-hidden shadow-xl border-2 border-primary/10">
-                <div className="w-full h-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-2xl">
-                  P
-                </div>
-              </div>
+              <Sparkles className="w-4 h-4" />
+              <span>{t('platformSubtitle')}</span>
             </motion.div>
+
+            {/* Main Title - Replaced the big 'P' box with a cleaner typography approach */}
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-5xl md:text-6xl font-bold text-foreground tracking-tight"
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-6xl md:text-8xl font-black tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70"
             >
               PIXEL
             </motion.h1>
-            <motion.p 
+
+            {/* Subtitle */}
+            <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-xl md:text-2xl text-muted-foreground font-medium"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-2xl md:text-4xl font-bold text-foreground mb-6"
             >
               {t('heroSubtitle')}
-            </motion.p>
+            </motion.h2>
+
+            {/* Description */}
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="text-lg text-foreground max-w-2xl mx-auto leading-relaxed"
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-10"
             >
               {t('heroDescription')}
             </motion.p>
+
+            {/* Actions - Reordered and styled */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center pt-4"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02, translateY: -2 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => handleTrackClick('ux-track')}
-                className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 gap-2"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 bg-primary text-primary-foreground font-bold rounded-xl hover:shadow-2xl hover:shadow-primary/30 transition-all gap-2 text-lg"
               >
                 {t('startLearning')}
                 <ArrowRight className="w-5 h-5" />
               </motion.button>
+              
               <motion.a
-                whileHover={{ scale: 1.05, backgroundColor: "rgba(var(--primary), 0.05)" }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02, backgroundColor: "rgba(var(--primary), 0.05)" }}
+                whileTap={{ scale: 0.98 }}
                 href="#about"
-                className="inline-flex items-center justify-center px-8 py-3 border-2 border-primary text-primary font-semibold rounded-lg transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-10 py-4 border-2 border-primary/20 text-foreground font-semibold rounded-xl hover:border-primary/40 transition-all text-lg"
               >
                 {t('learnMore')}
               </motion.a>
             </motion.div>
-          </motion.div>
-        </div>
-        {/* Decorative background elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          </div>
         </div>
       </section>
 
