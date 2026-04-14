@@ -10,7 +10,7 @@
 
 import Header from '@/components/Header';
 import { getTracks } from '@/lib/content';
-import { ArrowRight, Zap, Users, BookOpen, Award, Sparkles } from 'lucide-react';
+import { ArrowRight, Zap, Users, BookOpen, Award, Sparkles, Github, Mail, Linkedin, Twitter } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation } from '@/lib/i18n';
 import { motion } from 'framer-motion';
@@ -194,42 +194,194 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-foreground/5 border-t border-border py-12 mt-20">
+      {/* Footer - Professional Design */}
+      <footer className="bg-gradient-to-b from-background to-foreground/3 border-t border-border/50 py-16 md:py-20 mt-20">
         <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <h3 className="font-bold text-foreground mb-4 text-lg">PIXEL</h3>
-              <p className="text-sm text-muted-foreground">
+          {/* Main Footer Content */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            {/* Brand Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0 }}
+              className="space-y-4"
+            >
+              <h3 className="text-2xl font-black text-foreground">PIXEL</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
                 {t('footerDesc')}
               </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">{t('tracks')}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              {/* Social Links */}
+              <div className="flex gap-3 pt-2">
+                <motion.a
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  href="#"
+                  className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors"
+                  title="GitHub"
+                >
+                  <Github className="w-5 h-5" />
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  href="#"
+                  className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors"
+                  title="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  href="#"
+                  className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors"
+                  title="Twitter"
+                >
+                  <Twitter className="w-5 h-5" />
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  href="#"
+                  className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors"
+                  title="Email"
+                >
+                  <Mail className="w-5 h-5" />
+                </motion.a>
+              </div>
+            </motion.div>
+
+            {/* Learning Tracks */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="space-y-4"
+            >
+              <h4 className="font-bold text-foreground text-lg">{t('tracks')}</h4>
+              <ul className="space-y-3">
                 {tracks.map((track) => (
                   <li key={track.id}>
-                    <button 
+                    <motion.button
+                      whileHover={{ x: 4 }}
                       onClick={() => handleTrackClick(track.id)}
-                      className="hover:text-primary transition-colors"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
                     >
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary transition-colors" />
                       {track.title}
-                    </button>
+                    </motion.button>
                   </li>
                 ))}
               </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">{t('community')}</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">{t('github')}</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">{t('feedback')}</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">{t('about')}</a></li>
+            </motion.div>
+
+            {/* Community & Resources */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="space-y-4"
+            >
+              <h4 className="font-bold text-foreground text-lg">{t('community')}</h4>
+              <ul className="space-y-3">
+                <li>
+                  <motion.a
+                    whileHover={{ x: 4 }}
+                    href="#"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary transition-colors" />
+                    {t('github')}
+                  </motion.a>
+                </li>
+                <li>
+                  <motion.a
+                    whileHover={{ x: 4 }}
+                    href="#"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary transition-colors" />
+                    {t('feedback')}
+                  </motion.a>
+                </li>
+                <li>
+                  <motion.a
+                    whileHover={{ x: 4 }}
+                    href="#"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary transition-colors" />
+                    {t('about')}
+                  </motion.a>
+                </li>
               </ul>
-            </div>
+            </motion.div>
+
+            {/* Quick Links */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="space-y-4"
+            >
+              <h4 className="font-bold text-foreground text-lg">Quick Links</h4>
+              <ul className="space-y-3">
+                <li>
+                  <motion.a
+                    whileHover={{ x: 4 }}
+                    href="#home"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary transition-colors" />
+                    Home
+                  </motion.a>
+                </li>
+                <li>
+                  <motion.a
+                    whileHover={{ x: 4 }}
+                    href="#about"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary transition-colors" />
+                    About
+                  </motion.a>
+                </li>
+                <li>
+                  <motion.a
+                    whileHover={{ x: 4 }}
+                    href="#tracks"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary transition-colors" />
+                    Tracks
+                  </motion.a>
+                </li>
+              </ul>
+            </motion.div>
           </div>
-          <div className="border-t border-border pt-8 text-center text-sm text-muted-foreground">
+
+          {/* Divider */}
+          <div className="border-t border-border/50 my-8" />
+
+          {/* Footer Bottom */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>{t('copyright')}</p>
+            <div className="flex gap-6">
+              <motion.a
+                whileHover={{ textDecoration: 'underline' }}
+                href="#"
+                className="hover:text-primary transition-colors"
+              >
+                Privacy Policy
+              </motion.a>
+              <motion.a
+                whileHover={{ textDecoration: 'underline' }}
+                href="#"
+                className="hover:text-primary transition-colors"
+              >
+                Terms of Service
+              </motion.a>
+            </div>
           </div>
         </div>
       </footer>
