@@ -221,6 +221,37 @@
     }
   }
   
+  /* Modern Frosted Glass (Blur) Effects */
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/30 dark:bg-black/20;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-effect-strong {
+    @apply backdrop-blur-2xl bg-white/40 dark:bg-black/30;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-effect-subtle {
+    @apply backdrop-blur-md bg-white/20 dark:bg-black/10;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Enhanced Header Blur */
+  .header-blur {
+    @apply backdrop-blur-xl bg-background/70 dark:bg-background/60;
+    border-bottom: 1px solid rgba(var(--primary-rgb), 0.1);
+  }
+
+  /* Smooth transitions for all interactive elements */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    @apply transition-all duration-200;
+  }
+
   /* Educational card styling with pixel-inspired borders */
   .topic-card {
     @apply bg-card text-card-foreground rounded-lg shadow-sm border border-border transition-all duration-500;
@@ -310,6 +341,36 @@
   .animate-slide-in {
     animation: slideInUp 0.5s ease-out;
   }
+
+  /* Enhanced fade in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  /* Smooth scale animation */
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
   
   /* Pixel grid background pattern */
   @keyframes pixelShift {
@@ -326,5 +387,21 @@
       linear-gradient(0deg, transparent 24%, rgba(var(--primary-rgb), 0.03) 25%, rgba(var(--primary-rgb), 0.03) 26%, transparent 27%, transparent 74%, rgba(var(--primary-rgb), 0.03) 75%, rgba(var(--primary-rgb), 0.03) 76%, transparent 77%, transparent),
       linear-gradient(90deg, transparent 24%, rgba(var(--primary-rgb), 0.03) 25%, rgba(var(--primary-rgb), 0.03) 26%, transparent 27%, transparent 74%, rgba(var(--primary-rgb), 0.03) 75%, rgba(var(--primary-rgb), 0.03) 76%, transparent 77%, transparent);
     background-size: 50px 50px;
+  }
+
+  /* Touch-friendly button states */
+  @media (hover: none) and (pointer: coarse) {
+    button,
+    a[href],
+    [role="button"] {
+      @apply active:scale-95 active:opacity-80;
+    }
+  }
+
+  /* Smooth backdrop blur transitions */
+  @supports (backdrop-filter: blur(1px)) {
+    .backdrop-blur-md {
+      @apply transition-all duration-300;
+    }
   }
 }

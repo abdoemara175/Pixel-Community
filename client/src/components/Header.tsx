@@ -1,29 +1,33 @@
 /**
  * Header Component - PIXEL UX Learning Platform
  * 
- * Sticky navigation with:
- * - Logo and branding
- * - Track navigation links
- * - Mobile hamburger menu
+ * Enhanced Navigation with:
+ * - Smooth transitions and animations
+ * - Advanced touch interactions
+ * - Modern Frosted Glass (Blur) theme
+ * - Responsive design with mobile optimization
  * - Active section highlighting
  * - Theme toggle (Dark/Light)
  * - Language toggle (Arabic/English)
  */
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Menu, X, Moon, Sun, Globe } from 'lucide-react';
 import { Link } from 'wouter';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getTranslation } from '@/lib/i18n';
-import { motion, AnimatePresence } from 'framer-motion';
+import { getTranslation, type Translations } from '@/lib/i18n';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('#home');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const { theme, toggleTheme } = useTheme();
   const { language, toggleLanguage } = useLanguage();
 
-  const t = (key: keyof typeof getTranslation) => getTranslation(language, key as any);
+  const t = (key: keyof Translations) => getTranslation(language, key);
 
   const navItems = [
     { label: t('home'), href: '#home' },
@@ -36,49 +40,198 @@ export default function Header() {
 
   const isRtl = language === 'ar';
 
+  // Handle scroll effect for header styling
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close mobile menu when navigating
+  const handleNavClick = (href: string) => {
+    setActiveSection(href);
+    setIsMobileMenuOpen(false);
+  };
+
+  // Animation variants for staggered menu items
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.15,
+        ease: 'easeInOut',
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
+
+  const mobileMenuVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      height: 0,
+      transition: {
+        duration: 0.4,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+    visible: {
+      opacity: 1,
+      height: 'auto',
+      transition: {
+        duration: 0.4,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
+
+  const navLinkVariants: Variants = {
+    rest: {
+      backgroundColor: 'transparent',
+      x: 0,
+    },
+    hover: {
+      backgroundColor: 'var(--muted)',
+      x: isRtl ? -4 : 4,
+      transition: {
+        duration: 0.35,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+    tap: {
+      scale: 0.98,
+      transition: {
+        duration: 0.15,
+        ease: 'easeInOut',
+      },
+    },
+  };
+
+  const iconButtonVariants: Variants = {
+    rest: {
+      scale: 1,
+      rotate: 0,
+    },
+    hover: {
+      scale: 1.1,
+      rotate: 5,
+      transition: {
+        duration: 0.4,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+    tap: {
+      scale: 0.92,
+      transition: {
+        duration: 0.15,
+        ease: 'easeInOut',
+      },
+    },
+  };
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border shadow-sm">
+    <header
+      ref={headerRef}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-background/70 backdrop-blur-xl border-b border-border/50 shadow-lg'
+          : 'bg-background/50 backdrop-blur-md border-b border-border/30 shadow-sm'
+      }`}
+    >
       <div className="container">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo and Brand */}
-          <motion.div 
+          {/* Logo and Brand - Enhanced Animation */}
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3"
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="flex items-center gap-3 flex-shrink-0"
           >
             <div className="hidden sm:block">
-              <h1 className="text-lg md:text-xl font-bold text-primary tracking-tight">PIXEL</h1>
-              <p className="text-xs md:text-sm text-muted-foreground">{t('platformSubtitle')}</p>
+              <motion.h1
+                className="text-lg md:text-xl font-bold text-primary tracking-tight"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                PIXEL
+              </motion.h1>
+              <motion.p
+                className="text-xs md:text-sm text-muted-foreground"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                {t('platformSubtitle')}
+              </motion.p>
             </div>
           </motion.div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item, index) => (
+          {/* Desktop Navigation - Enhanced with smooth transitions */}
+          <motion.nav
+            className="hidden md:flex items-center gap-1"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {navItems.map((item) => (
               <motion.a
                 key={item.href}
                 href={item.href}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-all duration-200"
+                onClick={() => handleNavClick(item.href)}
+                variants={itemVariants}
+                initial="rest"
+                whileHover="hover"
+                whileTap="tap"
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 relative overflow-hidden ${
+                  activeSection === item.href
+                    ? 'text-primary bg-primary/10'
+                    : 'text-foreground hover:text-primary'
+                }`}
               >
+                {/* Animated background indicator */}
+                {activeSection === item.href && (
+                  <motion.div
+                    layoutId="navIndicator"
+                    className="absolute inset-0 bg-primary/5 rounded-lg -z-10"
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  />
+                )}
                 {item.label}
               </motion.a>
             ))}
-          </nav>
+          </motion.nav>
 
-          {/* Theme & Language Controls */}
-          <div className="flex items-center gap-2">
-            {/* Theme Toggle */}
+          {/* Theme & Language Controls - Enhanced with better touch feedback */}
+          <motion.div
+            className="flex items-center gap-2"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            {/* Theme Toggle - Enhanced animation */}
             <motion.button
-              whileHover={{ scale: 1.1, rotate: 15 }}
-              whileTap={{ scale: 0.9 }}
+              variants={iconButtonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
               onClick={toggleTheme}
-              className="p-2 hover:bg-muted rounded-md transition-colors"
-              aria-label="تبديل الوضع"
+              className="p-2 rounded-lg transition-all duration-200 hover:bg-muted/50 active:bg-muted"
+              aria-label={theme === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح'}
               title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -87,7 +240,7 @@ export default function Header() {
                   initial={{ y: -20, opacity: 0, rotate: -90 }}
                   animate={{ y: 0, opacity: 1, rotate: 0 }}
                   exit={{ y: 20, opacity: 0, rotate: 90 }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
                   {theme === 'light' ? (
                     <Moon className="w-5 h-5 text-foreground" />
@@ -98,22 +251,25 @@ export default function Header() {
               </AnimatePresence>
             </motion.button>
 
-            {/* Language Toggle */}
+            {/* Language Toggle - Enhanced animation */}
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              variants={iconButtonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
               onClick={toggleLanguage}
-              className="p-2 hover:bg-muted rounded-md transition-colors flex items-center gap-1"
-              aria-label="تبديل اللغة"
+              className="p-2 rounded-lg transition-all duration-200 hover:bg-muted/50 active:bg-muted flex items-center gap-1"
+              aria-label={language === 'ar' ? 'تبديل إلى الإنجليزية' : 'تبديل إلى العربية'}
               title={language === 'ar' ? 'English' : 'العربية'}
             >
               <Globe className="w-5 h-5 text-foreground" />
               <AnimatePresence mode="wait" initial={false}>
-                <motion.span 
+                <motion.span
                   key={language}
                   initial={{ opacity: 0, x: language === 'ar' ? 10 : -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: language === 'ar' ? -10 : 10 }}
+                  transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
                   className="text-xs font-semibold text-foreground hidden sm:inline"
                 >
                   {language === 'ar' ? 'EN' : 'AR'}
@@ -121,36 +277,73 @@ export default function Header() {
               </AnimatePresence>
             </motion.button>
 
-            {/* Mobile Menu Button */}
-            <button
+            {/* Mobile Menu Button - Enhanced with smooth animation */}
+            <motion.button
+              variants={iconButtonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 hover:bg-muted rounded-md transition-colors"
-              aria-label="تبديل القائمة"
+              className="md:hidden p-2 rounded-lg transition-all duration-200 hover:bg-muted/50 active:bg-muted"
+              aria-label={isMobileMenuOpen ? 'إغلاق القائمة' : 'فتح القائمة'}
             >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={isMobileMenuOpen ? 'close' : 'menu'}
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  {isMobileMenuOpen ? (
+                    <X className="w-6 h-6 text-foreground" />
+                  ) : (
+                    <Menu className="w-6 h-6 text-foreground" />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </motion.button>
+          </motion.div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <nav className="md:hidden pb-4 space-y-2 border-t border-border pt-4">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-4 py-2 text-sm font-medium text-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+        {/* Mobile Navigation - Enhanced with smooth transitions */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.nav
+              variants={mobileMenuVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              className="md:hidden border-t border-border/50 pt-4 pb-4"
+            >
+              <motion.div
+                className="space-y-2"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
               >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-        )}
+                {navItems.map((item) => (
+                  <motion.a
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => handleNavClick(item.href)}
+                    variants={itemVariants}
+                    initial="rest"
+                    whileHover="hover"
+                    whileTap="tap"
+                    className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
+                      activeSection === item.href
+                        ? 'text-primary bg-primary/10'
+                        : 'text-foreground hover:text-primary'
+                    }`}
+                  >
+                    {item.label}
+                  </motion.a>
+                ))}
+              </motion.div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );
