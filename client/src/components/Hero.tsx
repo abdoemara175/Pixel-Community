@@ -62,7 +62,7 @@ export default function Hero() {
 
             {/* Main Headline */}
             <motion.div variants={itemVariants}>
-              <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white leading-[1.1] whitespace-nowrap">
                 Learn.{" "}
                 <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 dark:from-blue-400 dark:via-indigo-400 dark:to-blue-400 bg-clip-text text-transparent animate-gradient-x">
                   Design.
