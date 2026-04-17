@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <title>Pixel Community</title>
     <script type="text/javascript">
-      var pathSegmentsToKeep = 1;
+      // This script takes the current URL and redirects to the index page
+      // while preserving the path and search parameters in a query string.
+      // This allows GitHub Pages to support Single Page Applications (SPA).
       var l = window.location;
       var repoName = '/Pixel-Community';
       l.replace(
