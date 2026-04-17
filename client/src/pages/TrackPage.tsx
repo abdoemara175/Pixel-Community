@@ -1,19 +1,10 @@
-/**
- * Track Page - PIXEL UX Learning Platform
- * 
- * Displays all topics for a specific track
- * - Track header with title and description
- * - Grid of topic cards
- * - Navigation back to home
- */
-
 import Header from '@/components/Header';
 import { getTracks } from '@/lib/content';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getTranslation } from '@/lib/i18n';
+import { getTranslation, type Translations } from '@/lib/i18n';
 import { motion } from 'framer-motion';
 import { useLocation } from 'wouter';
-import { ArrowRight, ChevronLeft } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface TrackPageProps {
   params: {
@@ -24,22 +15,23 @@ interface TrackPageProps {
 export default function TrackPage({ params }: TrackPageProps) {
   const { language } = useLanguage();
   const [, setLocation] = useLocation();
-  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+  const t = (key: keyof Translations) => getTranslation(language, key);
   const tracks = getTracks(language);
+  const isRtl = language === 'ar';
   
   const track = tracks.find(tr => tr.id === params.trackId);
 
   if (!track) {
     return (
-      <div className="min-h-screen bg-background pt-16 md:pt-20">
+      <div className="min-h-screen bg-background pt-16 md:pt-20" dir={isRtl ? 'rtl' : 'ltr'}>
         <Header />
         <div className="container py-20 text-center">
           <h1 className="text-3xl font-bold text-foreground mb-4">{t('notFound')}</h1>
           <button
             onClick={() => setLocation('/')}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors"
+            className={`inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors ${isRtl ? 'flex-row-reverse' : ''}`}
           >
-            <ChevronLeft className="w-5 h-5" />
+            {isRtl ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
             {t('backHome')}
           </button>
         </div>
@@ -52,21 +44,22 @@ export default function TrackPage({ params }: TrackPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background pt-16 md:pt-20">
+    <div className="min-h-screen bg-background pt-16 md:pt-20" dir={isRtl ? 'rtl' : 'ltr'}>
       <Header />
 
       {/* Back Button */}
       <div className="container py-6">
         <motion.button
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: isRtl ? 20 : -20 }}
           animate={{ opacity: 1, x: 0 }}
-          whileHover={{ x: -5 }}
+          whileHover={{ x: isRtl ? 5 : -5 }}
           onClick={() => setLocation('/')}
-          className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-medium"
+          className={`flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-medium ${isRtl ? 'flex-row-reverse float-right' : 'float-left'}`}
         >
-          <ChevronLeft className="w-5 h-5" />
+          {isRtl ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           {t('backHome')}
         </motion.button>
+        <div className="clear-both"></div>
       </div>
 
       {/* Track Header */}
@@ -103,7 +96,7 @@ export default function TrackPage({ params }: TrackPageProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-lg text-muted-foreground max-w-2xl mx-auto"
+              className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
             >
               {track.description}
             </motion.p>
@@ -111,8 +104,9 @@ export default function TrackPage({ params }: TrackPageProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-sm font-semibold text-muted-foreground"
+              className="text-sm font-semibold text-muted-foreground inline-flex items-center justify-center gap-2 bg-muted/50 px-4 py-2 rounded-full"
             >
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: track.color }}></span>
               {track.topics.length} {t('topics')}
             </motion.div>
           </motion.div>
@@ -132,24 +126,31 @@ export default function TrackPage({ params }: TrackPageProps) {
                 transition={{ delay: index * 0.05 }}
                 whileHover={{ y: -8, boxShadow: "0 20px 40px -10px rgba(0,0,0,0.1)" }}
                 onClick={() => handleTopicClick(topic.id)}
-                className="topic-card p-6 cursor-pointer group transition-all duration-300 hover:border-primary/50"
+                className={`topic-card p-6 cursor-pointer group transition-all duration-300 hover:border-primary/50 ${isRtl ? 'text-right' : 'text-left'}`}
               >
-                <div className="flex items-start justify-between mb-4">
+                <div className={`flex items-start justify-between mb-4 ${isRtl ? 'flex-row-reverse' : ''}`}>
                   <div
-                    className="w-14 h-14 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform"
+                    className="w-14 h-14 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0"
                     style={{ backgroundColor: `${track.color}20` }}
                   >
                     {topic.emoji}
                   </div>
-                  <ArrowRight className={`w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity ${language === 'ar' ? 'rotate-180' : ''}`} />
+                  {isRtl ? (
+                    <ArrowLeft className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                  ) : (
+                    <ArrowRight className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0" />
+                  )}
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                   {topic.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">
                   {topic.description}
                 </p>
-                <div className="text-xs font-semibold text-muted-foreground">
+                <div className="text-xs font-semibold text-muted-foreground flex items-center gap-1">
+                  <div className="w-4 h-4 rounded bg-muted flex items-center justify-center">
+                    <span className="text-[10px]">📄</span>
+                  </div>
                   {topic.steps.length} {t('steps')}
                 </div>
               </motion.div>

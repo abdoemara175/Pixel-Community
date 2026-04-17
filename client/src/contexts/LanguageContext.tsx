@@ -7,7 +7,7 @@ interface LanguageContextType {
   switchable: boolean;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 interface LanguageProviderProps {
   children: React.ReactNode;

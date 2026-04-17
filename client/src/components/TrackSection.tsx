@@ -1,16 +1,7 @@
-/**
- * TrackSection Component - PIXEL UX Learning Platform
- * 
- * Displays a learning track with:
- * - Track title and description
- * - All topics in the track
- * - Visual styling based on track color
- */
-
 import TopicCard from './TopicCard';
 import type { Track } from '@/lib/content';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getTranslation } from '@/lib/i18n';
+import { getTranslation, type Translations } from '@/lib/i18n';
 
 interface TrackSectionProps {
   track: Track;
@@ -19,7 +10,8 @@ interface TrackSectionProps {
 
 export default function TrackSection({ track, id }: TrackSectionProps) {
   const { language } = useLanguage();
-  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+  const t = (key: keyof Translations) => getTranslation(language, key);
+  const isRtl = language === 'ar';
 
   const totalMinutes = track.topics.reduce((sum, topic) => sum + topic.estimatedTime, 0);
 
@@ -27,11 +19,14 @@ export default function TrackSection({ track, id }: TrackSectionProps) {
     <section id={id} className="py-12 md:py-16 border-b border-border last:border-b-0">
       <div className="container">
         {/* Track Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-4 mb-4">
+        <div className={`mb-12 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <div className={`flex items-center gap-4 mb-4 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
             <div
-              className="w-16 h-16 rounded-lg flex items-center justify-center text-3xl"
-              style={{ backgroundColor: `${track.color}20`, borderLeft: `4px solid ${track.color}` }}
+              className="w-16 h-16 rounded-lg flex items-center justify-center text-3xl shrink-0"
+              style={{ 
+                backgroundColor: `${track.color}20`, 
+                [isRtl ? 'borderRight' : 'borderLeft']: `4px solid ${track.color}` 
+              } as any}
             >
               {track.emoji}
             </div>
@@ -40,7 +35,7 @@ export default function TrackSection({ track, id }: TrackSectionProps) {
               <p className="text-muted-foreground mt-2">{track.description}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className={`flex items-center gap-2 text-sm text-muted-foreground ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
             <span className="inline-block px-3 py-1 bg-muted rounded-full">
               {track.topics.length} {t('topics')}
             </span>

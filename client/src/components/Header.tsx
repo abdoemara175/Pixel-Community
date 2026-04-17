@@ -1,16 +1,3 @@
-/**
- * Header Component - PIXEL UX Learning Platform
- * 
- * Enhanced Navigation with:
- * - Smooth transitions and animations
- * - Advanced touch interactions
- * - Modern Frosted Glass (Blur) theme
- * - Responsive design with mobile optimization
- * - Active section highlighting
- * - Theme toggle (Dark/Light)
- * - Language toggle (Arabic/English)
- */
-
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X, Moon, Sun, Globe } from 'lucide-react';
 import { Link } from 'wouter';
@@ -34,6 +21,7 @@ export default function Header() {
   const { language, toggleLanguage } = useLanguage();
 
   const t = (key: keyof Translations) => getTranslation(language, key);
+  const isRtl = language === 'ar';
 
   const navItems: NavItem[] = [
     { label: t('home'), href: '/', isExternal: false },
@@ -43,8 +31,6 @@ export default function Header() {
     { label: t('bonusTrack'), href: '#bonus-track', isExternal: false },
     { label: t('contact'), href: '#contact', isExternal: false },
   ];
-
-  const isRtl = language === 'ar';
 
   // Handle scroll effect for header styling
   useEffect(() => {
@@ -67,20 +53,18 @@ export default function Header() {
   // Handle smooth scroll to section
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isExternal?: boolean) => {
     if (isExternal || !href.startsWith('#')) {
-      return; // Let the browser or wouter handle external links or page routes
+      return; 
     }
     
     e.preventDefault();
     handleNavClick(href, isExternal);
     
-    // Smooth scroll to section
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
-  // Animation variants for staggered menu items
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -154,13 +138,14 @@ export default function Header() {
           ? 'bg-background/70 backdrop-blur-xl border-b border-border/50 shadow-lg'
           : 'bg-background/50 backdrop-blur-md border-b border-border/30 shadow-sm'
       }`}
+      dir={isRtl ? 'rtl' : 'ltr'}
     >
       <div className="container">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo and Brand - Enhanced Animation */}
+        <div className={`flex items-center justify-between h-16 md:h-20 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
+          {/* Logo and Brand - Always English "PIXEL" */}
           <Link href="/">
-            <div className="flex items-center gap-3 flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer">
-              <div className="hidden sm:block text-left">
+            <div className={`flex items-center gap-3 flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer ${isRtl ? 'text-right' : 'text-left'}`}>
+              <div className="hidden sm:block">
                 <motion.h1
                   className="text-lg md:text-xl font-bold text-primary tracking-tight"
                   whileHover={{ scale: 1.05 }}
@@ -180,14 +165,14 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Desktop Navigation - Enhanced with smooth transitions */}
+          {/* Desktop Navigation */}
           <motion.nav
-            className="hidden md:flex items-center gap-1"
+            className={`hidden md:flex items-center gap-1 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            {navItems.map((item) => (
+            {(isRtl ? [...navItems].reverse() : navItems).map((item) => (
               <motion.a
                 key={item.href}
                 href={item.href}
@@ -199,7 +184,6 @@ export default function Header() {
                     : 'text-foreground hover:text-primary'
                 }`}
               >
-                {/* Animated background indicator */}
                 {activeSection === item.href && !item.isExternal && item.href.startsWith('#') && (
                   <motion.div
                     layoutId="navIndicator"
@@ -212,14 +196,13 @@ export default function Header() {
             ))}
           </motion.nav>
 
-          {/* Theme & Language Controls - Enhanced with better touch feedback */}
+          {/* Theme & Language Controls */}
           <motion.div
-            className="flex items-center gap-2"
-            initial={{ opacity: 0, x: 20 }}
+            className={`flex items-center gap-2 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}
+            initial={{ opacity: 0, x: isRtl ? -20 : 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            {/* Theme Toggle - Enhanced animation */}
             <motion.button
               variants={iconButtonVariants}
               initial="rest"
@@ -227,8 +210,7 @@ export default function Header() {
               whileTap="tap"
               onClick={toggleTheme}
               className="p-2 rounded-lg transition-all duration-200 hover:bg-muted/50 active:bg-muted"
-              aria-label={theme === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح'}
-              title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+              aria-label={theme === 'light' ? (isRtl ? 'تفعيل الوضع الداكن' : 'Enable Dark Mode') : (isRtl ? 'تفعيل الوضع الفاتح' : 'Enable Light Mode')}
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -247,24 +229,22 @@ export default function Header() {
               </AnimatePresence>
             </motion.button>
 
-            {/* Language Toggle - Enhanced animation */}
             <motion.button
               variants={iconButtonVariants}
               initial="rest"
               whileHover="hover"
               whileTap="tap"
               onClick={toggleLanguage}
-              className="p-2 rounded-lg transition-all duration-200 hover:bg-muted/50 active:bg-muted flex items-center gap-1"
-              aria-label={language === 'ar' ? 'تبديل إلى الإنجليزية' : 'تبديل إلى العربية'}
-              title={language === 'ar' ? 'English' : 'العربية'}
+              className={`p-2 rounded-lg transition-all duration-200 hover:bg-muted/50 active:bg-muted flex items-center gap-1 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}
+              aria-label={language === 'ar' ? 'Switch to English' : 'التبديل للعربية'}
             >
               <Globe className="w-5 h-5 text-foreground" />
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
                   key={language}
-                  initial={{ opacity: 0, x: language === 'ar' ? 10 : -10 }}
+                  initial={{ opacity: 0, x: isRtl ? -10 : 10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: language === 'ar' ? -10 : 10 }}
+                  exit={{ opacity: 0, x: isRtl ? 10 : -10 }}
                   transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
                   className="text-xs font-semibold text-foreground hidden sm:inline"
                 >
@@ -273,7 +253,6 @@ export default function Header() {
               </AnimatePresence>
             </motion.button>
 
-            {/* Mobile Menu Button - Enhanced with smooth animation */}
             <motion.button
               variants={iconButtonVariants}
               initial="rest"
@@ -281,7 +260,7 @@ export default function Header() {
               whileTap="tap"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 rounded-lg transition-all duration-200 hover:bg-muted/50 active:bg-muted"
-              aria-label={isMobileMenuOpen ? 'إغلاق القائمة' : 'فتح القائمة'}
+              aria-label={isMobileMenuOpen ? (isRtl ? 'إغلاق القائمة' : 'Close Menu') : (isRtl ? 'فتح القائمة' : 'Open Menu')}
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -302,7 +281,6 @@ export default function Header() {
           </motion.div>
         </div>
 
-        {/* Mobile Navigation - Enhanced with smooth transitions */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.nav
@@ -324,7 +302,7 @@ export default function Header() {
                     href={item.href}
                     onClick={(e) => handleSmoothScroll(e, item.href, item.isExternal)}
                     variants={itemVariants}
-                    className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${isRtl ? 'text-right' : 'text-left'} ${
                       activeSection === item.href
                         ? 'text-primary bg-primary/10'
                         : 'text-foreground hover:text-primary'

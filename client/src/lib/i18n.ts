@@ -21,6 +21,18 @@ export interface Translations {
   heroDescription: string;
   startLearning: string;
   learnMore: string;
+  getStarted: string;
+  exploreTracks: string;
+  studentsCount: string;
+  topicsCount: string;
+  practicalLearning: string;
+  yourProgress: string;
+  uiFundamentals: string;
+  designSystems: string;
+  masterFundamentals: string;
+  viewCourse: string;
+  completedStatus: string;
+  inProgressStatus: string;
 
   // About Section
   whyPixel: string;
@@ -47,8 +59,9 @@ export interface Translations {
   feedback: string;
   about: string;
   copyright: string;
+  allRightsReserved: string;
 
-  // Topic Card
+  // Topic Card & Page
   estimatedTime: string;
   minutes: string;
   viewLessons: string;
@@ -63,6 +76,14 @@ export interface Translations {
   steps: string;
   backHome: string;
   notFound: string;
+  backToTopics: string;
+  interactiveActivity: string;
+  activityPlaceholder: string;
+  congratsTopic: string;
+  nextTopicPrompt: string;
+  gridView: string;
+  fullView: string;
+  viewInSeparatePage: string;
 
   // Step Types
   introduction: string;
@@ -75,6 +96,19 @@ export interface Translations {
   practicalTips: string;
   miniActivity: string;
   summary: string;
+
+  // 404 Page
+  pageNotFound: string;
+  notFoundDesc: string;
+  goHome: string;
+
+  // Error Boundary
+  unexpectedError: string;
+  reloadPage: string;
+
+  // Manus Dialog
+  loginWithManusDesc: string;
+  loginWithManusBtn: string;
 
   // Track Descriptions & Navigation
   uxFoundationsDesc: string;
@@ -124,6 +158,18 @@ const translations: Record<Language, Translations> = {
     heroDescription: 'تعلم. صمم. أنشئ. نما مع مجتمع يدعم رحلتك في عالم تصميم تجربة المستخدم والواجهات',
     startLearning: 'ابدأ التعلم',
     learnMore: 'تعرف أكثر',
+    getStarted: 'ابدأ الآن',
+    exploreTracks: 'استكشف المسارات',
+    studentsCount: '+100 طالب',
+    topicsCount: '10+ مواضيع',
+    practicalLearning: 'تعلم عملي',
+    yourProgress: 'تقدمك',
+    uiFundamentals: 'أساسيات واجهة المستخدم',
+    designSystems: 'أنظمة التصميم',
+    masterFundamentals: 'أتقن الأساسيات',
+    viewCourse: 'عرض المسار ←',
+    completedStatus: 'مكتمل',
+    inProgressStatus: 'قيد التنفيذ',
 
     // About Section
     whyPixel: 'لماذا PIXEL؟',
@@ -149,9 +195,10 @@ const translations: Record<Language, Translations> = {
     github: 'GitHub',
     feedback: 'التعليقات',
     about: 'حول',
-    copyright: '© 2026 PIXEL Community. تم إنشاؤه بـ ❤️ لمصممي UX/UI في كل مكان.',
+    copyright: '© 2026 Pixel Community. تم إنشاؤه بـ ❤️ لمصممي UX/UI في كل مكان.',
+    allRightsReserved: 'جميع الحقوق محفوظة.',
 
-    // Topic Card
+    // Topic Card & Page
     estimatedTime: 'الوقت المتوقع',
     minutes: 'دقيقة',
     viewLessons: 'عرض الدروس',
@@ -166,6 +213,14 @@ const translations: Record<Language, Translations> = {
     steps: 'خطوات',
     backHome: 'العودة للرئيسية',
     notFound: 'الصفحة غير موجودة',
+    backToTopics: 'العودة إلى المواضيع',
+    interactiveActivity: 'نشاط تفاعلي:',
+    activityPlaceholder: 'اكتب إجابتك هنا للتفكير...',
+    congratsTopic: 'مبروك! لقد أكملت هذا الموضوع بنجاح',
+    nextTopicPrompt: 'انتقل إلى الموضوع التالي لمواصلة رحلة التعلم',
+    gridView: 'عرض الشبكة',
+    fullView: 'عرض كامل',
+    viewInSeparatePage: 'عرض في صفحة مستقلة',
 
     // Step Types
     introduction: 'المقدمة',
@@ -178,6 +233,19 @@ const translations: Record<Language, Translations> = {
     practicalTips: 'نصائح عملية',
     miniActivity: 'نشاط صغير',
     summary: 'الملخص',
+
+    // 404 Page
+    pageNotFound: 'الصفحة غير موجودة',
+    notFoundDesc: 'عذراً، الصفحة التي تبحث عنها غير موجودة. ربما تم نقلها أو حذفها.',
+    goHome: 'العودة للرئيسية',
+
+    // Error Boundary
+    unexpectedError: 'حدث خطأ غير متوقع.',
+    reloadPage: 'إعادة تحميل الصفحة',
+
+    // Manus Dialog
+    loginWithManusDesc: 'يرجى تسجيل الدخول باستخدام Manus للمتابعة',
+    loginWithManusBtn: 'تسجيل الدخول باستخدام Manus',
 
     // Track Descriptions
     uxFoundationsDesc: 'أساسيات تجربة المستخدم',
@@ -225,6 +293,18 @@ const translations: Record<Language, Translations> = {
     heroDescription: 'Learn. Design. Create. Grow with a community that supports your journey in the world of user experience and interface design.',
     startLearning: 'Start Learning',
     learnMore: 'Learn More',
+    getStarted: 'Get Started',
+    exploreTracks: 'Explore Tracks',
+    studentsCount: '+100 Students',
+    topicsCount: '10+ Topics',
+    practicalLearning: 'Practical Learning',
+    yourProgress: 'Your Progress',
+    uiFundamentals: 'UI Fundamentals',
+    designSystems: 'Design Systems',
+    masterFundamentals: 'Master the fundamentals',
+    viewCourse: 'View Course →',
+    completedStatus: 'Completed',
+    inProgressStatus: 'In Progress',
 
     // About Section
     whyPixel: 'Why PIXEL?',
@@ -250,9 +330,10 @@ const translations: Record<Language, Translations> = {
     github: 'GitHub',
     feedback: 'Feedback',
     about: 'About',
-    copyright: '© 2026 PIXEL Community. Created with ❤️ for UX/UI designers everywhere.',
+    copyright: '© 2026 Pixel Community. Created with ❤️ for UX/UI designers everywhere.',
+    allRightsReserved: 'All rights reserved.',
 
-    // Topic Card
+    // Topic Card & Page
     estimatedTime: 'Estimated Time',
     minutes: 'minutes',
     viewLessons: 'View Lessons',
@@ -267,6 +348,14 @@ const translations: Record<Language, Translations> = {
     steps: 'steps',
     backHome: 'Back to Home',
     notFound: 'Page Not Found',
+    backToTopics: 'Back to Topics',
+    interactiveActivity: 'Interactive Activity:',
+    activityPlaceholder: 'Write your answer here to reflect...',
+    congratsTopic: 'Congratulations! You completed this topic successfully',
+    nextTopicPrompt: 'Move to the next topic to continue your learning journey',
+    gridView: 'Grid View',
+    fullView: 'Full View',
+    viewInSeparatePage: 'View in separate page',
 
     // Step Types
     introduction: 'Introduction',
@@ -279,6 +368,19 @@ const translations: Record<Language, Translations> = {
     practicalTips: 'Practical Tips',
     miniActivity: 'Mini Activity',
     summary: 'Summary',
+
+    // 404 Page
+    pageNotFound: 'Page Not Found',
+    notFoundDesc: "Sorry, the page you are looking for doesn't exist. It may have been moved or deleted.",
+    goHome: 'Go Home',
+
+    // Error Boundary
+    unexpectedError: 'An unexpected error occurred.',
+    reloadPage: 'Reload Page',
+
+    // Manus Dialog
+    loginWithManusDesc: 'Please login with Manus to continue',
+    loginWithManusBtn: 'Login with Manus',
 
     // Track Descriptions
     uxFoundationsDesc: 'User Experience Foundations',

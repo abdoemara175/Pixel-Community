@@ -1,20 +1,9 @@
-/**
- * TopicCard Component - PIXEL UX Learning Platform
- * 
- * Displays a single topic with:
- * - Title and emoji
- * - Description
- * - Estimated time
- * - Click to expand and view steps as cards
- * - Step-by-step content reveal in card format
- */
-
 import { useState } from 'react';
 import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X, ExternalLink } from 'lucide-react';
 import { Link } from 'wouter';
 import type { Topic, Step } from '@/lib/content';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getTranslation } from '@/lib/i18n';
+import { getTranslation, type Translations } from '@/lib/i18n';
 
 interface TopicCardProps {
   topic: Topic;
@@ -49,35 +38,23 @@ const getStepIcon = (type: string) => {
   }
 };
 
-// Get step type label based on language
+// Get step type label based on language using i18n
 const getStepTypeLabel = (type: string, language: 'ar' | 'en') => {
-  const labels: Record<string, Record<string, string>> = {
-    ar: {
-      introduction: 'مقدمة',
-      concept: 'المفهوم',
-      'why-it-matters': 'لماذا يهم؟',
-      breakdown: 'التفاصيل',
-      example: 'مثال عملي',
-      'bad-vs-good': 'جيد مقابل سيء',
-      mistakes: 'أخطاء شائعة',
-      tips: 'نصائح عملية',
-      activity: 'نشاط صغير',
-      summary: 'الخلاصة',
-    },
-    en: {
-      introduction: 'Introduction',
-      concept: 'Concept',
-      'why-it-matters': 'Why It Matters',
-      breakdown: 'Breakdown',
-      example: 'Example',
-      'bad-vs-good': 'Bad vs Good',
-      mistakes: 'Common Mistakes',
-      tips: 'Practical Tips',
-      activity: 'Mini Activity',
-      summary: 'Summary',
-    },
+  const t = (key: keyof Translations) => getTranslation(language, key);
+  const map: Record<string, keyof Translations> = {
+    introduction: 'introduction',
+    concept: 'concept',
+    'why-it-matters': 'whyItMatters',
+    breakdown: 'breakdown',
+    example: 'example',
+    'bad-vs-good': 'badVsGood',
+    mistakes: 'commonMistakes',
+    tips: 'practicalTips',
+    activity: 'miniActivity',
+    summary: 'summary',
   };
-  return labels[language][type] || type;
+  const key = map[type];
+  return key ? t(key) : type;
 };
 
 // Get step type color (light theme and dark theme compatible)
@@ -107,7 +84,8 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick, lang
   onClick: () => void;
   language: 'ar' | 'en';
 }) => {
-  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+  const t = (key: keyof Translations) => getTranslation(language, key);
+  const isRtl = language === 'ar';
 
   return (
     <div
@@ -118,7 +96,7 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick, lang
       style={isActive ? { outlineColor: trackColor, outlineStyle: 'solid', outlineWidth: '2px', outlineOffset: '2px' } : {}}
     >
       {/* Step Header */}
-      <div className="flex items-start gap-4 mb-4">
+      <div className={`flex items-start gap-4 mb-4 ${isRtl ? 'flex-row-reverse text-right' : 'text-left'}`}>
         <div
           className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0"
           style={{ backgroundColor: trackColor }}
@@ -127,7 +105,7 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick, lang
         </div>
         <div className="flex-1">
           <h4 className="text-lg font-semibold text-foreground mb-1">{step.title}</h4>
-          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-medium ${getStepTypeColor(step.type)}`}>
+          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-medium ${getStepTypeColor(step.type)} ${isRtl ? 'flex-row-reverse' : ''}`}>
             {getStepIcon(step.type)}
             {getStepTypeLabel(step.type, language)}
           </div>
@@ -135,14 +113,14 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick, lang
       </div>
 
       {/* Step Content */}
-      <div className="text-foreground text-sm leading-relaxed line-clamp-3 mb-4">
+      <div className={`text-foreground text-sm leading-relaxed line-clamp-3 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
         {step.content}
       </div>
 
       {/* Progress Indicator */}
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
+      <div className={`flex items-center justify-between text-xs text-muted-foreground ${isRtl ? 'flex-row-reverse' : ''}`}>
         <span>{t('step')} {index + 1} {t('of')} {totalSteps}</span>
-        <div className="flex gap-1">
+        <div className={`flex gap-1 ${isRtl ? 'flex-row-reverse' : ''}`}>
           {Array.from({ length: totalSteps }).map((_, i) => (
             <div
               key={i}
@@ -169,14 +147,15 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
   onPrev: () => void;
   language: 'ar' | 'en';
 }) => {
-  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+  const t = (key: keyof Translations) => getTranslation(language, key);
+  const isRtl = language === 'ar';
 
   return (
     <div className="space-y-6">
       {/* Full Step Card */}
-      <div className={`${getStepTypeColor(step.type)} rounded-lg p-8 border-2`}>
+      <div className={`${getStepTypeColor(step.type)} rounded-lg p-8 border-2 ${isRtl ? 'text-right' : 'text-left'}`}>
         {/* Header */}
-        <div className="flex items-start gap-4 mb-6">
+        <div className={`flex items-start gap-4 mb-6 ${isRtl ? 'flex-row-reverse' : ''}`}>
           <div
             className="w-16 h-16 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0"
             style={{ backgroundColor: trackColor }}
@@ -185,7 +164,7 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
           </div>
           <div className="flex-1">
             <h3 className="text-2xl font-bold mb-2">{step.title}</h3>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-card rounded-full border-2 font-medium">
+            <div className={`inline-flex items-center gap-2 px-4 py-2 bg-card rounded-full border-2 font-medium ${isRtl ? 'flex-row-reverse' : ''}`}>
               {getStepIcon(step.type)}
               {getStepTypeLabel(step.type, language)}
             </div>
@@ -199,13 +178,13 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
 
         {/* Progress Bar */}
         <div className="space-y-3">
-          <div className="flex items-center justify-between text-sm font-medium">
+          <div className={`flex items-center justify-between text-sm font-medium ${isRtl ? 'flex-row-reverse' : ''}`}>
             <span>{t('progress')}</span>
             <span>{Math.round(((index + 1) / totalSteps) * 100)}%</span>
           </div>
           <div className="w-full bg-card/50 rounded-full h-3 overflow-hidden">
             <div
-              className="h-full transition-all duration-300 rounded-full"
+              className={`h-full transition-all duration-300 rounded-full ${isRtl ? 'float-right' : ''}`}
               style={{
                 width: `${((index + 1) / totalSteps) * 100}%`,
                 backgroundColor: trackColor,
@@ -216,16 +195,16 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex items-center justify-between gap-4">
+      <div className={`flex items-center justify-between gap-4 ${isRtl ? 'flex-row-reverse' : ''}`}>
         <button
           onClick={onPrev}
           disabled={index === 0}
-          className="px-6 py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium ${isRtl ? 'flex-row-reverse' : ''}`}
         >
-          {language === 'ar' ? '→ ' : ''}{t('previousStep')}{language === 'en' ? ' ←' : ''}
+          {isRtl ? '← ' : '← '}{t('previousStep')}
         </button>
 
-        <div className="flex gap-2">
+        <div className={`flex gap-2 ${isRtl ? 'flex-row-reverse' : ''}`}>
           {Array.from({ length: totalSteps }).map((_, i) => (
             <div
               key={i}
@@ -244,10 +223,10 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
         <button
           onClick={onNext}
           disabled={index === totalSteps - 1}
-          className="px-6 py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${isRtl ? 'flex-row-reverse' : ''}`}
           style={{ backgroundColor: trackColor }}
         >
-          {t('nextStep')}{language === 'ar' ? ' ←' : ' →'}
+          {t('nextStep')}{isRtl ? ' →' : ' →'}
         </button>
       </div>
 
@@ -256,10 +235,10 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
         <div className="bg-green-50 dark:bg-green-950 border-2 border-green-200 dark:border-green-800 rounded-lg p-6 text-center">
           <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400 mx-auto mb-3" />
           <p className="text-green-700 dark:text-green-300 font-semibold text-lg">
-            ✓ {language === 'ar' ? 'مبروك! لقد أكملت هذا الموضوع بنجاح' : 'Congratulations! You completed this topic successfully'}
+            ✓ {t('congratsTopic')}
           </p>
           <p className="text-green-600 dark:text-green-400 text-sm mt-2">
-            {language === 'ar' ? 'انتقل إلى الموضوع التالي لمواصلة رحلة التعلم' : 'Move to the next topic to continue your learning journey'}
+            {t('nextTopicPrompt')}
           </p>
         </div>
       )}
@@ -272,7 +251,8 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [viewMode, setViewMode] = useState<'grid' | 'full'>('grid');
   const { language } = useLanguage();
-  const t = (key: keyof ReturnType<typeof getTranslation>) => getTranslation(language, key as any);
+  const t = (key: keyof Translations) => getTranslation(language, key);
+  const isRtl = language === 'ar';
 
   const currentStep = topic.steps[currentStepIndex];
   const totalSteps = topic.steps.length;
@@ -295,73 +275,70 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
   };
 
   return (
-    <div className="topic-card p-6 mb-6 animate-slide-in">
-      {/* Header */}
-      <button
-        onClick={() => {
-          setIsExpanded(!isExpanded);
-          setCurrentStepIndex(0);
-          setViewMode('grid');
-        }}
-        className="w-full text-left flex items-start justify-between gap-4 hover:opacity-80 transition-opacity"
+    <div className={`bg-card rounded-2xl border border-border overflow-hidden transition-all duration-300 ${isExpanded ? 'shadow-lg ring-1 ring-border' : 'hover:border-primary/50 hover:shadow-md'}`}>
+      {/* Card Header */}
+      <div
+        onClick={() => setIsExpanded(!isExpanded)}
+        className={`p-6 cursor-pointer flex items-center justify-between hover:bg-muted/30 transition-colors ${isRtl ? 'flex-row-reverse' : ''}`}
       >
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-3xl">{topic.emoji}</span>
-            <h3 className="text-2xl font-bold text-foreground">{topic.title}</h3>
+        <div className={`flex items-center gap-4 ${isRtl ? 'flex-row-reverse' : ''}`}>
+          <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center text-2xl">
+            {topic.emoji}
           </div>
-          <p className="text-muted-foreground mb-3">{topic.description}</p>
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              <span>{topic.estimatedTime} {t('minutes')}</span>
-            </div>
-            <Link href={`/track/${topic.trackId}/topic/${topic.id}`}>
-              <span className="flex items-center gap-1 text-primary hover:underline font-medium">
-                <ExternalLink className="w-4 h-4" />
-                {language === 'ar' ? 'عرض في صفحة منفصلة' : 'View in separate page'}
+          <div className={isRtl ? 'text-right' : 'text-left'}>
+            <h3 className="text-xl font-bold text-foreground">{topic.title}</h3>
+            <div className={`flex items-center gap-3 text-sm text-muted-foreground mt-1 ${isRtl ? 'flex-row-reverse' : ''}`}>
+              <span className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                {topic.estimatedTime} {t('minutes')}
               </span>
-            </Link>
+              <span className="flex items-center gap-1">
+                <BookOpen className="w-4 h-4" />
+                {topic.steps.length} {t('steps')}
+              </span>
+            </div>
           </div>
         </div>
-        <ChevronDown
-          className={`w-6 h-6 text-primary transition-transform flex-shrink-0 mt-1 ${
-            isExpanded ? 'rotate-180' : ''
-          }`}
-        />
-      </button>
+        <ChevronDown className={`w-6 h-6 text-muted-foreground transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+      </div>
 
       {/* Expanded Content */}
       {isExpanded && (
-        <div className="mt-6 pt-6 border-t border-border space-y-6">
+        <div className="p-6 border-t border-border bg-muted/10">
+          <p className={`text-muted-foreground mb-8 leading-relaxed ${isRtl ? 'text-right' : 'text-left'}`}>
+            {topic.description}
+          </p>
+
           {/* View Mode Toggle */}
-          <div className="flex gap-3 justify-center">
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                viewMode === 'grid'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-foreground hover:bg-muted/80'
-              }`}
-            >
-              {language === 'ar' ? 'عرض شبكة' : 'Grid View'}
-            </button>
-            <button
-              onClick={() => {
-                setViewMode('full');
-              }}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                viewMode === 'full'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-foreground hover:bg-muted/80'
-              }`}
-            >
-              {language === 'ar' ? 'عرض كامل' : 'Full View'}
-            </button>
+          <div className={`flex items-center justify-between mb-6 ${isRtl ? 'flex-row-reverse' : ''}`}>
+            <div className={`flex p-1 bg-muted rounded-lg ${isRtl ? 'flex-row-reverse' : ''}`}>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  viewMode === 'grid' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {t('gridView')}
+              </button>
+              <button
+                onClick={() => setViewMode('full')}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  viewMode === 'full' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {t('fullView')}
+              </button>
+            </div>
+            <Link href={`/track/${topic.trackId}/topic/${topic.id}`}>
+              <a className={`text-sm font-medium text-primary hover:underline flex items-center gap-1 ${isRtl ? 'flex-row-reverse' : ''}`}>
+                {t('viewInSeparatePage')}
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </Link>
           </div>
 
-          {/* Grid View - All Steps as Cards */}
-          {viewMode === 'grid' && (
+          {/* Steps Display */}
+          {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {topic.steps.map((step, index) => (
                 <StepCard
@@ -370,16 +347,13 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
                   index={index}
                   totalSteps={totalSteps}
                   trackColor={trackColor}
-                  isActive={index === currentStepIndex}
+                  isActive={currentStepIndex === index}
                   onClick={() => handleStepClick(index)}
                   language={language}
                 />
               ))}
             </div>
-          )}
-
-          {/* Full View - Single Step Expanded */}
-          {viewMode === 'full' && (
+          ) : (
             <StepFullView
               step={currentStep}
               index={currentStepIndex}
