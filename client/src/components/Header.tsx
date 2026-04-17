@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X, Moon, Sun, Globe } from 'lucide-react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation, type Translations } from '@/lib/i18n';
@@ -16,21 +16,28 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('#home');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [currentPath, setCurrentPath] = useState('/');
   const headerRef = useRef<HTMLElement>(null);
   const { theme, toggleTheme } = useTheme();
   const { language, toggleLanguage } = useLanguage();
+  const [location] = useLocation();
 
   const t = (key: keyof Translations) => getTranslation(language, key);
   const isRtl = language === 'ar';
 
   const navItems: NavItem[] = [
     { label: t('home'), href: '/', isExternal: false },
-    { label: t('uxTrack'), href: '#ux-track', isExternal: false },
-    { label: t('uiTrack'), href: '#ui-track', isExternal: false },
-    { label: t('integrationTrack'), href: '#integration-track', isExternal: false },
-    { label: t('bonusTrack'), href: '#bonus-track', isExternal: false },
-    { label: t('contact'), href: '#contact', isExternal: false },
+    { label: t('allTracks'), href: '/tracks', isExternal: false },
+    { label: t('uxTrack'), href: '/track/ux-track', isExternal: false },
+    { label: t('uiTrack'), href: '/track/ui-track', isExternal: false },
+    { label: t('integrationTrack'), href: '/track/integration-track', isExternal: false },
+    { label: t('bonusTrack'), href: '/track/bonus-track', isExternal: false },
   ];
+
+  // Update current path when location changes
+  useEffect(() => {
+    setCurrentPath(location);
+  }, [location]);
 
   // Handle scroll effect for header styling
   useEffect(() => {
@@ -44,7 +51,9 @@ export default function Header() {
 
   // Close mobile menu when navigating
   const handleNavClick = (href: string, isExternal?: boolean) => {
-    if (!isExternal) {
+    if (!isExternal && !href.startsWith('#')) {
+      setActiveSection('');
+    } else if (href.startsWith('#')) {
       setActiveSection(href);
     }
     setIsMobileMenuOpen(false);
@@ -63,6 +72,13 @@ export default function Header() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
+
+  const isActive = (href: string) => {
+    if (href.startsWith('#')) {
+      return activeSection === href;
+    }
+    return currentPath === href || currentPath.startsWith(href + '/');
   };
 
   const containerVariants: Variants = {
@@ -180,12 +196,12 @@ export default function Header() {
                 onClick={(e) => handleSmoothScroll(e, item.href, item.isExternal)}
                 variants={itemVariants}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 relative overflow-hidden ${
-                  activeSection === item.href
+                  isActive(item.href)
                     ? 'text-primary bg-primary/10'
                     : 'text-foreground hover:text-primary'
                 }`}
               >
-                {activeSection === item.href && !item.isExternal && item.href.startsWith('#') && (
+                {isActive(item.href) && !item.isExternal && item.href.startsWith('#') && (
                   <motion.div
                     layoutId="navIndicator"
                     className="absolute inset-0 bg-primary/5 rounded-lg -z-10"
@@ -304,7 +320,7 @@ export default function Header() {
                     onClick={(e) => handleSmoothScroll(e, item.href, item.isExternal)}
                     variants={itemVariants}
                     className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 text-start ${
-                      activeSection === item.href
+                      isActive(item.href)
                         ? 'text-primary bg-primary/10'
                         : 'text-foreground hover:text-primary'
                     }`}

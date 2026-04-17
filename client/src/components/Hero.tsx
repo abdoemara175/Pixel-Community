@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Users, BookOpen, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getTranslation, type Translations } from "@/lib/i18n";
 
@@ -35,6 +36,7 @@ const itemVariants = {
 
 export default function Hero() {
   const [hoveredStat, setHoveredStat] = useState<number | null>(null);
+  const [, setLocation] = useLocation();
   const { language } = useLanguage();
   const t = (key: keyof Translations) => getTranslation(language, key);
   const isRtl = language === 'ar';
@@ -115,7 +117,8 @@ export default function Hero() {
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 md:gap-5 pt-2 md:pt-4">
               <Button
                 size="lg"
-                className="bg-blue-600 hover:bg-blue-500 text-white px-6 md:px-8 py-6 md:py-7 text-base md:text-lg font-bold rounded-xl transition-all duration-300 shadow-xl shadow-blue-600/20 hover:shadow-blue-600/40 hover:-translate-y-1"
+                onClick={() => setLocation('/tracks')}
+                className="bg-blue-600 hover:bg-blue-500 text-white px-6 md:px-8 py-6 md:py-7 text-base md:text-lg font-bold rounded-xl transition-all duration-300 shadow-xl shadow-blue-600/20 hover:shadow-blue-600/40 hover:-translate-y-1 cursor-pointer"
               >
                 {t('getStarted')}
                 {isRtl ? <ArrowLeft className="ms-2 w-5 h-5" /> : <ArrowRight className="ms-2 w-5 h-5" />}

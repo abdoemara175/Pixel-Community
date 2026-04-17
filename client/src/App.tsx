@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import Home from "./pages/Home";
+import AllTracksPage from "./pages/AllTracksPage";
 import TrackPage from "./pages/TrackPage";
 import TopicPage from "./pages/TopicPage";
 
@@ -14,6 +15,7 @@ function Router() {
     <WouterRouter base="/Pixel-Community">
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/tracks" component={AllTracksPage} />
         <Route path="/track/:trackId" component={TrackPage} />
         <Route path="/track/:trackId/topic/:topicId" component={TopicPage} />
         <Route path="/404" component={NotFound} />

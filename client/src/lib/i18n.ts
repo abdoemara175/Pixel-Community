@@ -8,6 +8,7 @@ export type Language = 'ar' | 'en';
 export interface Translations {
   // Header & Navigation
   home: string;
+  allTracks: string;
   uxTrack: string;
   uiTrack: string;
   integrationTrack: string;
@@ -23,6 +24,7 @@ export interface Translations {
   learnMore: string;
   getStarted: string;
   exploreTracks: string;
+  selectTrackToLearn: string;
   studentsCount: string;
   topicsCount: string;
   practicalContent: string;
@@ -149,6 +151,7 @@ const translations: Record<Language, Translations> = {
   ar: {
     // Header & Navigation
     home: 'الرئيسية',
+    allTracks: 'جميع المسارات',
     uxTrack: 'مسار تجربة المستخدم (UX)',
     uiTrack: 'مسار واجهة المستخدم (UI)',
     integrationTrack: 'تكامل UX × UI',
@@ -164,6 +167,7 @@ const translations: Record<Language, Translations> = {
     learnMore: 'تعرف أكثر',
     getStarted: 'ابدأ الآن',
     exploreTracks: 'استكشف المسارات',
+    selectTrackToLearn: 'اختر المسار الذي تريد تعلمه وابدأ رحلتك التعليمية',
     studentsCount: '55 طالب',
     topicsCount: '45 موضوع',
     practicalContent: '80% محتوى عملي',
@@ -288,6 +292,7 @@ const translations: Record<Language, Translations> = {
   en: {
     // Header & Navigation
     home: 'Home',
+    allTracks: 'All Tracks',
     uxTrack: 'UX Track',
     uiTrack: 'UI Track',
     integrationTrack: 'UX × UI Integration',
@@ -303,6 +308,7 @@ const translations: Record<Language, Translations> = {
     learnMore: 'Learn More',
     getStarted: 'Get Started',
     exploreTracks: 'Explore Tracks',
+    selectTrackToLearn: 'Choose the track you want to learn and start your educational journey',
     studentsCount: '55 Students',
     topicsCount: '45 Topics',
     practicalContent: '80% Practical Content',
