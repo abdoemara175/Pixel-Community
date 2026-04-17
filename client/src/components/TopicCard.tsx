@@ -95,26 +95,28 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick, lang
       }`}
       style={isActive ? { outlineColor: trackColor, outlineStyle: 'solid', outlineWidth: '2px', outlineOffset: '2px' } : {}}
     >
-      {/* Step Header */}
-      <div className={`flex items-start gap-4 mb-4 ${isRtl ? 'flex-row-reverse text-right' : 'text-left'}`}>
-        <div
-          className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0"
-          style={{ backgroundColor: trackColor }}
-        >
-          {index + 1}
-        </div>
-        <div className="flex-1">
-          <h4 className="text-lg font-semibold text-foreground mb-1">{step.title}</h4>
-          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-medium ${getStepTypeColor(step.type)} ${isRtl ? 'flex-row-reverse' : ''}`}>
-            {getStepIcon(step.type)}
-            {getStepTypeLabel(step.type, language)}
-          </div>
+      {/* Step Header - Badge as Main Title */}
+      <div className={`flex items-center gap-3 mb-4 ${isRtl ? 'flex-row-reverse' : ''}`}>
+        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 text-sm font-semibold ${getStepTypeColor(step.type)} ${isRtl ? 'flex-row-reverse' : ''}`}>
+          {getStepIcon(step.type)}
+          {getStepTypeLabel(step.type, language)}
         </div>
       </div>
 
       {/* Step Content */}
       <div className={`text-foreground text-sm leading-relaxed line-clamp-3 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
         {step.content}
+      </div>
+
+      {/* Step Number Indicator */}
+      <div className={`flex items-center gap-2 text-xs text-muted-foreground mb-3 ${isRtl ? 'flex-row-reverse' : ''}`}>
+        <div
+          className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs flex-shrink-0"
+          style={{ backgroundColor: trackColor }}
+        >
+          {index + 1}
+        </div>
+        <span>{t('step')} {index + 1}</span>
       </div>
 
       {/* Progress Indicator */}
@@ -154,20 +156,17 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
     <div className="space-y-6">
       {/* Full Step Card */}
       <div className={`${getStepTypeColor(step.type)} rounded-lg p-8 border-2 ${isRtl ? 'text-right' : 'text-left'}`}>
-        {/* Header */}
-        <div className={`flex items-start gap-4 mb-6 ${isRtl ? 'flex-row-reverse' : ''}`}>
+        {/* Header - Badge as Main Title */}
+        <div className={`flex items-center gap-4 mb-6 ${isRtl ? 'flex-row-reverse' : ''}`}>
+          <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full border-2 text-lg font-bold ${getStepTypeColor(step.type)} ${isRtl ? 'flex-row-reverse' : ''}`}>
+            {getStepIcon(step.type)}
+            {getStepTypeLabel(step.type, language)}
+          </div>
           <div
-            className="w-16 h-16 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0"
+            className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
             style={{ backgroundColor: trackColor }}
           >
             {index + 1}
-          </div>
-          <div className="flex-1">
-            <h3 className="text-2xl font-bold mb-2">{step.title}</h3>
-            <div className={`inline-flex items-center gap-2 px-4 py-2 bg-card rounded-full border-2 font-medium ${isRtl ? 'flex-row-reverse' : ''}`}>
-              {getStepIcon(step.type)}
-              {getStepTypeLabel(step.type, language)}
-            </div>
           </div>
         </div>
 

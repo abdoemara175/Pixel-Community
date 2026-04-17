@@ -12,9 +12,9 @@ import Header from '@/components/Header';
 import { getTracks } from '@/lib/content';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation, type Translations } from '@/lib/i18n';
+import { BookOpen, Lightbulb, CheckCircle, ChevronDown, Eye, Zap, X, Award, MessageCircle, ChevronLeft, ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
-import { ChevronLeft, ChevronRight, CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import type { Step } from '@/lib/content';
 
@@ -26,19 +26,30 @@ interface TopicPageProps {
 }
 
 const getStepIcon = (type: string) => {
-  const icons: Record<string, string> = {
-    introduction: '📚',
-    concept: '💡',
-    'why-it-matters': '✅',
-    breakdown: '📋',
-    example: '👀',
-    'bad-vs-good': '⚡',
-    mistakes: '❌',
-    tips: '💡',
-    activity: '🎯',
-    summary: '🏆',
-  };
-  return icons[type] || '📝';
+  switch (type) {
+    case 'introduction':
+      return <BookOpen className="w-6 h-6" />;
+    case 'concept':
+      return <Lightbulb className="w-6 h-6" />;
+    case 'why-it-matters':
+      return <CheckCircle className="w-6 h-6" />;
+    case 'breakdown':
+      return <ChevronDown className="w-6 h-6" />;
+    case 'example':
+      return <Eye className="w-6 h-6" />;
+    case 'bad-vs-good':
+      return <Zap className="w-6 h-6" />;
+    case 'mistakes':
+      return <X className="w-6 h-6" />;
+    case 'tips':
+      return <CheckCircle className="w-6 h-6" />;
+    case 'activity':
+      return <Zap className="w-6 h-6" />;
+    case 'summary':
+      return <Award className="w-6 h-6" />;
+    default:
+      return <MessageCircle className="w-6 h-6" />;
+  }
 };
 
 const getStepTypeColor = (type: string) => {
@@ -55,6 +66,24 @@ const getStepTypeColor = (type: string) => {
     summary: 'bg-pink-50 dark:bg-pink-950 border-pink-200 dark:border-pink-800 text-pink-700 dark:text-pink-300',
   };
   return colors[type] || 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300';
+};
+
+const getStepTypeLabel = (type: string, language: 'ar' | 'en' = 'en') => {
+  const t = (key: keyof Translations) => getTranslation(language, key);
+  const map: Record<string, keyof Translations> = {
+    introduction: 'introduction',
+    concept: 'concept',
+    'why-it-matters': 'whyItMatters',
+    breakdown: 'breakdown',
+    example: 'example',
+    'bad-vs-good': 'badVsGood',
+    mistakes: 'commonMistakes',
+    tips: 'practicalTips',
+    activity: 'miniActivity',
+    summary: 'summary',
+  };
+  const key = map[type];
+  return key ? t(key) : type;
 };
 
 export default function TopicPage({ params }: TopicPageProps) {
@@ -194,19 +223,18 @@ export default function TopicPage({ params }: TopicPageProps) {
               transition={{ duration: 0.4 }}
               className={`${getStepTypeColor(currentStep.type)} rounded-lg p-8 md:p-12 border-2 space-y-6 ${isRtl ? 'text-right' : 'text-left'}`}
             >
-              {/* Step Header */}
+              {/* Step Header - Badge as Main Title */}
               <div className="space-y-4">
                 <div className={`flex items-center gap-4 ${isRtl ? 'flex-row-reverse' : ''}`}>
+                  <div className={`inline-flex items-center gap-3 px-8 py-4 rounded-full border-2 text-2xl md:text-3xl font-bold ${getStepTypeColor(currentStep.type)} ${isRtl ? 'flex-row-reverse' : ''}`}>
+                    {getStepIcon(currentStep.type)}
+                    <span>{getStepTypeLabel(currentStep.type, language)}</span>
+                  </div>
                   <div
-                    className="w-16 h-16 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 text-white font-bold"
+                    className="w-14 h-14 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 text-white font-bold"
                     style={{ backgroundColor: track.color }}
                   >
-                    {getStepIcon(currentStep.type)}
-                  </div>
-                  <div className="flex-1">
-                    <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                      {currentStep.title}
-                    </h1>
+                    {currentStepIndex + 1}
                   </div>
                 </div>
               </div>
