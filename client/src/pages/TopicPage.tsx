@@ -127,11 +127,11 @@ export default function TopicPage({ params }: TopicPageProps) {
     return (
       <div className="min-h-screen bg-background pt-16 md:pt-20">
         <Header />
-        <div className="container py-20 text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-4">{t('notFound')}</h1>
+        <div className="container py-12 md:py-20 text-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4">{t('notFound')}</h1>
           <button
             onClick={() => setLocation('/')}
-            className={`inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors ${isRtl ? 'flex-row-reverse' : ''}`}
+            className="inline-flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors text-sm md:text-base"
           >
             {isRtl ? <ArrowRight className="w-5 h-5" /> : <ArrowLeft className="w-5 h-5" />}
             {t('backHome')}
@@ -164,35 +164,35 @@ export default function TopicPage({ params }: TopicPageProps) {
       <Header />
 
       {/* Navigation Breadcrumb */}
-      <div className="container py-6">
+      <div className="container py-4 md:py-6">
         <motion.div
           initial={{ opacity: 0, x: isRtl ? 20 : -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className={`flex items-center gap-2 text-sm text-muted-foreground ${isRtl ? 'flex-row-reverse' : ''}`}
+          className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground overflow-x-auto"
         >
           <button
             onClick={() => setLocation('/')}
-            className="hover:text-primary transition-colors"
+            className="hover:text-primary transition-colors whitespace-nowrap"
           >
             {t('home')}
           </button>
-          <span>/</span>
+          <span className="text-muted-foreground">/</span>
           <button
             onClick={() => setLocation(`/track/${params.trackId}`)}
-            className="hover:text-primary transition-colors"
+            className="hover:text-primary transition-colors whitespace-nowrap"
           >
             {track.title}
           </button>
-          <span>/</span>
-          <span className="text-foreground font-medium">{topic.title}</span>
+          <span className="text-muted-foreground">/</span>
+          <span className="text-foreground font-medium truncate">{topic.title}</span>
         </motion.div>
       </div>
 
       {/* Progress Bar */}
       <div className="sticky top-16 md:top-20 z-40 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="container py-4">
+        <div className="container py-3 md:py-4">
           <div className="space-y-2">
-            <div className={`flex items-center justify-between text-sm ${isRtl ? 'flex-row-reverse' : ''}`}>
+            <div className="flex items-center justify-between text-xs md:text-sm">
               <span className="text-muted-foreground">
                 {t('step')} {currentStepIndex + 1} {t('of')} {totalSteps}
               </span>
@@ -203,7 +203,7 @@ export default function TopicPage({ params }: TopicPageProps) {
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.5 }}
-                className={`h-full rounded-full ${isRtl ? 'float-right' : ''}`}
+                className="h-full rounded-full"
                 style={{ backgroundColor: track.color }}
               />
             </div>
@@ -212,7 +212,7 @@ export default function TopicPage({ params }: TopicPageProps) {
       </div>
 
       {/* Main Content */}
-      <section className="py-12 md:py-20">
+      <section className="py-8 md:py-12 lg:py-16">
         <div className="container max-w-3xl">
           <AnimatePresence mode="wait">
             <motion.div
@@ -221,17 +221,17 @@ export default function TopicPage({ params }: TopicPageProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className={`${getStepTypeColor(currentStep.type)} rounded-lg p-8 md:p-12 border-2 space-y-6 ${isRtl ? 'text-right' : 'text-left'}`}
+              className={`${getStepTypeColor(currentStep.type)} rounded-lg p-6 md:p-8 lg:p-12 border-2 space-y-4 md:space-y-6 text-start`}
             >
               {/* Step Header - Badge as Main Title */}
-              <div className="space-y-4">
-                <div className={`flex items-center gap-4 ${isRtl ? 'flex-row-reverse' : ''}`}>
-                  <div className={`inline-flex items-center gap-3 px-8 py-4 rounded-full border-2 text-2xl md:text-3xl font-bold ${getStepTypeColor(currentStep.type)} ${isRtl ? 'flex-row-reverse' : ''}`}>
+              <div className="space-y-3 md:space-y-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
+                  <div className={`inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-3 md:py-4 rounded-full border-2 text-lg md:text-2xl lg:text-3xl font-bold ${getStepTypeColor(currentStep.type)}`}>
                     {getStepIcon(currentStep.type)}
-                    <span>{getStepTypeLabel(currentStep.type, language)}</span>
+                    <span className="truncate">{getStepTypeLabel(currentStep.type, language)}</span>
                   </div>
                   <div
-                    className="w-14 h-14 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 text-white font-bold"
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center text-xl md:text-2xl flex-shrink-0 text-white font-bold"
                     style={{ backgroundColor: track.color }}
                   >
                     {currentStepIndex + 1}
@@ -240,17 +240,17 @@ export default function TopicPage({ params }: TopicPageProps) {
               </div>
 
               {/* Step Content */}
-              <div className="prose dark:prose-invert max-w-none">
-                <div className="text-foreground text-lg leading-relaxed whitespace-pre-wrap">
+              <div className="prose dark:prose-invert max-w-none text-sm md:text-base">
+                <div className="text-foreground leading-relaxed whitespace-pre-wrap">
                   {currentStep.type === 'activity' ? (
-                    <div className="bg-white/50 dark:bg-black/20 p-6 rounded-xl border-2 border-dashed border-primary/30 shadow-inner">
-                      <p className={`font-bold text-primary mb-4 flex items-center gap-2 ${isRtl ? 'flex-row-reverse' : ''}`}>
-                        <span className="text-2xl">🎯</span> {t('interactiveActivity')}
+                    <div className="bg-white/50 dark:bg-black/20 p-4 md:p-6 rounded-xl border-2 border-dashed border-primary/30 shadow-inner">
+                      <p className="font-bold text-primary mb-3 md:mb-4 flex items-center gap-2">
+                        <span className="text-xl md:text-2xl">🎯</span> {t('interactiveActivity')}
                       </p>
                       {currentStep.content}
-                      <div className="mt-6">
+                      <div className="mt-4 md:mt-6">
                         <textarea 
-                          className={`w-full p-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary outline-none transition-all ${isRtl ? 'text-right' : 'text-left'}`}
+                          className="w-full p-3 md:p-4 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary outline-none transition-all text-start text-sm md:text-base"
                           placeholder={t('activityPlaceholder')}
                           rows={3}
                         />
@@ -259,13 +259,13 @@ export default function TopicPage({ params }: TopicPageProps) {
                   ) : (
                     currentStep.content.split('\n').map((line, i) => {
                       if (line.startsWith('✅')) {
-                        return <p key={i} className={`flex items-start gap-2 text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20 my-2 ${isRtl ? 'flex-row-reverse text-right' : ''}`}>{line}</p>;
+                        return <p key={i} className="flex items-start gap-2 text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20 my-2">{line}</p>;
                       }
                       if (line.startsWith('❌')) {
-                        return <p key={i} className={`flex items-start gap-2 text-rose-600 dark:text-rose-400 font-medium bg-rose-500/10 p-3 rounded-lg border border-rose-500/20 my-2 ${isRtl ? 'flex-row-reverse text-right' : ''}`}>{line}</p>;
+                        return <p key={i} className="flex items-start gap-2 text-rose-600 dark:text-rose-400 font-medium bg-rose-500/10 p-3 rounded-lg border border-rose-500/20 my-2">{line}</p>;
                       }
                       if (line.startsWith('•')) {
-                        return <li key={i} className={`list-none flex items-start gap-2 my-1 ${isRtl ? 'flex-row-reverse text-right' : ''}`}><span className="text-primary">•</span> {line.substring(1).trim()}</li>;
+                        return <li key={i} className="list-none flex items-start gap-2 my-1"><span className="text-primary">•</span> {line.substring(1).trim()}</li>;
                       }
                       return <p key={i} className="my-2">{line}</p>;
                     })
@@ -274,7 +274,7 @@ export default function TopicPage({ params }: TopicPageProps) {
               </div>
 
               {/* Step Indicators */}
-              <div className={`flex gap-2 pt-6 ${isRtl ? 'flex-row-reverse' : ''}`}>
+              <div className="flex gap-2 pt-4 md:pt-6 flex-wrap">
                 {topic.steps.map((_, index) => (
                   <motion.button
                     key={index}
@@ -302,38 +302,38 @@ export default function TopicPage({ params }: TopicPageProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-green-50 dark:bg-green-950 border-2 border-green-200 dark:border-green-800 rounded-lg p-8 text-center mt-8"
+              className="bg-green-50 dark:bg-green-950 border-2 border-green-200 dark:border-green-800 rounded-lg p-6 md:p-8 text-center mt-6 md:mt-8"
             >
-              <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-4" />
-              <p className="text-green-700 dark:text-green-300 font-semibold text-lg mb-2">
+              <CheckCircle className="w-10 h-10 md:w-12 md:h-12 text-green-600 dark:text-green-400 mx-auto mb-3 md:mb-4" />
+              <p className="text-green-700 dark:text-green-300 font-semibold text-base md:text-lg mb-2">
                 ✓ {t('congratsTopic')}
               </p>
-              <p className="text-green-600 dark:text-green-400">
+              <p className="text-green-600 dark:text-green-400 text-sm md:text-base">
                 {t('nextTopicPrompt')}
               </p>
             </motion.div>
           )}
 
           {/* Navigation Buttons */}
-          <div className={`flex items-center justify-between mt-12 ${isRtl ? 'flex-row-reverse' : ''}`}>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4 mt-8 md:mt-12">
             <button
               onClick={handlePrev}
               disabled={isFirstStep}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg border-2 border-border text-foreground font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${isRtl ? 'flex-row-reverse' : ''}`}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg border-2 border-border text-foreground font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
             >
               {isRtl ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
               {t('previousStep')}
             </button>
             <button
               onClick={() => setLocation('/')}
-              className="px-6 py-3 text-muted-foreground font-medium hover:text-primary transition-colors"
+              className="px-4 md:px-6 py-2 md:py-3 text-muted-foreground font-medium hover:text-primary transition-colors text-sm md:text-base"
             >
               {t('backToTopics')}
             </button>
             <button
               onClick={handleNext}
               disabled={isLastStep}
-              className={`flex items-center gap-2 px-8 py-3 rounded-lg font-bold text-white shadow-lg transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed ${isRtl ? 'flex-row-reverse' : ''}`}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-8 py-2 md:py-3 rounded-lg font-bold text-white shadow-lg transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
               style={{ backgroundColor: track.color }}
             >
               {t('nextStep')}
@@ -344,9 +344,9 @@ export default function TopicPage({ params }: TopicPageProps) {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-border mt-20">
+      <footer className="py-8 md:py-12 border-t border-border mt-12 md:mt-20">
         <div className="container text-center">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-xs md:text-sm">
             {t('copyright')}
           </p>
         </div>

@@ -34,9 +34,9 @@ export default function Home() {
       </main>
       
       {/* Simple Footer */}
-      <footer id="contact" className="py-12 bg-muted/30 border-t border-border">
+      <footer id="contact" className="py-8 md:py-12 bg-muted/30 border-t border-border mt-auto">
         <div className="container text-center">
-          <p className="text-muted-foreground">
+          <p className="text-sm md:text-base text-muted-foreground">
             {t('copyright')} {t('allRightsReserved')}
           </p>
         </div>

@@ -90,39 +90,37 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick, lang
   return (
     <div
       onClick={onClick}
-      className={`topic-card p-6 cursor-pointer transition-all duration-300 transform hover:scale-105 ${
-        isActive ? 'ring-2 ring-offset-2' : ''
-      }`}
+      className="card-base p-4 md:p-6 cursor-pointer hover:shadow-lg transform hover:scale-105 transition-all duration-300"
       style={isActive ? { outlineColor: trackColor, outlineStyle: 'solid', outlineWidth: '2px', outlineOffset: '2px' } : {}}
     >
       {/* Step Header - Badge as Main Title */}
-      <div className={`flex items-center gap-3 mb-4 ${isRtl ? 'flex-row-reverse' : ''}`}>
-        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 text-sm font-semibold ${getStepTypeColor(step.type)} ${isRtl ? 'flex-row-reverse' : ''}`}>
+      <div className="flex items-center gap-3 mb-4">
+        <div className={`inline-flex items-center gap-2 px-3 md:px-4 py-2 rounded-full border-2 text-xs md:text-sm font-semibold ${getStepTypeColor(step.type)}`}>
           {getStepIcon(step.type)}
-          {getStepTypeLabel(step.type, language)}
+          <span className="truncate">{getStepTypeLabel(step.type, language)}</span>
         </div>
       </div>
 
       {/* Step Content */}
-      <div className={`text-foreground text-sm leading-relaxed line-clamp-3 mb-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+      <div className="text-foreground text-xs md:text-sm leading-relaxed line-clamp-3 mb-4 text-start">
         {step.content}
       </div>
 
       {/* Step Number Indicator */}
-      <div className={`flex items-center gap-2 text-xs text-muted-foreground mb-3 ${isRtl ? 'flex-row-reverse' : ''}`}>
+      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
         <div
           className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs flex-shrink-0"
           style={{ backgroundColor: trackColor }}
         >
           {index + 1}
         </div>
-        <span>{t('step')} {index + 1}</span>
+        <span className="truncate">{t('step')} {index + 1}</span>
       </div>
 
       {/* Progress Indicator */}
-      <div className={`flex items-center justify-between text-xs text-muted-foreground ${isRtl ? 'flex-row-reverse' : ''}`}>
-        <span>{t('step')} {index + 1} {t('of')} {totalSteps}</span>
-        <div className={`flex gap-1 ${isRtl ? 'flex-row-reverse' : ''}`}>
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <span className="truncate">{t('step')} {index + 1} {t('of')} {totalSteps}</span>
+        <div className="flex gap-1 flex-shrink-0">
           {Array.from({ length: totalSteps }).map((_, i) => (
             <div
               key={i}
@@ -155,12 +153,12 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
   return (
     <div className="space-y-6">
       {/* Full Step Card */}
-      <div className={`${getStepTypeColor(step.type)} rounded-lg p-8 border-2 ${isRtl ? 'text-right' : 'text-left'}`}>
+      <div className={`${getStepTypeColor(step.type)} rounded-lg p-6 md:p-8 border-2 text-start`}>
         {/* Header - Badge as Main Title */}
-        <div className={`flex items-center gap-4 mb-6 ${isRtl ? 'flex-row-reverse' : ''}`}>
-          <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full border-2 text-lg font-bold ${getStepTypeColor(step.type)} ${isRtl ? 'flex-row-reverse' : ''}`}>
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
+          <div className={`inline-flex items-center gap-3 px-4 md:px-6 py-3 rounded-full border-2 text-lg md:text-xl font-bold ${getStepTypeColor(step.type)}`}>
             {getStepIcon(step.type)}
-            {getStepTypeLabel(step.type, language)}
+            <span>{getStepTypeLabel(step.type, language)}</span>
           </div>
           <div
             className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
@@ -177,13 +175,13 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
 
         {/* Progress Bar */}
         <div className="space-y-3">
-          <div className={`flex items-center justify-between text-sm font-medium ${isRtl ? 'flex-row-reverse' : ''}`}>
+          <div className="flex items-center justify-between text-sm font-medium">
             <span>{t('progress')}</span>
             <span>{Math.round(((index + 1) / totalSteps) * 100)}%</span>
           </div>
           <div className="w-full bg-card/50 rounded-full h-3 overflow-hidden">
             <div
-              className={`h-full transition-all duration-300 rounded-full ${isRtl ? 'float-right' : ''}`}
+              className="h-full transition-all duration-300 rounded-full"
               style={{
                 width: `${((index + 1) / totalSteps) * 100}%`,
                 backgroundColor: trackColor,
@@ -194,16 +192,16 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
       </div>
 
       {/* Navigation Buttons */}
-      <div className={`flex items-center justify-between gap-4 ${isRtl ? 'flex-row-reverse' : ''}`}>
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4">
         <button
           onClick={onPrev}
           disabled={index === 0}
-          className={`flex items-center gap-2 px-6 py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium ${isRtl ? 'flex-row-reverse' : ''}`}
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-sm md:text-base"
         >
           {isRtl ? '← ' : '← '}{t('previousStep')}
         </button>
 
-        <div className={`flex gap-2 ${isRtl ? 'flex-row-reverse' : ''}`}>
+        <div className="flex gap-2">
           {Array.from({ length: totalSteps }).map((_, i) => (
             <div
               key={i}
@@ -222,7 +220,7 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
         <button
           onClick={onNext}
           disabled={index === totalSteps - 1}
-          className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${isRtl ? 'flex-row-reverse' : ''}`}
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm md:text-base"
           style={{ backgroundColor: trackColor }}
         >
           {t('nextStep')}{isRtl ? ' →' : ' →'}
@@ -231,7 +229,7 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
 
       {/* Completion Message */}
       {index === totalSteps - 1 && (
-        <div className="bg-green-50 dark:bg-green-950 border-2 border-green-200 dark:border-green-800 rounded-lg p-6 text-center">
+        <div className="bg-green-50 dark:bg-green-950 border-2 border-green-200 dark:border-green-800 rounded-lg p-4 md:p-6 text-center">
           <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400 mx-auto mb-3" />
           <p className="text-green-700 dark:text-green-300 font-semibold text-lg">
             ✓ {t('congratsTopic')}
@@ -274,46 +272,46 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
   };
 
   return (
-    <div className={`bg-card rounded-2xl border border-border overflow-hidden transition-all duration-300 ${isExpanded ? 'shadow-lg ring-1 ring-border' : 'hover:border-primary/50 hover:shadow-md'}`}>
+    <div className={`card-base border border-border overflow-hidden transition-all duration-300 ${isExpanded ? 'shadow-lg ring-1 ring-border' : 'hover:border-primary/50 hover:shadow-md'}`}>
       {/* Card Header */}
       <div
         onClick={() => setIsExpanded(!isExpanded)}
-        className={`p-6 cursor-pointer flex items-center justify-between hover:bg-muted/30 transition-colors ${isRtl ? 'flex-row-reverse' : ''}`}
+        className="p-4 md:p-6 cursor-pointer flex items-center justify-between hover:bg-muted/30 transition-colors"
       >
-        <div className={`flex items-center gap-4 ${isRtl ? 'flex-row-reverse' : ''}`}>
-          <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center text-2xl">
+        <div className="flex items-center gap-3 md:gap-4 min-w-0">
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-muted flex items-center justify-center text-xl md:text-2xl flex-shrink-0">
             {topic.emoji}
           </div>
-          <div className={isRtl ? 'text-right' : 'text-left'}>
-            <h3 className="text-xl font-bold text-foreground">{topic.title}</h3>
-            <div className={`flex items-center gap-3 text-sm text-muted-foreground mt-1 ${isRtl ? 'flex-row-reverse' : ''}`}>
-              <span className="flex items-center gap-1">
+          <div className="min-w-0 text-start">
+            <h3 className="text-lg md:text-xl font-bold text-foreground truncate">{topic.title}</h3>
+            <div className="flex items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground mt-1 flex-wrap">
+              <span className="flex items-center gap-1 whitespace-nowrap">
                 <Clock className="w-4 h-4" />
                 {topic.estimatedTime} {t('minutes')}
               </span>
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 whitespace-nowrap">
                 <BookOpen className="w-4 h-4" />
                 {topic.steps.length} {t('steps')}
               </span>
             </div>
           </div>
         </div>
-        <ChevronDown className={`w-6 h-6 text-muted-foreground transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-6 h-6 text-muted-foreground transition-transform duration-300 flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`} />
       </div>
 
       {/* Expanded Content */}
       {isExpanded && (
-        <div className="p-6 border-t border-border bg-muted/10">
-          <p className={`text-muted-foreground mb-8 leading-relaxed ${isRtl ? 'text-right' : 'text-left'}`}>
+        <div className="p-4 md:p-6 border-t border-border bg-muted/10">
+          <p className="text-muted-foreground mb-6 md:mb-8 leading-relaxed text-start text-sm md:text-base">
             {topic.description}
           </p>
 
           {/* View Mode Toggle */}
-          <div className={`flex items-center justify-between mb-6 ${isRtl ? 'flex-row-reverse' : ''}`}>
-            <div className={`flex p-1 bg-muted rounded-lg ${isRtl ? 'flex-row-reverse' : ''}`}>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+            <div className="flex p-1 bg-muted rounded-lg w-full sm:w-auto">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                className={`flex-1 sm:flex-none px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-md transition-all ${
                   viewMode === 'grid' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -321,7 +319,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
               </button>
               <button
                 onClick={() => setViewMode('full')}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                className={`flex-1 sm:flex-none px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-md transition-all ${
                   viewMode === 'full' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -329,7 +327,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
               </button>
             </div>
             <Link href={`/track/${topic.trackId}/topic/${topic.id}`}>
-              <a className={`text-sm font-medium text-primary hover:underline flex items-center gap-1 ${isRtl ? 'flex-row-reverse' : ''}`}>
+              <a className="text-xs md:text-sm font-medium text-primary hover:underline flex items-center gap-1 whitespace-nowrap">
                 {t('viewInSeparatePage')}
                 <ExternalLink className="w-4 h-4" />
               </a>
@@ -338,7 +336,7 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
 
           {/* Steps Display */}
           {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               {topic.steps.map((step, index) => (
                 <StepCard
                   key={step.id}

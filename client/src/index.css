@@ -76,6 +76,23 @@
   --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.623 0.214 259.815);
+
+  /* Unified Spacing System (8px base) */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem; /* 8px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-2xl: 2.5rem; /* 40px */
+  --spacing-3xl: 3rem; /* 48px */
+  --spacing-4xl: 4rem; /* 64px */
+
+  /* Unified Shadow System */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 }
 
 .dark {
@@ -94,7 +111,7 @@
   --muted: oklch(0.274 0.006 286.033);
   --muted-foreground: oklch(0.705 0.015 286.067);
   --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground:  oklch(0.92 0.005 65);
+  --accent-foreground: oklch(0.92 0.005 65);
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(1 0 0 / 10%);
@@ -108,9 +125,16 @@
   --sidebar: oklch(0.21 0.006 285.885);
   --sidebar-foreground: oklch(0.85 0.005 65);
   --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground:  oklch(0.985 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.488 0.243 264.376);
+
+  /* Dark mode shadows are more subtle */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.2);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.4);
 }
 
 @layer base {
@@ -151,8 +175,7 @@
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
-    padding-right: 1rem;
+    padding-inline: 1rem; /* 16px - mobile padding (8px * 2) */
   }
 
   .flex {
@@ -162,16 +185,147 @@
 
   @media (min-width: 640px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
-      padding-right: 1.5rem;
+      padding-inline: 1.5rem; /* 24px - tablet padding (8px * 3) */
     }
   }
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
-      padding-right: 2rem;
+      padding-inline: 2rem; /* 32px - desktop padding (8px * 4) */
       max-width: 1280px; /* Standard content width */
     }
+  }
+
+  /* Unified Card Component */
+  .card-base {
+    @apply bg-card rounded-xl border border-border overflow-hidden transition-all duration-300;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-base:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Unified Button Base */
+  .btn-base {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200;
+    padding: 0.625rem 1rem; /* 10px 16px */
+  }
+
+  .btn-base:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .btn-base:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  /* Unified Badge Component */
+  .badge-base {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold;
+  }
+
+  /* Section Spacing */
+  .section-spacing {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+
+  .section-spacing-lg {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  /* Text Direction Utilities for RTL/LTR Support */
+  .text-start {
+    text-align: start;
+  }
+
+  .text-end {
+    text-align: end;
+  }
+
+  .flex-row-start {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .flex-row-reverse-start {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  /* Consistent Focus Ring */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+  }
+
+  .dark .focus-ring {
+    @apply focus:ring-offset-background;
+  }
+}
+
+
+/* Unified Animation System */
+@layer components {
+  /* Standard transition durations */
+  .transition-fast {
+    @apply transition-all duration-150;
+  }
+
+  .transition-base {
+    @apply transition-all duration-200;
+  }
+
+  .transition-slow {
+    @apply transition-all duration-300;
+  }
+
+  .transition-slower {
+    @apply transition-all duration-500;
+  }
+
+  /* Hover effects */
+  .hover-lift {
+    @apply hover:-translate-y-1 transition-transform duration-200;
+  }
+
+  .hover-scale {
+    @apply hover:scale-105 transition-transform duration-200;
+  }
+
+  .hover-glow {
+    @apply hover:shadow-lg transition-shadow duration-200;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Consistent focus styles */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-offset-2 ring-primary;
+  }
+
+  .dark *:focus-visible {
+    @apply ring-offset-background;
+  }
+
+  /* Smooth color transitions */
+  .color-transition {
+    @apply transition-colors duration-200;
+  }
+
+  /* Disabled state consistency */
+  :disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  /* Smooth opacity transitions */
+  .fade-in {
+    @apply animate-in fade-in duration-300;
+  }
+
+  .fade-out {
+    @apply animate-out fade-out duration-300;
   }
 }

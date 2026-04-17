@@ -133,18 +133,19 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-background/70 backdrop-blur-xl border-b border-border/50 shadow-lg'
-          : 'bg-background/50 backdrop-blur-md border-b border-border/30 shadow-sm'
+          ? 'bg-background/70 backdrop-blur-xl border-b border-border/50'
+          : 'bg-background/50 backdrop-blur-md border-b border-border/30'
       }`}
+      style={{ boxShadow: isScrolled ? 'var(--shadow-lg)' : 'var(--shadow-sm)' }}
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       <div className="container">
-        <div className={`flex items-center justify-between h-16 md:h-20 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
+        <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo and Brand - Always English "PIXEL" */}
           <Link href="/">
-            <div className={`flex items-center gap-3 flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer ${isRtl ? 'text-right' : 'text-left'}`}>
+            <div className="flex items-center gap-3 flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer text-start">
               <div className="hidden sm:block">
                 <motion.h1
                   className="text-lg md:text-xl font-bold text-primary tracking-tight"
@@ -167,7 +168,7 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <motion.nav
-            className={`hidden md:flex items-center gap-1 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}
+            className="hidden md:flex items-center gap-1"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -198,7 +199,7 @@ export default function Header() {
 
           {/* Theme & Language Controls */}
           <motion.div
-            className={`flex items-center gap-2 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}
+            className="flex items-center gap-2"
             initial={{ opacity: 0, x: isRtl ? -20 : 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -235,7 +236,7 @@ export default function Header() {
               whileHover="hover"
               whileTap="tap"
               onClick={toggleLanguage}
-              className={`p-2 rounded-lg transition-all duration-200 hover:bg-muted/50 active:bg-muted flex items-center gap-1 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}
+              className="p-2 rounded-lg transition-all duration-200 hover:bg-muted/50 active:bg-muted flex items-center gap-1"
               aria-label={language === 'ar' ? 'Switch to English' : 'التبديل للعربية'}
             >
               <Globe className="w-5 h-5 text-foreground" />
@@ -288,10 +289,10 @@ export default function Header() {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              className="md:hidden border-t border-border/50 pt-4 pb-4"
+              className="md:hidden border-t border-border/50 py-2"
             >
               <motion.div
-                className="space-y-2"
+                className="space-y-1"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -302,7 +303,7 @@ export default function Header() {
                     href={item.href}
                     onClick={(e) => handleSmoothScroll(e, item.href, item.isExternal)}
                     variants={itemVariants}
-                    className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${isRtl ? 'text-right' : 'text-left'} ${
+                    className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 text-start ${
                       activeSection === item.href
                         ? 'text-primary bg-primary/10'
                         : 'text-foreground hover:text-primary'
