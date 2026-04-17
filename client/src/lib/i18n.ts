@@ -25,7 +25,7 @@ export interface Translations {
   exploreTracks: string;
   studentsCount: string;
   topicsCount: string;
-  practicalLearning: string;
+  practicalContent: string;
   yourProgress: string;
   uiFundamentals: string;
   designSystems: string;
@@ -160,9 +160,9 @@ const translations: Record<Language, Translations> = {
     learnMore: 'تعرف أكثر',
     getStarted: 'ابدأ الآن',
     exploreTracks: 'استكشف المسارات',
-    studentsCount: '+100 طالب',
-    topicsCount: '10+ مواضيع',
-    practicalLearning: 'تعلم عملي',
+    studentsCount: '55 طالب',
+    topicsCount: '45 موضوع',
+    practicalContent: '80% محتوى عملي',
     yourProgress: 'تقدمك',
     uiFundamentals: 'أساسيات واجهة المستخدم',
     designSystems: 'أنظمة التصميم',
@@ -295,9 +295,9 @@ const translations: Record<Language, Translations> = {
     learnMore: 'Learn More',
     getStarted: 'Get Started',
     exploreTracks: 'Explore Tracks',
-    studentsCount: '+100 Students',
-    topicsCount: '10+ Topics',
-    practicalLearning: 'Practical Learning',
+    studentsCount: '55 Students',
+    topicsCount: '45 Topics',
+    practicalContent: '80% Practical Content',
     yourProgress: 'Your Progress',
     uiFundamentals: 'UI Fundamentals',
     designSystems: 'Design Systems',

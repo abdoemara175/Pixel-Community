@@ -39,6 +39,13 @@ export default function Hero() {
   const t = (key: keyof Translations) => getTranslation(language, key);
   const isRtl = language === 'ar';
 
+  // Memoize stats to prevent re-renders on hover
+  const stats = [
+    { icon: Users, label: t('studentsCount') },
+    { icon: BookOpen, label: t('topicsCount') },
+    { icon: Zap, label: t('practicalContent') },
+  ];
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500 pt-20 pb-20">
       {/* Background decorative elements - Responsive to Theme */}
@@ -127,33 +134,36 @@ export default function Hero() {
               variants={itemVariants}
               className={`flex flex-wrap gap-8 pt-10 border-t border-slate-200 dark:border-slate-800/50 ${isRtl ? 'justify-start' : ''}`}
             >
-              {[
-                { icon: Users, label: t('studentsCount'), value: "100" },
-                { icon: BookOpen, label: t('topicsCount'), value: "10+" },
-                { icon: Zap, label: t('practicalLearning'), value: "100%" },
-              ].map((stat, idx) => (
-                <motion.div
-                  key={idx}
-                  onHoverStart={() => setHoveredStat(idx)}
-                  onHoverEnd={() => setHoveredStat(null)}
-                  className={`flex items-center ${isRtl ? 'space-x-reverse' : ''} space-x-4 cursor-pointer group`}
-                  whileHover={{ x: isRtl ? -5 : 5 }}
-                >
-                  <div
-                    className={`p-3 rounded-xl transition-all duration-300 ${
-                      hoveredStat === idx
-                        ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
-                        : "bg-slate-100 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700/50"
-                    }`}
+              {stats.map((stat, idx) => {
+                // Extract value from label (e.g., "55 طالب" -> "55", "45 موضوع" -> "45", "80% محتوى عملي" -> "80%")
+                const parts = stat.label.split(' ');
+                const value = parts[0];
+                const labelText = parts.slice(1).join(' ');
+                
+                return (
+                  <motion.div
+                    key={idx}
+                    onHoverStart={() => setHoveredStat(idx)}
+                    onHoverEnd={() => setHoveredStat(null)}
+                    className={`flex items-center ${isRtl ? 'space-x-reverse' : ''} space-x-4 cursor-pointer group`}
+                    whileHover={{ x: isRtl ? -5 : 5 }}
                   >
-                    <stat.icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{stat.value}</p>
-                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">{stat.label}</p>
-                  </div>
-                </motion.div>
-              ))}
+                    <div
+                      className={`p-3 rounded-xl transition-all duration-300 ${
+                        hoveredStat === idx
+                          ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30"
+                          : "bg-slate-100 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700/50"
+                      }`}
+                    >
+                      <stat.icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{value}</p>
+                      <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">{labelText}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
           </motion.div>
 
