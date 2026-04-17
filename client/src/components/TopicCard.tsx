@@ -105,17 +105,6 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick, lang
         {step.content}
       </div>
 
-      {/* Step Number Indicator */}
-      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-        <div
-          className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs flex-shrink-0"
-          style={{ backgroundColor: trackColor }}
-        >
-          {index + 1}
-        </div>
-        <span className="truncate">{t('step')} {index + 1}</span>
-      </div>
-
       {/* Progress Indicator */}
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span className="truncate">{t('step')} {index + 1} {t('of')} {totalSteps}</span>
@@ -154,16 +143,10 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
       {/* Full Step Card */}
       <div className={`${getStepTypeColor(step.type)} rounded-lg p-6 md:p-8 border-2 text-start`}>
         {/* Header - Badge as Main Title */}
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
+        <div className="flex items-center gap-3 mb-6">
           <div className={`inline-flex items-center gap-3 px-4 md:px-6 py-3 rounded-full border-2 text-lg md:text-xl font-bold ${getStepTypeColor(step.type)}`}>
             {getStepIcon(step.type)}
             <span>{getStepTypeLabel(step.type, language)}</span>
-          </div>
-          <div
-            className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-            style={{ backgroundColor: trackColor }}
-          >
-            {index + 1}
           </div>
         </div>
 

@@ -225,16 +225,10 @@ export default function TopicPage({ params }: TopicPageProps) {
             >
               {/* Step Header - Badge as Main Title */}
               <div className="space-y-3 md:space-y-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
                   <div className={`inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-3 md:py-4 rounded-full border-2 text-lg md:text-2xl lg:text-3xl font-bold ${getStepTypeColor(currentStep.type)}`}>
                     {getStepIcon(currentStep.type)}
                     <span className="truncate">{getStepTypeLabel(currentStep.type, language)}</span>
-                  </div>
-                  <div
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center text-xl md:text-2xl flex-shrink-0 text-white font-bold"
-                    style={{ backgroundColor: track.color }}
-                  >
-                    {currentStepIndex + 1}
                   </div>
                 </div>
               </div>
