@@ -51,7 +51,7 @@ const getUXTrack = (lang: Language): Track => {
         {
           id: 'why-it-matters',
           title: lang === 'ar' ? 'Why It Matters' : 'Why It Matters',
-          content: lang === 'ar' ? 'لو المستخدم اتلخبط أو تعب أثناء الاستخدام → هيسيب المنتج حتى لو شكله حلو' : 'If the user gets confused or tired during use → they will leave the product even if it looks good.',
+          content: lang === 'ar' ? 'لو المستخدم اتلخبط أو تعب أثناء الاستخدام ← هيسيب المنتج حتى لو شكله حلو' : 'If the user gets confused or tired during use → they will leave the product even if it looks good.',
           type: 'why-it-matters'
         },
         {
@@ -63,7 +63,7 @@ const getUXTrack = (lang: Language): Track => {
         {
           id: 'example',
           title: lang === 'ar' ? 'Example' : 'Example',
-          content: lang === 'ar' ? 'تطبيق طلب أكل:\nلو خلّصت الطلب في خطوات قليلة → UX كويس\nلو تهت بين الصفحات → UX سيء' : 'Food delivery app:\nIf you finish the order in a few steps → Good UX\nIf you get lost between pages → Bad UX',
+          content: lang === 'ar' ? 'تطبيق طلب أكل:\nلو خلّصت الطلب في خطوات قليلة ← UX كويس\nلو تهت بين الصفحات ← UX سيء' : 'Food delivery app:\nIf you finish the order in a few steps → Good UX\nIf you get lost between pages → Bad UX',
           type: 'example'
         },
         {
@@ -133,7 +133,7 @@ const getUXTrack = (lang: Language): Track => {
         {
           id: 'example',
           title: lang === 'ar' ? 'Example' : 'Example',
-          content: lang === 'ar' ? 'طالب مش بينظم وقته → نفهم السبب → نحدد المشكلة → نجرب حل' : 'A student not organizing their time → Understand the reason → Define the problem → Try a solution.',
+          content: lang === 'ar' ? 'طالب مش بينظم وقته ← نفهم السبب ← نحدد المشكلة ← نجرب حل' : 'A student not organizing their time → Understand the reason → Define the problem → Try a solution.',
           type: 'example'
         },
         {
@@ -163,7 +163,7 @@ const getUXTrack = (lang: Language): Track => {
         {
           id: 'summary',
           title: lang === 'ar' ? 'Summary' : 'Summary',
-          content: lang === 'ar' ? 'افهم → حدد → حل → جرّب' : 'Understand → Define → Solve → Try',
+          content: lang === 'ar' ? 'افهم ← حدد ← حل ← جرّب' : 'Understand → Define → Solve → Try',
           type: 'summary'
         },
       ]
@@ -413,7 +413,7 @@ const getUXTrack = (lang: Language): Track => {
         {
           id: 'example',
           title: lang === 'ar' ? 'Example' : 'Example',
-          content: lang === 'ar' ? '“مش لاقي وقت” → توتر' : '"Not finding time" → Stress',
+          content: lang === 'ar' ? '“مش لاقي وقت” ← توتر' : '"Not finding time" → Stress',
           type: 'example'
         },
         {
@@ -477,7 +477,7 @@ const getUXTrack = (lang: Language): Track => {
         {
           id: 'example',
           title: lang === 'ar' ? 'Example' : 'Example',
-          content: lang === 'ar' ? 'طالب عايز ينظم وقته → مش عايز App… عايز ينجز مهامه' : 'A student wanting to organize their time → Doesn’t want an app… wants to get tasks done.',
+          content: lang === 'ar' ? 'طالب عايز ينظم وقته ← مش عايز App… عايز ينجز مهامه' : 'A student wanting to organize their time → Doesn’t want an app… wants to get tasks done.',
           type: 'example'
         },
         {
@@ -995,7 +995,7 @@ const getIntegrationTrack = (lang: Language): Track => {
         {
           id: 'example',
           title: lang === 'ar' ? 'Example' : 'Example',
-          content: lang === 'ar' ? 'توضح مشكلة → تحليل → تصميم → النتيجة' : 'Clarifying problem → analysis → design → result.',
+          content: lang === 'ar' ? 'توضح مشكلة ← تحليل ← تصميم ← النتيجة' : 'Clarifying problem → analysis → design → result.',
           type: 'example'
         },
         {
@@ -1065,7 +1065,7 @@ const getIntegrationTrack = (lang: Language): Track => {
         {
           id: 'example',
           title: lang === 'ar' ? 'Example' : 'Example',
-          content: lang === 'ar' ? 'مستطيلات → تتحول لButtons وCards' : 'Rectangles → turn into Buttons and Cards.',
+          content: lang === 'ar' ? 'مستطيلات ← تتحول لButtons وCards' : 'Rectangles → turn into Buttons and Cards.',
           type: 'example'
         },
         {

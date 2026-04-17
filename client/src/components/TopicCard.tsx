@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X, ExternalLink } from 'lucide-react';
+import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X, ExternalLink, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Link } from 'wouter';
 import type { Topic, Step } from '@/lib/content';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -85,7 +85,6 @@ const StepCard = ({ step, index, totalSteps, trackColor, isActive, onClick, lang
   language: 'ar' | 'en';
 }) => {
   const t = (key: keyof Translations) => getTranslation(language, key);
-  const isRtl = language === 'ar';
 
   return (
     <div
@@ -198,7 +197,8 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
           disabled={index === 0}
           className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-sm md:text-base"
         >
-          {isRtl ? '← ' : '← '}{t('previousStep')}
+          {isRtl ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+          {t('previous')}
         </button>
 
         <div className="flex gap-2">
@@ -223,7 +223,8 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
           className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm md:text-base"
           style={{ backgroundColor: trackColor }}
         >
-          {t('nextStep')}{isRtl ? ' →' : ' →'}
+          {t('next')}
+          {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
         </button>
       </div>
 
@@ -251,7 +252,6 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
   const t = (key: keyof Translations) => getTranslation(language, key);
   const isRtl = language === 'ar';
 
-  const currentStep = topic.steps[currentStepIndex];
   const totalSteps = topic.steps.length;
 
   const handleNextStep = () => {
@@ -282,61 +282,65 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
           <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-muted flex items-center justify-center text-xl md:text-2xl flex-shrink-0">
             {topic.emoji}
           </div>
-          <div className="min-w-0 text-start">
-            <h3 className="text-lg md:text-xl font-bold text-foreground truncate">{topic.title}</h3>
-            <div className="flex items-center gap-2 md:gap-3 text-xs md:text-sm text-muted-foreground mt-1 flex-wrap">
-              <span className="flex items-center gap-1 whitespace-nowrap">
-                <Clock className="w-4 h-4" />
-                {topic.estimatedTime} {t('minutes')}
-              </span>
-              <span className="flex items-center gap-1 whitespace-nowrap">
-                <BookOpen className="w-4 h-4" />
-                {topic.steps.length} {t('steps')}
-              </span>
+          <div className="min-w-0">
+            <h3 className="text-base md:text-lg font-bold text-foreground truncate">{topic.title}</h3>
+            <div className="flex items-center gap-3 mt-1">
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Clock className="w-3 h-3" />
+                <span>{topic.estimatedTime} {t('minutes')}</span>
+              </div>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <BookOpen className="w-3 h-3" />
+                <span>{topic.steps.length} {t('steps')}</span>
+              </div>
             </div>
           </div>
         </div>
-        <ChevronDown className={`w-6 h-6 text-muted-foreground transition-transform duration-300 flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`} />
+        <div className="flex items-center gap-2 md:gap-4">
+          <Link href={`/track/${topic.trackId}/topic/${topic.id}`}>
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className="hidden sm:flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+            >
+              {t('viewInSeparatePage')}
+              <ExternalLink className="w-3 h-3" />
+            </button>
+          </Link>
+          <div className={`p-2 rounded-full hover:bg-muted transition-colors ${isExpanded ? 'rotate-180' : ''}`}>
+            <ChevronDown className="w-5 h-5 text-muted-foreground" />
+          </div>
+        </div>
       </div>
 
       {/* Expanded Content */}
       {isExpanded && (
         <div className="p-4 md:p-6 border-t border-border bg-muted/10">
-          <p className="text-muted-foreground mb-6 md:mb-8 leading-relaxed text-start text-sm md:text-base">
-            {topic.description}
-          </p>
-
           {/* View Mode Toggle */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-            <div className="flex p-1 bg-muted rounded-lg w-full sm:w-auto">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex bg-muted p-1 rounded-lg">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`flex-1 sm:flex-none px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-md transition-all ${
-                  viewMode === 'grid' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
-                }`}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${viewMode === 'grid' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 {t('gridView')}
               </button>
               <button
                 onClick={() => setViewMode('full')}
-                className={`flex-1 sm:flex-none px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-md transition-all ${
-                  viewMode === 'full' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
-                }`}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${viewMode === 'full' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 {t('fullView')}
               </button>
             </div>
             <Link href={`/track/${topic.trackId}/topic/${topic.id}`}>
-              <a className="text-xs md:text-sm font-medium text-primary hover:underline flex items-center gap-1 whitespace-nowrap">
-                {t('viewInSeparatePage')}
-                <ExternalLink className="w-4 h-4" />
-              </a>
+              <button className="sm:hidden flex items-center gap-1 text-xs font-semibold text-primary">
+                <ExternalLink className="w-3 h-3" />
+              </button>
             </Link>
           </div>
 
-          {/* Steps Display */}
-          {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          {/* Grid View */}
+          {viewMode === 'grid' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {topic.steps.map((step, index) => (
                 <StepCard
                   key={step.id}
@@ -350,16 +354,21 @@ export default function TopicCard({ topic, trackColor }: TopicCardProps) {
                 />
               ))}
             </div>
-          ) : (
-            <StepFullView
-              step={currentStep}
-              index={currentStepIndex}
-              totalSteps={totalSteps}
-              trackColor={trackColor}
-              onNext={handleNextStep}
-              onPrev={handlePreviousStep}
-              language={language}
-            />
+          )}
+
+          {/* Full View */}
+          {viewMode === 'full' && (
+            <div className="max-w-2xl mx-auto">
+              <StepFullView
+                step={topic.steps[currentStepIndex]}
+                index={currentStepIndex}
+                totalSteps={totalSteps}
+                trackColor={trackColor}
+                onNext={handleNextStep}
+                onPrev={handlePreviousStep}
+                language={language}
+              />
+            </div>
           )}
         </div>
       )}

@@ -322,7 +322,7 @@ export default function TopicPage({ params }: TopicPageProps) {
               className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg border-2 border-border text-foreground font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
             >
               {isRtl ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
-              {t('previousStep')}
+              {t('previous')}
             </button>
             <button
               onClick={() => setLocation('/')}
@@ -336,7 +336,7 @@ export default function TopicPage({ params }: TopicPageProps) {
               className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-8 py-2 md:py-3 rounded-lg font-bold text-white shadow-lg transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
               style={{ backgroundColor: track.color }}
             >
-              {t('nextStep')}
+              {t('next')}
               {isRtl ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
             </button>
           </div>

@@ -44,6 +44,8 @@ export interface Translations {
   organizedLearningDesc: string;
   communitySupport: string;
   communitySupportDesc: string;
+  organizedLearningTitle: string;
+  communitySupportTitle: string;
   quote: string;
 
   // Learning Journey
@@ -68,6 +70,8 @@ export interface Translations {
   closeLessons: string;
   step: string;
   of: string;
+  next: string;
+  previous: string;
   nextStep: string;
   previousStep: string;
   markAsComplete: string;
@@ -181,6 +185,8 @@ const translations: Record<Language, Translations> = {
     organizedLearningDesc: 'محتوى منظم ومنهجي يتابع أفضل الممارسات في صناعة التصميم.',
     communitySupport: 'دعم المجتمع',
     communitySupportDesc: 'تعلم مع مجتمع من المصممين الذين يشاركون نفس الرغبة في النمو والتطور.',
+    organizedLearningTitle: 'تعلم منظم',
+    communitySupportTitle: 'دعم المجتمع',
     quote: '"الهدف ليس فقط قراءة UX/UI... بل فهم كيفية التفكير مثل المصمم"',
 
     // Learning Journey
@@ -205,6 +211,8 @@ const translations: Record<Language, Translations> = {
     closeLessons: 'إغلاق الدروس',
     step: 'الخطوة',
     of: 'من',
+    next: 'التالي',
+    previous: 'السابق',
     nextStep: 'الخطوة التالية',
     previousStep: 'الخطوة السابقة',
     markAsComplete: 'تحديد كمكتمل',
@@ -316,6 +324,8 @@ const translations: Record<Language, Translations> = {
     organizedLearningDesc: 'Structured and methodical content that follows industry best practices in design.',
     communitySupport: 'Community Support',
     communitySupportDesc: 'Learn with a community of designers who share the same desire to grow and develop.',
+    organizedLearningTitle: 'Organized Learning',
+    communitySupportTitle: 'Community Support',
     quote: '"The goal is not just to read UX/UI... but to understand how to think like a designer"',
 
     // Learning Journey
@@ -340,6 +350,8 @@ const translations: Record<Language, Translations> = {
     closeLessons: 'Close Lessons',
     step: 'Step',
     of: 'of',
+    next: 'Next',
+    previous: 'Previous',
     nextStep: 'Next Step',
     previousStep: 'Previous Step',
     markAsComplete: 'Mark as Complete',
