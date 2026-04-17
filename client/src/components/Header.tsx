@@ -36,7 +36,7 @@ export default function Header() {
   const t = (key: keyof Translations) => getTranslation(language, key);
 
   const navItems: NavItem[] = [
-    { label: t('home'), href: 'https://abdoemara175.github.io/Pixel-Community/', isExternal: true },
+    { label: t('home'), href: '/', isExternal: false },
     { label: t('uxTrack'), href: '#ux-track', isExternal: false },
     { label: t('uiTrack'), href: '#ui-track', isExternal: false },
     { label: t('integrationTrack'), href: '#integration-track', isExternal: false },
@@ -158,7 +158,7 @@ export default function Header() {
       <div className="container">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo and Brand - Enhanced Animation */}
-          <a href="https://abdoemara175.github.io/Pixel-Community/">
+          <Link href="/">
             <div className="flex items-center gap-3 flex-shrink-0 hover:opacity-80 transition-opacity cursor-pointer">
               <div className="hidden sm:block text-left">
                 <motion.h1
@@ -178,7 +178,7 @@ export default function Header() {
                 </motion.p>
               </div>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Navigation - Enhanced with smooth transitions */}
           <motion.nav
