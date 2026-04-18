@@ -42,6 +42,24 @@ export function ThemeProvider({
     }
   }, [theme, switchable]);
 
+  // Keyboard shortcut for theme toggle (M key)
+  useEffect(() => {
+    if (!switchable) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.key === 'M' || e.key === 'm') && !e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
+        const target = e.target as HTMLElement;
+        if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          setTheme(prev => (prev === "light" ? "dark" : "light"));
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [switchable]);
+
   const toggleTheme = switchable
     ? () => {
         setTheme(prev => (prev === "light" ? "dark" : "light"));
