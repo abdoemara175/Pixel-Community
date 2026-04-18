@@ -29,7 +29,7 @@ export default function Header() {
     { label: t('home'), href: /Pixel-Community', isExternal: false },
     { label: t('allTracks'), href: '/tracks', isExternal: false },
     { label: t('uxTrack'), href: '/Pixel-Community/sections/ux', isExternal: false },
-    { label: t('uiTrack'), href: 'https://abdoemara175.github.io/sections/ui', isExternal: true },
+    { label: t('uiTrack'), href: 'https://abdoemara175.github.io/sections/ui', isExternal: false },
     { label: t('integrationTrack'), href: '/track/integration-track', isExternal: false },
     { label: t('bonusTrack'), href: '/track/bonus-track', isExternal: false },
   ];
