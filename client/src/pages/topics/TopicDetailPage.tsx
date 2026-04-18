@@ -215,12 +215,9 @@ export default function TopicDetailPage() {
                 <div
                   className={`h-full bg-gradient-to-br ${colors[currentSlide]} rounded-2xl border border-border p-8 md:p-12 flex flex-col justify-between`}
                 >
-                  {/* Badge and Title */}
+                  {/* Title Only */}
                   <div>
-                    <div className={`inline-block ${badgeColors[currentSlide]} px-4 py-2 rounded-full text-sm font-semibold mb-6`}>
-                      {currentPoint.label}
-                    </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-8">
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
                       {currentPoint.label}
                     </h2>
                   </div>
