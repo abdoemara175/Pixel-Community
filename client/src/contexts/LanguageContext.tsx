@@ -38,6 +38,24 @@ export function LanguageProvider({
     }
   }, [language, switchable]);
 
+  // Keyboard shortcut for language toggle (L key)
+  useEffect(() => {
+    if (!switchable) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.key === 'L' || e.key === 'l') && !e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
+        const target = e.target as HTMLElement;
+        if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          setLanguage(prev => (prev === "ar" ? "en" : "ar"));
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [switchable]);
+
   const toggleLanguage = switchable
     ? () => {
         setLanguage(prev => (prev === "ar" ? "en" : "ar"));
