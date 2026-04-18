@@ -26,10 +26,10 @@ export default function Header() {
   const isRtl = language === 'ar';
 
   const navItems: NavItem[] = [
-    { label: t('home'), href: '/', isExternal: false },
+    { label: t('home'), href: /Pixel-Community', isExternal: false },
     { label: t('allTracks'), href: '/tracks', isExternal: false },
-    { label: t('uxTrack'), href: '/track/ux-track', isExternal: false },
-    { label: t('uiTrack'), href: '/track/ui-track', isExternal: false },
+    { label: t('uxTrack'), href: '/Pixel-Community/sections/ux', isExternal: false },
+    { label: t('uiTrack'), href: '/Pixel-Community/sections/ui', isExternal: false },
     { label: t('integrationTrack'), href: '/track/integration-track', isExternal: false },
     { label: t('bonusTrack'), href: '/track/bonus-track', isExternal: false },
   ];
