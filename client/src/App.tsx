@@ -16,6 +16,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import { useEffect } from "react";
 import { useLocation } from "wouter";
 
+import WelcomeModal from "./components/WelcomeModal";
+
 function ScrollToTop() {
   const [location] = useLocation();
   useEffect(() => {
@@ -28,6 +30,7 @@ function Router() {
   return (
     <WouterRouter base="/Pixel-Community">
       <ScrollToTop />
+      <WelcomeModal />
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/tracks" component={AllTracksPage} />
