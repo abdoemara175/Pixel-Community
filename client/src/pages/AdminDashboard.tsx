@@ -354,16 +354,75 @@ export default function AdminDashboard() {
           {/* TAB 3: Students & Team Role Management */}
           {activeTab === 'students' && (
             <div className="bg-card border border-border p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-extrabold text-foreground flex items-center gap-2">
                     <Users className="w-5 h-5 text-primary" />
-                    <span>{isRtl ? 'إدارة أعضاء الفريق والطلاب والأدوار القيادية' : 'Team Roles & Students Management'}</span>
+                    <span>{isRtl ? 'إدارة أدمن النظام وأعضاء الفريق والطلاب' : 'Team Roles & Students Management'}</span>
                   </h2>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {isRtl ? 'التحكم في أدوار الأعضاء (Founder, Admin, Instructor UI/UX, HR, Media, Student)' : 'Assign roles and monitor camp progress'}
+                    {isRtl ? 'إضافة وترقية أي حساب مسجل إلى أدمن أو مدرب أو مسؤول HR/ميديا' : 'Promote any registered student to Admin or Team Lead'}
                   </p>
                 </div>
+              </div>
+
+              {/* Add / Promote Admin Box */}
+              <div className="p-5 rounded-2xl bg-secondary/30 border border-border space-y-3">
+                <h3 className="text-xs font-black text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-amber-500" />
+                  <span>{isRtl ? 'إضافة / ترقية أدمن أو مسؤول جديد' : 'Promote Registered Email to Admin'}</span>
+                </h3>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const form = e.target as HTMLFormElement;
+                    const emailInput = (form.elements.namedItem('promoteEmail') as HTMLInputElement).value;
+                    const roleSelect = (form.elements.namedItem('promoteRole') as HTMLSelectElement).value;
+                    const titleInput = (form.elements.namedItem('promoteTitle') as HTMLInputElement).value;
+
+                    if (!emailInput || !emailInput.includes('@')) {
+                      toast.error(isRtl ? 'يرجى إدخال إيميل صحيح' : 'Please enter valid email');
+                      return;
+                    }
+
+                    // Call promote logic
+                    const promotedMap = JSON.parse(localStorage.getItem('pixel_promoted_roles') || '{}');
+                    promotedMap[emailInput.toLowerCase().trim()] = {
+                      role: roleSelect,
+                      title: titleInput || roleSelect.toUpperCase(),
+                    };
+                    localStorage.setItem('pixel_promoted_roles', JSON.stringify(promotedMap));
+
+                    toast.success(isRtl ? `تم ترقية ${emailInput} كـ ${roleSelect} بنجاح!` : `Promoted ${emailInput} successfully!`);
+                    form.reset();
+                  }}
+                  className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+                >
+                  <input
+                    type="email"
+                    name="promoteEmail"
+                    placeholder={isRtl ? 'إيميل العضو المسجل' : 'Registered Member Email'}
+                    required
+                    className="px-4 py-2.5 rounded-xl border border-border bg-background text-xs font-medium outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  <select
+                    name="promoteRole"
+                    className="px-4 py-2.5 rounded-xl border border-border bg-background text-xs font-bold outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    <option value="admin">{isRtl ? 'أدمن النظام (Admin)' : 'Admin'}</option>
+                    <option value="instructor_uiux">{isRtl ? 'مدرب UI/UX' : 'UI/UX Instructor'}</option>
+                    <option value="lead">{isRtl ? 'قائد تنفيذي' : 'Executive Lead'}</option>
+                    <option value="hr">{isRtl ? 'مسؤول HR' : 'HR Lead'}</option>
+                    <option value="media">{isRtl ? 'مسؤول الميديا' : 'Media Lead'}</option>
+                  </select>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 bg-primary text-primary-foreground font-bold text-xs rounded-xl shadow-md hover:bg-primary/90 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>{isRtl ? 'تأكيد الترقية كـ أدمن' : 'Promote to Admin'}</span>
+                  </button>
+                </form>
               </div>
 
               <div className="space-y-4">

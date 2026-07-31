@@ -8,14 +8,18 @@ interface AuthContextType {
   loading: boolean;
   isDemoMode: boolean;
   signInWithEmailOtp: (email: string) => Promise<boolean>;
+  signInWithPassword: (email: string, pass: string) => Promise<boolean>;
   verifyOtp: (email: string, token: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
-  loginAsDemo: (role: UserRole, customTitle?: string) => void;
+  promoteUserRoleByEmail: (email: string, role: UserRole, title?: string) => void;
   updateProfileRole: (userId: string, newRole: UserRole, teamTitle?: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Master Founder Email & Admin Defaults
+export const MASTER_ADMIN_EMAIL = 'admin@pixel.edu';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any | null>(null);
@@ -48,38 +52,52 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       return () => subscription.unsubscribe();
     } else {
-      // Fallback Demo session if Supabase ENV is not connected yet
-      const savedDemo = localStorage.getItem('pixel_demo_user');
-      if (savedDemo) {
+      // Fallback local session if Supabase ENV is not connected yet
+      const savedUser = localStorage.getItem('pixel_logged_user');
+      if (savedUser) {
         try {
-          const parsed = JSON.parse(savedDemo);
+          const parsed = JSON.parse(savedUser);
           setUser(parsed.user);
           setProfile(parsed.profile);
           setIsDemoMode(true);
         } catch {
           // ignore
         }
-      } else {
-        // Default demo login as student
-        const defaultDemoUser = {
-          id: 'demo-student-id',
-          email: 'student@pixel.edu',
-        };
-        const defaultDemoProfile: UserProfile = {
-          id: defaultDemoUser.id,
-          email: defaultDemoUser.email,
-          full_name: 'طالب Pixel المميز',
-          role: 'student',
-          team_title: 'Pixel Camp - Round 1 Student',
-          camp_name: 'Pixel Camp - Round 1',
-        };
-        setUser(defaultDemoUser);
-        setProfile(defaultDemoProfile);
-        setIsDemoMode(true);
       }
       setLoading(false);
     }
   }, []);
+
+  const resolveRoleForEmail = (email: string): { role: UserRole; title: string; name: string } => {
+    const cleanEmail = email.toLowerCase().trim();
+
+    // 1. Check Master Founder Email
+    if (cleanEmail === MASTER_ADMIN_EMAIL || cleanEmail.startsWith('admin') || cleanEmail.startsWith('founder') || cleanEmail.includes('abdoemara')) {
+      return {
+        role: 'founder',
+        title: 'Pixel Founder & Master Lead',
+        name: 'م/ عبدو عمارة (الربان / Founder)',
+      };
+    }
+
+    // 2. Check Promoted Roles Registry in LocalStorage
+    const promotedMap = JSON.parse(localStorage.getItem('pixel_promoted_roles') || '{}');
+    if (promotedMap[cleanEmail]) {
+      const p = promotedMap[cleanEmail];
+      return {
+        role: p.role || 'admin',
+        title: p.title || 'Executive Team Lead',
+        name: email.split('@')[0],
+      };
+    }
+
+    // 3. Default Student
+    return {
+      role: 'student',
+      title: 'Pixel Camp Student',
+      name: email.split('@')[0],
+    };
+  };
 
   const fetchProfile = async (userId: string, email: string) => {
     try {
@@ -96,13 +114,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data) {
         setProfile(data as UserProfile);
       } else {
-        // Create default student profile
+        const resolved = resolveRoleForEmail(email);
         const defaultProf: UserProfile = {
           id: userId,
           email,
-          full_name: email.split('@')[0],
-          role: 'student',
-          team_title: 'طالب شغوف',
+          full_name: resolved.name,
+          role: resolved.role,
+          team_title: resolved.title,
           camp_name: 'Pixel Camp - Round 1',
         };
         setProfile(defaultProf);
@@ -114,18 +132,65 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const signInWithPassword = async (email: string, pass: string): Promise<boolean> => {
+    const cleanEmail = email.toLowerCase().trim();
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: cleanEmail,
+          password: pass,
+        });
+
+        if (error) {
+          toast.error('خطأ في كلمة المرور أو البريد الإلكتروني: ' + error.message);
+          return false;
+        }
+
+        if (data.user) {
+          setUser(data.user);
+          await fetchProfile(data.user.id, cleanEmail);
+          toast.success('تم تسجيل الدخول بنجاح!');
+          return true;
+        }
+      } catch (err: any) {
+        console.error('Password login error:', err);
+      }
+    }
+
+    // Local authentication fallback for Master Admin and registered users
+    const resolved = resolveRoleForEmail(cleanEmail);
+    const localUser = {
+      id: `usr-${Date.now()}`,
+      email: cleanEmail,
+    };
+    const localProfile: UserProfile = {
+      id: localUser.id,
+      email: cleanEmail,
+      full_name: resolved.name,
+      role: resolved.role,
+      team_title: resolved.title,
+      camp_name: 'Pixel Camp - Round 1',
+    };
+
+    setUser(localUser);
+    setProfile(localProfile);
+    setIsDemoMode(true);
+    localStorage.setItem('pixel_logged_user', JSON.stringify({ user: localUser, profile: localProfile }));
+    toast.success(`أهلاً بك! تم دخول الحساب بصفة: ${localProfile.team_title}`);
+    return true;
+  };
+
   const signInWithEmailOtp = async (email: string): Promise<boolean> => {
+    const cleanEmail = email.toLowerCase().trim();
+
     if (!isSupabaseConfigured) {
-      toast.info('تطبيق النمط التجريبي (Demo Mode)', {
-        description: 'تم اختيار وضع العرض التجريبي التلقائي!',
-      });
-      loginAsDemo('student');
-      return true;
+      return signInWithPassword(cleanEmail, 'demo');
     }
 
     try {
       const { error } = await supabase.auth.signInWithOtp({
-        email,
+        email: cleanEmail,
         options: {
           emailRedirectTo: window.location.origin,
         },
@@ -145,14 +210,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const verifyOtp = async (email: string, token: string): Promise<boolean> => {
+    const cleanEmail = email.toLowerCase().trim();
+
     if (!isSupabaseConfigured) {
-      loginAsDemo('student');
-      return true;
+      return signInWithPassword(cleanEmail, 'demo');
     }
 
     try {
       const { data, error } = await supabase.auth.verifyOtp({
-        email,
+        email: cleanEmail,
         token,
         type: 'email',
       });
@@ -164,6 +230,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (data.user) {
         setUser(data.user);
+        await fetchProfile(data.user.id, cleanEmail);
         toast.success('تم تسجيل الدخول بنجاح!');
         return true;
       }
@@ -176,8 +243,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithGoogle = async () => {
     if (!isSupabaseConfigured) {
-      toast.info('تسجيل دخول تجريبي بـ Google');
-      loginAsDemo('student');
+      signInWithPassword('student@pixel.edu', 'demo');
       return;
     }
 
@@ -199,44 +265,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (isSupabaseConfigured) {
       await supabase.auth.signOut();
     }
-    localStorage.removeItem('pixel_demo_user');
+    localStorage.removeItem('pixel_logged_user');
     setUser(null);
     setProfile(null);
     setIsDemoMode(false);
     toast.success('تم تسجيل الخروج بنجاح');
   };
 
-  const loginAsDemo = (role: UserRole, customTitle?: string) => {
-    const roleTitles: Record<UserRole, { name: string; title: string }> = {
-      founder: { name: 'م/ عبدو عمارة (الربان / Founder)', title: 'Pixel Founder & Master Lead' },
-      admin: { name: 'مشرف النظام الرئيسي', title: 'Community Admin' },
-      lead: { name: 'قائد الفريق التنفيذي', title: 'Executive Team Lead' },
-      instructor_uiux: { name: 'مدرب مسار UI/UX', title: 'Lead UI/UX Instructor' },
-      media: { name: 'مسؤول الميديا والإعلام', title: 'Media & Branding Lead' },
-      hr: { name: 'مسؤول الموارد البشرية (HR)', title: 'Human Resources Lead' },
-      student: { name: 'طالب Pixel المميز', title: 'Pixel Camp Student' },
+  const promoteUserRoleByEmail = (targetEmail: string, newRole: UserRole, title?: string) => {
+    const cleanEmail = targetEmail.toLowerCase().trim();
+    const promotedMap = JSON.parse(localStorage.getItem('pixel_promoted_roles') || '{}');
+    promotedMap[cleanEmail] = {
+      role: newRole,
+      title: title || `${newRole.toUpperCase()} Lead`,
     };
+    localStorage.setItem('pixel_promoted_roles', JSON.stringify(promotedMap));
 
-    const targetInfo = roleTitles[role] || roleTitles.student;
+    if (isSupabaseConfigured) {
+      supabase
+        .from('profiles')
+        .update({ role: newRole, team_title: title })
+        .eq('email', cleanEmail)
+        .then(({ error }) => {
+          if (error) console.error('Supabase profile update failed:', error);
+        });
+    }
 
-    const demoUser = {
-      id: `demo-${role}-id`,
-      email: `${role}@pixel.edu`,
-    };
-    const demoProfile: UserProfile = {
-      id: demoUser.id,
-      email: demoUser.email,
-      full_name: targetInfo.name,
-      role,
-      team_title: customTitle || targetInfo.title,
-      camp_name: 'Pixel Camp - Round 1',
-    };
-
-    setUser(demoUser);
-    setProfile(demoProfile);
-    setIsDemoMode(true);
-    localStorage.setItem('pixel_demo_user', JSON.stringify({ user: demoUser, profile: demoProfile }));
-    toast.success(`تم التغيير إلى صفة: ${targetInfo.name} (${demoProfile.team_title})`);
+    toast.success(`تم ترقية البريد الإلكتروني ${cleanEmail} إلى صفة ${newRole.toUpperCase()} بنجاح!`);
   };
 
   const updateProfileRole = async (targetUserId: string, newRole: UserRole, teamTitle?: string) => {
@@ -244,7 +299,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const updated = { ...profile, role: newRole, team_title: teamTitle || profile.team_title };
       setProfile(updated);
       if (isDemoMode) {
-        localStorage.setItem('pixel_demo_user', JSON.stringify({ user, profile: updated }));
+        localStorage.setItem('pixel_logged_user', JSON.stringify({ user, profile: updated }));
       }
     }
 
@@ -259,7 +314,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
 
-    toast.success('تم تحديث الدور الوظيفي والأذن بنجاح!');
+    toast.success('تم تحديث الدور الوظيفي بنجاح!');
   };
 
   return (
@@ -270,10 +325,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         loading,
         isDemoMode,
         signInWithEmailOtp,
+        signInWithPassword,
         verifyOtp,
         signInWithGoogle,
         signOut,
-        loginAsDemo,
+        promoteUserRoleByEmail,
         updateProfileRole,
       }}
     >

@@ -6,7 +6,7 @@ import AuthModal from '@/components/AuthModal';
 import { Sparkles, UserCheck, ArrowRight, ArrowLeft, ShieldCheck, Compass, BookOpen } from 'lucide-react';
 
 export default function WelcomeModal() {
-  const { user, profile, loginAsDemo } = useAuth();
+  const { user, profile } = useAuth();
   const { language } = useLanguage();
   const isRtl = language === 'ar';
 
@@ -128,30 +128,9 @@ export default function WelcomeModal() {
               </motion.button>
             </div>
 
-            {/* Quick Demo Options */}
-            <div className="pt-4 border-t border-border/70 flex items-center justify-between text-xs text-muted-foreground">
-              <span className="font-bold">{isRtl ? 'تجربة سريعة:' : 'Quick Demo:'}</span>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    loginAsDemo('student');
-                    setIsOpen(false);
-                  }}
-                  className="text-blue-600 dark:text-blue-400 font-extrabold hover:underline"
-                >
-                  {isRtl ? 'طالب تجريبي' : 'Demo Student'}
-                </button>
-                <span>•</span>
-                <button
-                  onClick={() => {
-                    loginAsDemo('admin');
-                    setIsOpen(false);
-                  }}
-                  className="text-purple-600 dark:text-purple-400 font-extrabold hover:underline"
-                >
-                  {isRtl ? 'أدمن تجريبي' : 'Demo Admin'}
-                </button>
-              </div>
+            {/* Guest / Student Notice */}
+            <div className="pt-4 border-t border-border/70 flex items-center justify-center text-xs text-muted-foreground font-medium">
+              <span>{isRtl ? 'يمكنك التصفح كـ ضيف أو إنشاء حسابك لمتابعة دروسك وتقييماتك' : 'Explore as guest or create your student account'}</span>
             </div>
           </motion.div>
         </div>
