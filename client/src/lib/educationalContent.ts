@@ -363,6 +363,23 @@ export const educationalContent: { sections: Section[] } = {
             miniActivity: "اذكر حاجة ممكن تطورها في تصميم",
             summary: "Design = عملية مستمرة"
           }
+        },
+        {
+          id: "ux-psychology-laws",
+          titleAr: "قوانين تجربة المستخدم النفسية (Psychology Laws of UX)",
+          titleEn: "Psychology Laws of UX",
+          content: {
+            introduction: "كيف تتنبأ بعقل وسلوك المستخدم وتصمم شاشات مريحة غريزياً؟",
+            concept: "قوانين نفسية مبنية على العلوم السلوكية توضح كيف يعالج عقل الإنسان المعلومات في الواجهات الرقمية.",
+            whyItMatters: "بتضمن اتخاذ المستخدم قرارات سريعة بدون توتر أو تفكير زاد",
+            breakdown: "- Hick's Law: كلما زادت الخيارات زاد زمن اتخاذ القرار\n- Jakob's Law: التزامك بالأنماط المعروفة يسهل التعلم\n- Fitts's Law: المسافة وحجم الزر يحددان سرعة الوصول\n- Miller's Law: الذاكرة القصيرة تستوعب 7±2 عناصر فقط",
+            example: "وضع زر الشراء كبيراً ومباشراً وقريباً لإبهام المستخدم في الجوال (Fitts's Law)",
+            badVsGood: "Bad: إعطاء المستخدم 10 خيارات معقدة في القائمة الرئيسية\nGood: تبسيط الخيارات إلى 3 أو 4 بدائل مباشرة",
+            commonMistakes: "- خرق التوقعات والأنماط المعيارية للمستخدمين بدون سبب محدد",
+            practicalTips: "- قسّم القوائم الطويلة لمجموعات صغيرة (Chunking)\n- جعل الزر الأكثر استخداماً هو الأكبر والأقرب",
+            miniActivity: "طبق قانون Hick's Law على قائمة خيارات معقدة",
+            summary: "علم النفس + التصميم = تجربة بديهية ومريحة"
+          }
         }
       ]
     },
@@ -578,6 +595,23 @@ export const educationalContent: { sections: Section[] } = {
             miniActivity: "صمم شاشة Empty State لسلة تسوق فارغة",
             summary: "UI States = واجهة متكاملة تجيب على كل الاحتمالات"
           }
+        },
+        {
+          id: "figma-auto-layout-variants",
+          titleAr: "الـ Auto Layout والمتغيرات في فيجما (Figma Auto-Layout & Variants)",
+          titleEn: "Figma Auto-Layout & Variants",
+          content: {
+            introduction: "كيف تبني مكونات في Figma تتمدد وتتجاوب تلقائياً مثل الكود الحقيقي؟",
+            concept: "Auto Layout ميزة احترافية في Figma تحول العناصر إلى هيكل Flexbox مرن، وVariants تجمع حالات المكون في كائن واحد.",
+            whyItMatters: "تعديل زر واحد أو تغيير نص يضبط مقاس الكارت تلقائياً ويوفر 80% من وقت التصميم",
+            breakdown: "- Direction: أفقي (Horizontal) أو رأسي (Vertical)\n- Hug Content vs Fill Container: تمدد المكون حسب المحتوى أو الحاوية\n- Spacing & Padding: ضببط المسافات الداخلية والتوزيع\n- Component Variants: دمج حالات (Hover, Active, Disabled) في مكون واحد",
+            example: "تغيير كلمة 'حفظ' إلى 'حفظ وتعديل البيانات' فيتوسع الزر والمسافات تلقائياً بدون تعديل يدوي",
+            badVsGood: "Bad: ضبط مسافات وحجم الأزرار والكروت يدوياً بكسل ببكسل\nGood: الاعتماد التام على Auto Layout للـ Responsiveness",
+            commonMistakes: "- فك الـ Auto Layout وتعديل الأبعاد يدويًا في كل شاشة",
+            practicalTips: "- استخدم Shift + A لإضافة Auto Layout فوراً لأي مجموعة\n- سمِّ الحالات بوضوح مثل Property 1 = Hover",
+            miniActivity: "صمم زر بـ Auto Layout وغير النص لتلاحظ التمدد التلقائي",
+            summary: "Auto Layout = سرعة مذهلة واتساق تام كالكود"
+          }
         }
       ]
     },
@@ -650,6 +684,23 @@ export const educationalContent: { sections: Section[] } = {
             practicalTips: "- ركز على الجودة مش الكمية (2-3 مشاريع قوية يكفوا)\n- خلي المدخل بصري وجذاب",
             miniActivity: "اكتب مقدمة قصيرة لمشروعك القادم",
             summary: "Portfolio قوي = قصة مشكلتك وحلها الباهر"
+          }
+        },
+        {
+          id: "freelancing-client-management",
+          titleAr: "العمل الحر وإدارة العملاء والأسعار (Freelancing & Client Management)",
+          titleEn: "Freelancing & Client Management",
+          content: {
+            introduction: "كيف تبدأ مسيرتك كـ Freelancer وتحدد سعر ساعتك ومشروعك باحترافية؟",
+            concept: "أساسيات تسعير خدمات الـ UI/UX، التواصل مع العملاء، وكتابة عقود العرض والتسليم (Scope of Work).",
+            whyItMatters: "يحميك من إرهاق التعديلات اللانهائية ويضمن حقوقك المالية والأدبية",
+            breakdown: "- Pricing: التسعير بالساعة مقابل التسعير بالمشروع (Value-Based Pricing)\n- Scope of Work: تحديد عدد الشاشات والتعديلات مسبقاً\n- Client Brief: استلام تفاصيل الفكرة والجمهور بدقة\n- Contracts: الدفعة المقدمة (30% - 50%) قبل البدء",
+            example: "الاتفاق على 3 تعديلات فقط لكل شاشة، وما زاد عنها يحسب بسعر إضافي",
+            badVsGood: "Bad: البدء في التصميم بدون دفعة مقدمة أو عقد يحدد عدد الشاشات\nGood: اتفاق مالي واضح وعقد يحدد النطاق والمواعيد",
+            commonMistakes: "- قببول تعديلات غير محدودة بدون مقابل وتأخير الدفعات",
+            practicalTips: "- لا تبدأ أي مشروع بدون عربون 50%\n- وضح الـ Deliverables بوضوح في عقد ملزم",
+            miniActivity: "اكتب ملخص Scope of Work لمشروع تصميم تطبيق بسيط",
+            summary: "احترافية التعامل = حماية حقوقك ونجاح عملك الحر"
           }
         }
       ]
