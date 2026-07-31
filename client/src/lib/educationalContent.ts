@@ -504,11 +504,79 @@ export const educationalContent: { sections: Section[] } = {
             whyItMatters: "بيسهل التعاون بين المصمم والمطور وبيضمن الاتساق",
             breakdown: "- Design Tokens\n- Component Library\n- Guidelines & Documentation",
             example: "Design System بتاع Material Design أو Apple Human Interface",
-            badVsGood: "Bad: عشوائية واختلافات\nGood: مرجع واحد ثوابت لكل الفريق",
+            badVsGood: "Bad: عشوائية وااختلافات\nGood: مرجع واحد ثوابت لكل الفريق",
             commonMistakes: "- عمل Design System ضخم بدون داعي للمشاريع الصغيرة",
             practicalTips: "- ابدأ بـ UI Kit بسيط ثم طوره لـ Design System",
             miniActivity: "جمع الألوان والخطوط والأزرار في صفحة واحدة",
             summary: "Design System = مرجع موحد للجميع"
+          }
+        },
+        {
+          id: "ui-accessibility",
+          titleAr: "إمكانية الوصول في الواجهات (UI Accessibility - A11y)",
+          titleEn: "UI Accessibility (A11y)",
+          content: {
+            introduction: "هل تصميمك يقدر يستخدمه كل الناس بدون عوائق حتى ذوي الاحتياجات؟",
+            concept: "UI Accessibility هي مراعاة إتاحة الواجهة لجميع المستخدمين بشمولية بغض النظر عن قدراتهم البصرية أو الحركية.",
+            whyItMatters: "بتضمن وصول منتجك لـ 100% من الجمهور وبيطابق معايير الجودة العالمية (WCAG)",
+            breakdown: "- Color Contrast: تباين ألوان لا يقل عن 4.5:1\n- Touch Target: مساحة ضغط لا تقل عن 44x44px للجوال\n- Text Scaling: دعم تكبير الخطوط\n- Screen Readers: نصوص توضيحية للأيقونات",
+            example: "نص أبيض على زر أزرق داكن واضح جداً مقارنة بنص رمادي على أصفر",
+            badVsGood: "Bad: نصوص باهتة ومساحات ضغط صغيرة\nGood: تباين واضح وأزرار سهلة اللمس",
+            commonMistakes: "- الاعتماد على اللون فقط لإظهار الخطأ دون أيقونة أو نص",
+            practicalTips: "- استخدم أدوات مثل Stark لفحص Contrast\n- لا تجعل مساحة الأزرار التفاعلية أصغر من 44px",
+            miniActivity: "افحص نسبة التباين لأزرار تطبيقك المفضل",
+            summary: "التصميم الشامل = م متاح للجميع بسهولة"
+          }
+        },
+        {
+          id: "micro-interactions",
+          titleAr: "الحركات والتفاعلات الدقيقة (Micro-interactions)",
+          titleEn: "Micro-interactions & Motion",
+          content: {
+            introduction: "ليه بعض الأزرار والتطبيقات بتحس إنها حيّة وبتتفاعل معاك بسلاسة؟",
+            concept: "Micro-interactions هي الحركات والتأثيرات البصرية البسيطة اللي بتدي رد فعل فوري عند تفاعل المستخدم.",
+            whyItMatters: "بتأكد للمستخدم إن الأكشن تم بنجاح وتمنح الواجهة لمسة احترافية فائقة",
+            breakdown: "- Trigger: سبب الحركة (Hover / Click)\n- Feedback: رد الفعل البصري (تغيير اللون / تكبير خفيف)\n- Duration: سرعة الحركة بين 150ms إلى 300ms",
+            example: "زر التحميل اللي بيتحول لشارة صح عند اكتمال الرفع",
+            badVsGood: "Bad: حركات بطيئة ومزعجة تضيع وقت المستخدم\nGood: مؤثرات سريعة وسلسة وتفاعلية",
+            commonMistakes: "- زيادة الحركات بشكل يسبب تشتيت العين أو بطء الاستجابة",
+            practicalTips: "- اجعل زمن الانقال بين 200ms و 300ms\n- استخدم easing طبيعي",
+            miniActivity: "لاحظ التفاعل البصري عند ضغط زر Like في إنستغرام",
+            summary: "Micro-interactions = تفاعل حي واستجابة واضحة"
+          }
+        },
+        {
+          id: "responsive-ui-design",
+          titleAr: "التصميم المتجاوب للشاشات (Responsive UI & Breakpoints)",
+          titleEn: "Responsive UI & Breakpoints",
+          content: {
+            introduction: "إزاي التصميم بيكيف نفسه تلقائياً بين شاشة الجوال والتابلت والكومبيوتر؟",
+            concept: "Responsive UI هو تصميم واجهة مرنة تعيد ترتيب عناصرها وتناسب مقاسات الشاشات المختلفة بذكاء.",
+            whyItMatters: "أكثر من 60% من التصفح بيحصل على الجوال، فلا بد من تجربة ممتازة على كل الأجهزة",
+            breakdown: "- Mobile Breakpoint: 320px - 480px\n- Tablet Breakpoint: 768px - 1024px\n- Desktop Breakpoint: 1200px+\n- Mobile-First Approach: التصميم للجوال أولاً",
+            example: "تحويل الملاحة العريضة في Desktop إلى القائمة الجانبية (Hamburger Menu) في الجوال",
+            badVsGood: "Bad: تصغير الشاشة كصورة ثابتة فيصغر الخط\nGood: إعادة ترتيب الكروت والعمود ليصبح رأسي",
+            commonMistakes: "- التصميم للابتوب فقط وإهمال تجربة الجوال",
+            practicalTips: "- صمم بالعمود الواحد (1 Column) للجوال\n- اجعل العناصر مرنة بالنِسَب % أو Grid",
+            miniActivity: "افتح موقع على الكومبيوتر وصغر نافذة المتصفح لتلاحظ التجاوب",
+            summary: "Responsive UI = تجربة سلسة على كل الشاشات"
+          }
+        },
+        {
+          id: "ui-states--edge-cases",
+          titleAr: "حالات الواجهة والحالات الاستثنائية (UI States & Edge Cases)",
+          titleEn: "UI States & Edge Cases",
+          content: {
+            introduction: "ماذا يحدث للشاشة لما النت يقطع أو ما يرجعش أي داتا؟",
+            concept: "UI States هي الحالات المختلفة التي تمر بها أي شاشة في المنتج أثناء دورة حياتها.",
+            whyItMatters: "تجنب الشاشات البيضاء أو الصامتة وتوجيه المستخدم دائماً للخطوة التالية",
+            breakdown: "- Ideal State: الحالة المثالية الكاملة بالبيانات\n- Empty State: شاشة فارغة بدون بيانات مع زر إضافة\n- Loading State: حالة التحميل (Skeleton Loaders)\n- Error State: شاشة الخطأ مع خيار إعادة المحاولة",
+            example: "عرض هيكل محتوى باهت (Skeleton) أثناء تحميل التغذية الإخبارية",
+            badVsGood: "Bad: شاشة بيضاء فارغة تترك المستخدم حائراً\nGood: توضيح حالة التحميل أو رسالة لطيفة مع زر إعادة المحاولة",
+            commonMistakes: "- النسيان والتركيز فقط على الحالة المثالية (Ideal State)",
+            practicalTips: "- صمم Empty State مشجعة مع زر CTA واضح\n- استخدم Skeleton Loaders بدل الـ Spinner المزعج",
+            miniActivity: "صمم شاشة Empty State لسلة تسوق فارغة",
+            summary: "UI States = واجهة متكاملة تجيب على كل الاحتمالات"
           }
         }
       ]
