@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { X, Mail, ShieldCheck, KeyRound, Lock } from 'lucide-react';
+import { X, Mail, ShieldCheck, Lock, User, Phone, KeyRound, ArrowRight, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface AuthModalProps {
@@ -11,21 +11,35 @@ interface AuthModalProps {
   onClose: () => void;
 }
 
+type AuthMode = 'sign_in' | 'sign_up' | 'forgot_password';
+
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const { signInWithPassword, signInWithEmailOtp, verifyOtp, signInWithGoogle } = useAuth();
+  const {
+    signInWithPassword,
+    signUpWithPassword,
+    resetPasswordRequest,
+    confirmPasswordReset,
+    signInWithGoogle,
+  } = useAuth();
   const { language } = useLanguage();
   const isRtl = language === 'ar';
 
-  const [loginMethod, setLoginMethod] = useState<'password' | 'otp'>('password');
-  const [step, setStep] = useState<'email' | 'otp'>('email');
+  const [mode, setMode] = useState<AuthMode>('sign_in');
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [otpToken, setOtpToken] = useState('');
+  
+  // Forgot Password step states
+  const [resetStep, setResetStep] = useState<'request' | 'confirm'>('request');
+  const [resetCode, setResetCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   if (!isOpen || typeof document === 'undefined') return null;
 
-  const handlePasswordLogin = async (e: React.FormEvent) => {
+  // Handle Login
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes('@')) {
       toast.error(isRtl ? 'يرجى إدخال بريد إلكتروني صحيح' : 'Please enter a valid email');
@@ -45,35 +59,60 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
   };
 
-  const handleSendOtp = async (e: React.FormEvent) => {
+  // Handle Sign Up
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!fullName.trim()) {
+      toast.error(isRtl ? 'يرجى كتابة الاسم بالكامل' : 'Please enter your full name');
+      return;
+    }
     if (!email || !email.includes('@')) {
       toast.error(isRtl ? 'يرجى إدخال بريد إلكتروني صحيح' : 'Please enter a valid email');
       return;
     }
-
-    setLoading(true);
-    const success = await signInWithEmailOtp(email);
-    setLoading(false);
-
-    if (success) {
-      setStep('otp');
-    }
-  };
-
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!otpToken || otpToken.length < 4) {
-      toast.error(isRtl ? 'ادخل رمز OTP المكون من الأرقام' : 'Enter valid OTP code');
+    if (!password || password.length < 6) {
+      toast.error(isRtl ? 'كلمة المرور يجب أن لا تقل عن 6 أحرف' : 'Password must be at least 6 characters');
       return;
     }
 
     setLoading(true);
-    const success = await verifyOtp(email, otpToken);
+    const success = await signUpWithPassword(email, password, fullName, phone);
     setLoading(false);
 
     if (success) {
       onClose();
+    }
+  };
+
+  // Handle Forgot Password Step 1 (Request reset code to email or phone)
+  const handleRequestReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      toast.error(isRtl ? 'يرجى كتابة البريد الإلكتروني أو رقم الهاتف' : 'Please enter email or phone number');
+      return;
+    }
+
+    setLoading(true);
+    const success = await resetPasswordRequest(email);
+    setLoading(false);
+
+    if (success) {
+      setResetStep('confirm');
+    }
+  };
+
+  // Handle Forgot Password Step 2 (Confirm code & new password)
+  const handleConfirmReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const success = await confirmPasswordReset(email, resetCode, newPassword);
+    setLoading(false);
+
+    if (success) {
+      setMode('sign_in');
+      setResetStep('request');
+      setResetCode('');
+      setNewPassword('');
     }
   };
 
@@ -100,46 +139,54 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <X className="w-5 h-5" />
           </button>
 
-          {/* Header */}
+          {/* Icon & Title Header */}
           <div className="text-center mb-6">
             <div className="w-14 h-14 mx-auto mb-3 bg-primary/10 border border-primary/20 rounded-2xl flex items-center justify-center text-primary shadow-lg">
               <ShieldCheck className="w-7 h-7" />
             </div>
             <h2 className="text-2xl font-black text-foreground">
-              {isRtl ? 'تسجيل الدخول / حساب جديد' : 'Sign In / Account'}
+              {mode === 'forgot_password'
+                ? isRtl ? 'استعادة كلمة السر' : 'Reset Password'
+                : mode === 'sign_up'
+                ? isRtl ? 'إنشاء حساب جديد' : 'Create Account'
+                : isRtl ? 'تسجيل الدخول' : 'Sign In'}
             </h2>
             <p className="text-xs md:text-sm text-muted-foreground mt-1 font-medium">
-              {isRtl
-                ? 'ادخل إلى حسابك التعليمي لمتابعة الدروس والتطبيقات والتقييمات'
-                : 'Access your learning account and track progress'}
+              {mode === 'forgot_password'
+                ? isRtl ? 'ادخل بريدك أو رقم هاتفك لتلقي رمز التأكيد وإعادة ضبط كلمة السر' : 'Enter your email or phone to receive a reset code'
+                : mode === 'sign_up'
+                ? isRtl ? 'انضم لمجتمع PIXEL وسجل بياناتك لبدء رحلة التعلم' : 'Join PIXEL community and start your learning journey'
+                : isRtl ? 'أهلاً بك مجدداً! ادخل إلى حسابك التعليمي لمتابعة الدروس' : 'Welcome back! Access your learning account'}
             </p>
           </div>
 
-          {/* Login Method Toggle */}
-          <div className="flex bg-muted p-1 rounded-xl mb-5">
-            <button
-              type="button"
-              onClick={() => setLoginMethod('password')}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                loginMethod === 'password' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground'
-              }`}
-            >
-              {isRtl ? 'كلمة المرور' : 'Password'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setLoginMethod('otp')}
-              className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                loginMethod === 'otp' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground'
-              }`}
-            >
-              {isRtl ? 'رمز OTP لليميل' : 'Email OTP'}
-            </button>
-          </div>
+          {/* Mode Switcher Tabs (Sign In / Sign Up) - Hidden during Forgot Password */}
+          {mode !== 'forgot_password' && (
+            <div className="flex bg-muted p-1 rounded-xl mb-6">
+              <button
+                type="button"
+                onClick={() => setMode('sign_in')}
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  mode === 'sign_in' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground'
+                }`}
+              >
+                {isRtl ? 'تسجيل الدخول' : 'Sign In'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode('sign_up')}
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  mode === 'sign_up' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground'
+                }`}
+              >
+                {isRtl ? 'حساب جديد' : 'Sign Up'}
+              </button>
+            </div>
+          )}
 
-          {loginMethod === 'password' ? (
-            /* Password Login Form */
-            <form onSubmit={handlePasswordLogin} className="space-y-4">
+          {/* 1. SIGN IN FORM */}
+          {mode === 'sign_in' && (
+            <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
                   {isRtl ? 'البريد الإلكتروني' : 'Email Address'}
@@ -158,9 +205,18 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1.5">
-                  {isRtl ? 'كلمة المرور' : 'Password'}
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-bold text-foreground">
+                    {isRtl ? 'كلمة المرور' : 'Password'}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setMode('forgot_password')}
+                    className="text-xs font-bold text-primary hover:underline cursor-pointer"
+                  >
+                    {isRtl ? 'نسيت كلمة السر؟' : 'Forgot Password?'}
+                  </button>
+                </div>
                 <div className="relative">
                   <Lock className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
@@ -192,7 +248,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   <div className="w-full border-t border-border" />
                 </div>
                 <span className="relative px-3 bg-card text-xs font-semibold text-muted-foreground">
-                  {isRtl ? 'أو عبر Google' : 'Or via Google'}
+                  {isRtl ? 'أو الدخول بنقرة واحدة' : 'Or fast login with'}
                 </span>
               </div>
 
@@ -223,9 +279,28 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 <span>{isRtl ? 'جوجل' : 'Google'}</span>
               </button>
             </form>
-          ) : step === 'email' ? (
-            /* OTP Form Step 1 */
-            <form onSubmit={handleSendOtp} className="space-y-4">
+          )}
+
+          {/* 2. SIGN UP FORM */}
+          {mode === 'sign_up' && (
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-foreground mb-1.5">
+                  {isRtl ? 'الاسم بالكامل' : 'Full Name'}
+                </label>
+                <div className="relative">
+                  <User className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder={isRtl ? 'مثال: أحمد محمد' : 'John Doe'}
+                    required
+                    className="w-full ps-10 pe-4 py-3 rounded-xl border border-border bg-background text-foreground text-sm font-medium focus:ring-2 focus:ring-primary outline-none"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
                   {isRtl ? 'البريد الإلكتروني' : 'Email Address'}
@@ -236,8 +311,42 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="student@example.com"
+                    placeholder="student@domain.com"
                     required
+                    className="w-full ps-10 pe-4 py-3 rounded-xl border border-border bg-background text-foreground text-sm font-medium focus:ring-2 focus:ring-primary outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-foreground mb-1.5">
+                  {isRtl ? 'رقم الهاتف (اختياري / للتأكيد)' : 'Phone Number (Optional)'}
+                </label>
+                <div className="relative">
+                  <Phone className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="01012345678"
+                    className="w-full ps-10 pe-4 py-3 rounded-xl border border-border bg-background text-foreground text-sm font-medium focus:ring-2 focus:ring-primary outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-foreground mb-1.5">
+                  {isRtl ? 'كلمة المرور' : 'Password'}
+                </label>
+                <div className="relative">
+                  <Lock className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    minLength={6}
                     className="w-full ps-10 pe-4 py-3 rounded-xl border border-border bg-background text-foreground text-sm font-medium focus:ring-2 focus:ring-primary outline-none"
                   />
                 </div>
@@ -249,53 +358,112 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 className="w-full py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg hover:bg-primary/90 transition-all flex items-center justify-center gap-2 text-sm cursor-pointer"
               >
                 {loading ? (
-                  <span>{isRtl ? 'جاري إرسال OTP...' : 'Sending OTP...'}</span>
+                  <span>{isRtl ? 'جاري إنشاء الحساب...' : 'Creating account...'}</span>
                 ) : (
-                  <>
-                    <KeyRound className="w-4 h-4" />
-                    <span>{isRtl ? 'إرسال رمز التفعيل (OTP)' : 'Send Verification OTP'}</span>
-                  </>
+                  <span>{isRtl ? 'إنشاء حساب جديد' : 'Create New Account'}</span>
                 )}
               </button>
             </form>
-          ) : (
-            /* OTP Form Step 2 */
-            <form onSubmit={handleVerifyOtp} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-foreground mb-1.5">
-                  {isRtl ? 'ادخل رمز OTP المرسل لـ' : 'Enter OTP sent to'} {email}
-                </label>
-                <input
-                  type="text"
-                  value={otpToken}
-                  onChange={(e) => setOtpToken(e.target.value)}
-                  placeholder="123456"
-                  maxLength={6}
-                  required
-                  className="w-full text-center tracking-widest text-lg font-mono py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary outline-none"
-                />
-              </div>
+          )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg hover:bg-primary/90 transition-all cursor-pointer"
-              >
-                {loading ? (
-                  <span>{isRtl ? 'جاري التحقق...' : 'Verifying...'}</span>
-                ) : (
-                  <span>{isRtl ? 'تأكيد الرمز والتسجيل' : 'Verify & Sign In'}</span>
-                )}
-              </button>
+          {/* 3. FORGOT PASSWORD FORM */}
+          {mode === 'forgot_password' && (
+            <div className="space-y-4">
+              {resetStep === 'request' ? (
+                <form onSubmit={handleRequestReset} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-foreground mb-1.5">
+                      {isRtl ? 'البريد الإلكتروني أو رقم الهاتف' : 'Email Address or Phone Number'}
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <input
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder={isRtl ? 'ادخل الإيميل أو رقم الهاتف' : 'Enter email or phone'}
+                        required
+                        className="w-full ps-10 pe-4 py-3 rounded-xl border border-border bg-background text-foreground text-sm font-medium focus:ring-2 focus:ring-primary outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg hover:bg-primary/90 transition-all flex items-center justify-center gap-2 text-sm cursor-pointer"
+                  >
+                    {loading ? (
+                      <span>{isRtl ? 'جاري إرسال كود التأكيد...' : 'Sending reset code...'}</span>
+                    ) : (
+                      <>
+                        <KeyRound className="w-4 h-4" />
+                        <span>{isRtl ? 'إرسال كود التأكيد وإعادة التعيين' : 'Send Reset Code'}</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleConfirmReset} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-foreground mb-1.5">
+                      {isRtl ? 'رمز التأكيد (OTP)' : 'Verification Code'}
+                    </label>
+                    <input
+                      type="text"
+                      value={resetCode}
+                      onChange={(e) => setResetCode(e.target.value)}
+                      placeholder="123456"
+                      maxLength={6}
+                      required
+                      className="w-full text-center tracking-widest text-lg font-mono py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-foreground mb-1.5">
+                      {isRtl ? 'كلمة المرور الجديدة' : 'New Password'}
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <input
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="••••••••"
+                        required
+                        minLength={6}
+                        className="w-full ps-10 pe-4 py-3 rounded-xl border border-border bg-background text-foreground text-sm font-medium focus:ring-2 focus:ring-primary outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg hover:bg-primary/90 transition-all cursor-pointer"
+                  >
+                    {loading ? (
+                      <span>{isRtl ? 'جاري التحديث...' : 'Updating password...'}</span>
+                    ) : (
+                      <span>{isRtl ? 'تأكيد وتحديث كلمة المرور' : 'Confirm & Update Password'}</span>
+                    )}
+                  </button>
+                </form>
+              )}
 
               <button
                 type="button"
-                onClick={() => setStep('email')}
-                className="w-full text-xs font-bold text-muted-foreground hover:text-primary transition-colors text-center block pt-2"
+                onClick={() => {
+                  setMode('sign_in');
+                  setResetStep('request');
+                }}
+                className="w-full text-xs font-bold text-muted-foreground hover:text-primary transition-colors text-center flex items-center justify-center gap-1.5 pt-2 cursor-pointer"
               >
-                {isRtl ? 'تغيير البريد الإلكتروني' : 'Change email address'}
+                {isRtl ? <ArrowRight className="w-3.5 h-3.5" /> : <ArrowLeft className="w-3.5 h-3.5" />}
+                <span>{isRtl ? 'العودة لشاشة تسجيل الدخول' : 'Back to Sign In'}</span>
               </button>
-            </form>
+            </div>
           )}
         </motion.div>
       </div>

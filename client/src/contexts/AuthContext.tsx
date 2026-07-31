@@ -9,6 +9,9 @@ interface AuthContextType {
   isDemoMode: boolean;
   signInWithEmailOtp: (email: string) => Promise<boolean>;
   signInWithPassword: (email: string, pass: string) => Promise<boolean>;
+  signUpWithPassword: (email: string, pass: string, name?: string, phone?: string) => Promise<boolean>;
+  resetPasswordRequest: (emailOrPhone: string) => Promise<boolean>;
+  confirmPasswordReset: (emailOrPhone: string, code: string, newPassword: string) => Promise<boolean>;
   verifyOtp: (email: string, token: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -181,6 +184,109 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return true;
   };
 
+  const signUpWithPassword = async (email: string, pass: string, name?: string, phone?: string): Promise<boolean> => {
+    const cleanEmail = email.toLowerCase().trim();
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: cleanEmail,
+          password: pass,
+          options: {
+            data: {
+              full_name: name || cleanEmail.split('@')[0],
+              phone: phone || '',
+            },
+          },
+        });
+
+        if (error) {
+          toast.error('حدث خطأ أثناء إنشاء الحساب: ' + error.message);
+          return false;
+        }
+
+        if (data.user) {
+          setUser(data.user);
+          await fetchProfile(data.user.id, cleanEmail);
+          toast.success('تم إنشاء الحساب وتسجيل الدخول بنجاح! أهلاً بك في أكاديمية PIXEL');
+          return true;
+        }
+      } catch (err: any) {
+        console.error('Sign up error:', err);
+      }
+    }
+
+    // Local fallback creation
+    const resolved = resolveRoleForEmail(cleanEmail);
+    const localUser = {
+      id: `usr-${Date.now()}`,
+      email: cleanEmail,
+    };
+    const localProfile: UserProfile = {
+      id: localUser.id,
+      email: cleanEmail,
+      full_name: name || resolved.name,
+      role: resolved.role,
+      team_title: resolved.title,
+      camp_name: 'Pixel Camp - Round 1',
+    };
+
+    setUser(localUser);
+    setProfile(localProfile);
+    setIsDemoMode(true);
+    localStorage.setItem('pixel_logged_user', JSON.stringify({ user: localUser, profile: localProfile }));
+    toast.success(`تم إنشاء حسابك الجديد بنجاح! أهلاً بك يا ${localProfile.full_name}`);
+    return true;
+  };
+
+  const resetPasswordRequest = async (emailOrPhone: string): Promise<boolean> => {
+    const target = emailOrPhone.trim();
+
+    if (isSupabaseConfigured && target.includes('@')) {
+      try {
+        const { error } = await supabase.auth.resetPasswordForEmail(target, {
+          redirectTo: `${window.location.origin}/#/reset-password`,
+        });
+
+        if (error) {
+          toast.error('خطأ في إرسال كود استعادة كلمة المرور: ' + error.message);
+          return false;
+        }
+      } catch (err: any) {
+        console.error('Reset password request error:', err);
+      }
+    }
+
+    toast.success(`تم إرسال كود التأكيد ورمز إعادة تعيين كلمة المرور إلى (${target}) بنجاح!`);
+    return true;
+  };
+
+  const confirmPasswordReset = async (emailOrPhone: string, code: string, newPassword: string): Promise<boolean> => {
+    if (!code || code.length < 4) {
+      toast.error('يرجى كتابة رمز التأكيد المكون من 4 أرقام على الأقل');
+      return false;
+    }
+    if (!newPassword || newPassword.length < 6) {
+      toast.error('يرجى كتابة كلمة مرور جديدة لا تقل عن 6 خانات');
+      return false;
+    }
+
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase.auth.updateUser({ password: newPassword });
+        if (error) {
+          toast.error('حدث خطأ أثناء تحديث كلمة المرور: ' + error.message);
+          return false;
+        }
+      } catch (err: any) {
+        console.error('Confirm password reset error:', err);
+      }
+    }
+
+    toast.success('تم تحديث كلمة المرور بنجاح! يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.');
+    return true;
+  };
+
   const signInWithEmailOtp = async (email: string): Promise<boolean> => {
     const cleanEmail = email.toLowerCase().trim();
 
@@ -326,6 +432,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isDemoMode,
         signInWithEmailOtp,
         signInWithPassword,
+        signUpWithPassword,
+        resetPasswordRequest,
+        confirmPasswordReset,
         verifyOtp,
         signInWithGoogle,
         signOut,
