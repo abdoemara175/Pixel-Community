@@ -19,7 +19,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Master Founder Email & Admin Defaults
-export const MASTER_ADMIN_EMAIL = 'admin@pixel.edu';
+export const MASTER_ADMIN_EMAIL = 'abdoemara.175@gmail.com';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any | null>(null);
