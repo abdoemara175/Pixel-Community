@@ -78,12 +78,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+      <div
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto"
+        onClick={onClose}
+      >
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-md bg-card/95 border border-border/80 rounded-3xl p-6 md:p-8 shadow-2xl overflow-hidden"
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-md bg-card/95 border border-border/80 rounded-3xl p-6 md:p-8 shadow-2xl overflow-hidden my-auto"
           dir={isRtl ? 'rtl' : 'ltr'}
         >
           {/* Close Button */}
