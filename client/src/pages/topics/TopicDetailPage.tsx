@@ -5,7 +5,9 @@ import { useLocation, useParams } from 'wouter';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import EditTopicModal from '@/components/EditTopicModal';
+import { TopicQuizModal } from '@/components/TopicQuizModal';
 import { educationalContent as pixelContent } from '@/lib/educationalContent';
+import { toast } from 'sonner';
 import {
   ArrowLeft,
   ArrowRight,
@@ -36,6 +38,8 @@ export default function TopicDetailPage() {
   const [direction, setDirection] = useState(0);
   const [viewMode, setViewMode] = useState<'slides' | 'list'>('slides');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
+  const [isPassed, setIsPassed] = useState(false);
 
   // Find topic and its parent section
   let foundSection: typeof pixelContent.sections[0] | null = null;
@@ -467,6 +471,32 @@ export default function TopicDetailPage() {
                   <ChevronRight className="w-5 h-5" />
                 </motion.button>
               </div>
+
+              {/* Challenge Quiz Banner CTA */}
+              <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-amber-500/15 via-primary/10 to-amber-500/15 border-2 border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500 text-amber-950 font-bold text-xs mb-2">
+                    <Award className="w-4 h-4" />
+                    <span>{isRtl ? 'اختبار التحدي والاعتماد' : 'Unit Challenge Quiz'}</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground">
+                    {isRtl ? 'هل اختبرت فهمك الحقيقي لهذه الوحدة؟' : 'Ready to verify your mastery for this topic?'}
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {isRtl
+                      ? 'اجتياز الاختبار بدرجة 80%+ يفتح لك المستوى التالي ويمنحك شارة الإنجاز'
+                      : 'Pass with 80%+ to unlock the next level and get your achievement badge'}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setIsQuizModalOpen(true)}
+                  className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-amber-950 font-extrabold rounded-xl text-sm shadow-md flex items-center justify-center gap-2 transition-all shrink-0 cursor-pointer"
+                >
+                  <Award className="w-5 h-5" />
+                  <span>{isRtl ? 'بدء اختبار التحدي 🏆' : 'Start Challenge Quiz 🏆'}</span>
+                </button>
+              </div>
             </div>
           ) : (
             /* ================= Full List View Fallback ================= */
@@ -498,6 +528,23 @@ export default function TopicDetailPage() {
                   </motion.div>
                 );
               })}
+
+              <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-amber-500/15 via-primary/10 to-amber-500/15 border-2 border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+                <div>
+                  <h3 className="text-lg font-bold text-foreground">
+                    {isRtl ? 'خوض اختبار التحدي لهذه الوحدة' : 'Take Topic Challenge Quiz'}
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {isRtl ? 'مطلوب 80% للنجاح واجتياز التحدي' : 'Requires 80% score to pass'}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsQuizModalOpen(true)}
+                  className="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-amber-950 font-bold rounded-xl text-sm shrink-0"
+                >
+                  {isRtl ? 'بدء التحدي 🏆' : 'Start Quiz 🏆'}
+                </button>
+              </div>
             </div>
           )}
 
@@ -539,6 +586,15 @@ export default function TopicDetailPage() {
           </div>
         </div>
       </section>
+
+      <TopicQuizModal
+        isOpen={isQuizModalOpen}
+        onClose={() => setIsQuizModalOpen(false)}
+        topicId={foundTopic.id}
+        topicTitleAr={foundTopic.titleAr}
+        topicTitleEn={foundTopic.titleEn}
+        onQuizPassed={() => setIsPassed(true)}
+      />
 
       <EditTopicModal
         isOpen={isEditModalOpen}

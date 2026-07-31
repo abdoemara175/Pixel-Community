@@ -179,17 +179,20 @@ export default function StudentDashboard() {
         <div className="container">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-card/90 backdrop-blur-xl border border-border/80 p-6 md:p-8 rounded-3xl shadow-xl">
             <div className="flex items-center gap-5">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center text-3xl font-black shadow-lg shadow-primary/30">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center text-3xl font-black shadow-lg shadow-primary/30 shrink-0">
                 {profile.full_name?.charAt(0).toUpperCase() || 'S'}
               </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="px-3 py-1 bg-primary/15 text-primary border border-primary/30 rounded-full text-xs font-extrabold flex items-center gap-1">
                     <GraduationCap className="w-3.5 h-3.5" />
-                    {profile.role === 'admin' ? (isRtl ? 'حساب أدمن / مدرس' : 'Admin / Teacher') : (isRtl ? 'حساب طالب' : 'Student Account')}
+                    {profile.team_title || (isRtl ? 'طالب شغوف' : 'Passionate Student')}
+                  </span>
+                  <span className="px-3 py-1 bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded-full text-xs font-bold">
+                    ⛺ {profile.camp_name || 'Pixel Camp - Round 1'}
                   </span>
                   {isDemoMode && (
-                    <span className="px-2.5 py-0.5 bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded-full text-[11px] font-bold">
+                    <span className="px-2.5 py-0.5 bg-secondary text-muted-foreground border border-border rounded-full text-[11px] font-bold">
                       Demo Mode
                     </span>
                   )}

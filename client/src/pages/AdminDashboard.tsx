@@ -104,17 +104,19 @@ export default function AdminDashboard() {
     toast.success(isRtl ? 'تم حفظ المحتوى الجديد وتحديث الموقع!' : 'Topic saved!');
   };
 
-  if (!profile || profile.role !== 'admin') {
+  const isTeamMember = profile && ['founder', 'admin', 'lead', 'instructor_uiux', 'media', 'hr'].includes(profile.role);
+
+  if (!profile || !isTeamMember) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
         <div className="container py-24 text-center">
           <ShieldCheck className="w-16 h-16 text-amber-500 mx-auto mb-4" />
           <h1 className="text-2xl font-black text-foreground mb-2">
-            {isRtl ? 'صفحة خاصة بالإدارة والمدرسين فقط' : 'Admin & Teachers Only'}
+            {isRtl ? 'صفحة خاصة بالفريق القيادي والمدربين فقط' : 'Team Leads & Admins Only'}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {isRtl ? 'يمكنك تحويل حسابك التجريبي إلى أدمن من خلال تسجيل الدخول التجريبي' : 'You can switch role via Demo Admin login'}
+            {isRtl ? 'يمكنك تحويل حسابك التجريبي إلى أحد أدوار القيادة من خلال تسجيل الدخول التجريبي' : 'You can switch role via Demo Login options'}
           </p>
         </div>
       </div>
@@ -349,45 +351,77 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* TAB 3: Students Management */}
+          {/* TAB 3: Students & Team Role Management */}
           {activeTab === 'students' && (
             <div className="bg-card border border-border p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
-              <h2 className="text-lg font-extrabold text-foreground flex items-center gap-2">
-                <Users className="w-5 h-5 text-primary" />
-                <span>{isRtl ? 'قائمة الطلاب ومستوى التقدم' : 'Registered Students Progress'}</span>
-              </h2>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-extrabold text-foreground flex items-center gap-2">
+                    <Users className="w-5 h-5 text-primary" />
+                    <span>{isRtl ? 'إدارة أعضاء الفريق والطلاب والأدوار القيادية' : 'Team Roles & Students Management'}</span>
+                  </h2>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {isRtl ? 'التحكم في أدوار الأعضاء (Founder, Admin, Instructor UI/UX, HR, Media, Student)' : 'Assign roles and monitor camp progress'}
+                  </p>
+                </div>
+              </div>
 
-              <div className="space-y-3">
-                {students.map((st) => (
+              <div className="space-y-4">
+                {[
+                  { id: 'u1', name: 'عبدو عمارة', email: 'abdoemara@pixel.edu', role: 'founder', title: 'Pixel Founder & Master Lead', camp: 'Pixel Camp - Round 1', progress: '100%' },
+                  { id: 'u2', name: 'سارة خالد المنصوري', email: 'sara.lead@pixel.edu', role: 'instructor_uiux', title: 'Lead UI/UX Instructor', camp: 'Pixel Camp - Round 1', progress: '94%' },
+                  { id: 'u3', name: 'عمر النجار', email: 'omar.hr@pixel.edu', role: 'hr', title: 'Human Resources Lead', camp: 'Pixel Camp - Round 1', progress: '90%' },
+                  { id: 'u4', name: 'مريم محمود', email: 'mariam.media@pixel.edu', role: 'media', title: 'Media & Branding Lead', camp: 'Pixel Camp - Round 1', progress: '88%' },
+                  { id: 'u5', name: 'أحمد محمود العلي', email: 'ahmed@student.edu', role: 'student', title: 'Pixel Camp Student', camp: 'Pixel Camp - Round 1', progress: '85%' },
+                ].map((st) => (
                   <div
                     key={st.id}
-                    className="p-4 rounded-2xl border border-border bg-background flex items-center justify-between gap-4"
+                    className="p-4 md:p-5 rounded-2xl border border-border bg-background flex flex-col md:flex-row md:items-center justify-between gap-4"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary font-bold flex items-center justify-center text-lg shrink-0">
                         {st.name.charAt(0)}
                       </div>
-                      <div>
-                        <p className="text-xs font-extrabold text-foreground">{st.name}</p>
-                        <p className="text-[11px] text-muted-foreground">{st.email}</p>
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-extrabold text-sm text-foreground">{st.name}</span>
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-primary/15 text-primary border border-primary/30">
+                            {st.title}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{st.email} • {st.camp}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 text-start sm:text-end">
+                    {/* Role Control Selector */}
+                    <div className="flex flex-wrap items-center gap-3">
                       <div>
+                        <span className="text-[10px] font-bold text-muted-foreground block mb-1">
+                          {isRtl ? 'تعديل الدور' : 'Change Role'}
+                        </span>
+                        <select
+                          defaultValue={st.role}
+                          onChange={(e) => {
+                            toast.success(isRtl ? `تم تحديث دور ${st.name} إلى ${e.target.value}` : `Updated role for ${st.name}`);
+                          }}
+                          className="px-3 py-1.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold outline-none"
+                        >
+                          <option value="founder">{isRtl ? 'الربان (Founder)' : 'Founder'}</option>
+                          <option value="admin">{isRtl ? 'أدمن النظام' : 'Admin'}</option>
+                          <option value="lead">{isRtl ? 'قائد تنفيذي' : 'Lead'}</option>
+                          <option value="instructor_uiux">{isRtl ? 'مدرب UI/UX' : 'UI/UX Instructor'}</option>
+                          <option value="media">{isRtl ? 'مسؤول الميديا' : 'Media Lead'}</option>
+                          <option value="hr">{isRtl ? 'مسؤول HR' : 'HR Lead'}</option>
+                          <option value="student">{isRtl ? 'طالب (Student)' : 'Student'}</option>
+                        </select>
+                      </div>
+
+                      <div className="text-start md:text-end border-s border-border ps-3">
                         <span className="text-[10px] font-bold text-muted-foreground block">
                           {isRtl ? 'نسبة الإنجاز' : 'Progress'}
                         </span>
-                        <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">
+                        <span className="text-xs font-black text-emerald-500">
                           {st.progress}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-bold text-muted-foreground block">
-                          {isRtl ? 'الواجبات' : 'Assignments'}
-                        </span>
-                        <span className="text-xs font-black text-foreground">
-                          {st.assignments}
                         </span>
                       </div>
                     </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, Clock, BookOpen, Lightbulb, Eye, Zap, CheckCircle, MessageCircle, Award, X, ExternalLink, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Link } from 'wouter';
 import type { Topic, Step } from '@/lib/content';
@@ -138,20 +138,42 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
   const t = (key: keyof Translations) => getTranslation(language, key);
   const isRtl = language === 'ar';
 
+  // Keyboard Navigation with Arrow Keys
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+
+      if (e.key === 'ArrowRight') {
+        if (isRtl) onPrev();
+        else onNext();
+      } else if (e.key === 'ArrowLeft') {
+        if (isRtl) onNext();
+        else onPrev();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [index, totalSteps, isRtl, onNext, onPrev]);
+
   return (
     <div className="space-y-6">
       {/* Full Step Card */}
-      <div className={`${getStepTypeColor(step.type)} rounded-lg p-6 md:p-8 border-2 text-start`}>
+      <div className={`${getStepTypeColor(step.type)} rounded-xl p-6 md:p-8 border-2 text-start relative group shadow-sm`}>
         {/* Header - Badge as Main Title */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className={`inline-flex items-center gap-3 px-4 md:px-6 py-3 rounded-full border-2 text-lg md:text-xl font-bold ${getStepTypeColor(step.type)}`}>
+        <div className="flex items-center justify-between mb-6">
+          <div className={`inline-flex items-center gap-3 px-4 md:px-6 py-3 rounded-full border-2 text-base md:text-lg font-bold ${getStepTypeColor(step.type)}`}>
             {getStepIcon(step.type)}
             <span>{getStepTypeLabel(step.type, language)}</span>
           </div>
+
+          <span className="text-xs font-semibold opacity-70">
+            {t('step')} {index + 1} {t('of')} {totalSteps}
+          </span>
         </div>
 
         {/* Content */}
-        <div className="text-foreground text-base leading-relaxed whitespace-pre-wrap mb-6">
+        <div className="text-foreground text-base md:text-lg leading-relaxed whitespace-pre-wrap mb-6 font-medium">
           {step.content}
         </div>
 
@@ -161,7 +183,7 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
             <span>{t('progress')}</span>
             <span>{Math.round(((index + 1) / totalSteps) * 100)}%</span>
           </div>
-          <div className="w-full bg-card/50 rounded-full h-3 overflow-hidden">
+          <div className="w-full bg-card/50 rounded-full h-3 overflow-hidden border border-border/30">
             <div
               className="h-full transition-all duration-300 rounded-full"
               style={{
@@ -173,24 +195,24 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
         </div>
       </div>
 
-      {/* Navigation Buttons */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4">
+      {/* Navigation Buttons with prominent Arrows */}
+      <div className="flex items-center justify-between gap-4 bg-card p-3 rounded-xl border border-border shadow-sm">
         <button
           onClick={onPrev}
           disabled={index === 0}
-          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-sm md:text-base"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-border text-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-all font-bold text-sm md:text-base shadow-sm"
         >
-          {isRtl ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-          {t('previous')}
+          {isRtl ? <ArrowRight className="w-5 h-5 text-primary" /> : <ArrowLeft className="w-5 h-5 text-primary" />}
+          <span>{t('previous')}</span>
         </button>
 
         <div className="flex gap-2">
           {Array.from({ length: totalSteps }).map((_, i) => (
             <div
               key={i}
-              className={`w-3 h-3 rounded-full transition-colors ${
+              className={`w-3 h-3 rounded-full transition-all cursor-pointer ${
                 i === index
-                  ? 'bg-primary'
+                  ? 'bg-primary scale-125'
                   : i < index
                     ? 'bg-primary/50'
                     : 'bg-border'
@@ -203,22 +225,22 @@ const StepFullView = ({ step, index, totalSteps, trackColor, onNext, onPrev, lan
         <button
           onClick={onNext}
           disabled={index === totalSteps - 1}
-          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm md:text-base"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-primary-foreground hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-sm md:text-base shadow-md"
           style={{ backgroundColor: trackColor }}
         >
-          {t('next')}
-          {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+          <span>{t('next')}</span>
+          {isRtl ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
         </button>
       </div>
 
       {/* Completion Message */}
       {index === totalSteps - 1 && (
-        <div className="bg-green-50 dark:bg-green-950 border-2 border-green-200 dark:border-green-800 rounded-lg p-4 md:p-6 text-center">
-          <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400 mx-auto mb-3" />
-          <p className="text-green-700 dark:text-green-300 font-semibold text-lg">
+        <div className="bg-emerald-50 dark:bg-emerald-950/60 border-2 border-emerald-300 dark:border-emerald-700 rounded-xl p-4 md:p-6 text-center shadow-sm">
+          <CheckCircle className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mx-auto mb-3" />
+          <p className="text-emerald-800 dark:text-emerald-200 font-bold text-lg">
             ✓ {t('congratsTopic')}
           </p>
-          <p className="text-green-600 dark:text-green-400 text-sm mt-2">
+          <p className="text-emerald-700 dark:text-emerald-300 text-sm mt-1">
             {t('nextTopicPrompt')}
           </p>
         </div>

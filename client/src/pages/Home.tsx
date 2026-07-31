@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
+import { CampLeaderboard } from '@/components/CampLeaderboard';
 import { motion } from 'framer-motion';
 import { useLocation } from 'wouter';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -158,6 +159,13 @@ export default function Home() {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* Camp Top Performers Leaderboard Section */}
+      <section className="py-12 bg-secondary/10 border-t border-border/40">
+        <div className="container">
+          <CampLeaderboard />
         </div>
       </section>
 

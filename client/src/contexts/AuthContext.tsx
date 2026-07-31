@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase, isSupabaseConfigured, type UserProfile } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured, type UserProfile, type UserRole } from '@/lib/supabase';
 import { toast } from 'sonner';
 
 interface AuthContextType {
@@ -11,8 +11,8 @@ interface AuthContextType {
   verifyOtp: (email: string, token: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
-  loginAsDemo: (role: 'student' | 'admin') => void;
-  updateProfileRole: (newRole: 'student' | 'admin') => void;
+  loginAsDemo: (role: UserRole, customTitle?: string) => void;
+  updateProfileRole: (userId: string, newRole: UserRole, teamTitle?: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -59,6 +59,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } catch {
           // ignore
         }
+      } else {
+        // Default demo login as student
+        const defaultDemoUser = {
+          id: 'demo-student-id',
+          email: 'student@pixel.edu',
+        };
+        const defaultDemoProfile: UserProfile = {
+          id: defaultDemoUser.id,
+          email: defaultDemoUser.email,
+          full_name: 'طالب Pixel المميز',
+          role: 'student',
+          team_title: 'Pixel Camp - Round 1 Student',
+          camp_name: 'Pixel Camp - Round 1',
+        };
+        setUser(defaultDemoUser);
+        setProfile(defaultDemoProfile);
+        setIsDemoMode(true);
       }
       setLoading(false);
     }
@@ -85,6 +102,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           email,
           full_name: email.split('@')[0],
           role: 'student',
+          team_title: 'طالب شغوف',
+          camp_name: 'Pixel Camp - Round 1',
         };
         setProfile(defaultProf);
       }
@@ -97,8 +116,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithEmailOtp = async (email: string): Promise<boolean> => {
     if (!isSupabaseConfigured) {
-      toast.info('تطبيق النمط التجريبي (Demo Mode) بدون ربط مفاتيح Supabase', {
-        description: 'يمكنك اختيار حزمة الطالب أو الأدمن للتجربة المباشرة!',
+      toast.info('تطبيق النمط التجريبي (Demo Mode)', {
+        description: 'تم اختيار وضع العرض التجريبي التلقائي!',
       });
       loginAsDemo('student');
       return true;
@@ -187,35 +206,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     toast.success('تم تسجيل الخروج بنجاح');
   };
 
-  const loginAsDemo = (role: 'student' | 'admin') => {
+  const loginAsDemo = (role: UserRole, customTitle?: string) => {
+    const roleTitles: Record<UserRole, { name: string; title: string }> = {
+      founder: { name: 'م/ عبدو عمارة (الربان / Founder)', title: 'Pixel Founder & Master Lead' },
+      admin: { name: 'مشرف النظام الرئيسي', title: 'Community Admin' },
+      lead: { name: 'قائد الفريق التنفيذي', title: 'Executive Team Lead' },
+      instructor_uiux: { name: 'مدرب مسار UI/UX', title: 'Lead UI/UX Instructor' },
+      media: { name: 'مسؤول الميديا والإعلام', title: 'Media & Branding Lead' },
+      hr: { name: 'مسؤول الموارد البشرية (HR)', title: 'Human Resources Lead' },
+      student: { name: 'طالب Pixel المميز', title: 'Pixel Camp Student' },
+    };
+
+    const targetInfo = roleTitles[role] || roleTitles.student;
+
     const demoUser = {
-      id: role === 'admin' ? 'demo-admin-id' : 'demo-student-id',
-      email: role === 'admin' ? 'admin@pixel.edu' : 'student@pixel.edu',
+      id: `demo-${role}-id`,
+      email: `${role}@pixel.edu`,
     };
     const demoProfile: UserProfile = {
       id: demoUser.id,
       email: demoUser.email,
-      full_name: role === 'admin' ? 'الأستاذ الأدمن (الإدارة)' : 'الطالب التجريبي',
+      full_name: targetInfo.name,
       role,
-      avatar_url: undefined,
+      team_title: customTitle || targetInfo.title,
+      camp_name: 'Pixel Camp - Round 1',
     };
 
     setUser(demoUser);
     setProfile(demoProfile);
     setIsDemoMode(true);
     localStorage.setItem('pixel_demo_user', JSON.stringify({ user: demoUser, profile: demoProfile }));
-    toast.success(`تم دخول الحساب التجريبي بنجاح بصفة: ${role === 'admin' ? 'أدمن / مدرس' : 'طالب'}`);
+    toast.success(`تم التغيير إلى صفة: ${targetInfo.name} (${demoProfile.team_title})`);
   };
 
-  const updateProfileRole = (newRole: 'student' | 'admin') => {
-    if (profile) {
-      const updated = { ...profile, role: newRole };
+  const updateProfileRole = async (targetUserId: string, newRole: UserRole, teamTitle?: string) => {
+    if (profile?.id === targetUserId) {
+      const updated = { ...profile, role: newRole, team_title: teamTitle || profile.team_title };
       setProfile(updated);
       if (isDemoMode) {
         localStorage.setItem('pixel_demo_user', JSON.stringify({ user, profile: updated }));
       }
-      toast.success(`تم التغيير إلى: ${newRole === 'admin' ? 'حساب أدمن' : 'حساب طالب'}`);
     }
+
+    if (isSupabaseConfigured) {
+      try {
+        await supabase
+          .from('profiles')
+          .update({ role: newRole, team_title: teamTitle })
+          .eq('id', targetUserId);
+      } catch (err) {
+        console.error('Failed to update remote profile:', err);
+      }
+    }
+
+    toast.success('تم تحديث الدور الوظيفي والأذن بنجاح!');
   };
 
   return (

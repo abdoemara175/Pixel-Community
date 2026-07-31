@@ -12,22 +12,53 @@ export const isSupabaseConfigured = Boolean(
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+export type UserRole = 
+  | 'founder'
+  | 'admin'
+  | 'lead'
+  | 'instructor_uiux'
+  | 'media'
+  | 'hr'
+  | 'student';
+
 export interface UserProfile {
   id: string;
   email: string;
   full_name: string;
-  role: 'student' | 'admin';
+  role: UserRole;
+  team_title?: string;
   avatar_url?: string;
+  camp_name?: string;
   created_at?: string;
 }
 
 export interface UserProgressItem {
   id?: string;
   user_id: string;
-  section_id: string;
+  section_id?: string;
   topic_id: string;
+  track_id?: string;
   completed: boolean;
+  score?: number;
   updated_at?: string;
+}
+
+export interface QuizSubmissionItem {
+  id?: string;
+  user_id: string;
+  topic_id: string;
+  score: number;
+  total_questions: number;
+  passed: boolean;
+  submitted_at?: string;
+}
+
+export interface AchievementItem {
+  id?: string;
+  user_id: string;
+  badge_title: string;
+  badge_icon: string;
+  unlocked_at?: string;
 }
 
 export interface AssignmentItem {
@@ -51,3 +82,4 @@ export interface NotificationItem {
   read: boolean;
   created_at: string;
 }
+

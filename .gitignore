@@ -20,8 +20,9 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Dependency directories
+# Dependency & Build directories
 node_modules/
+dist/
 jspm_packages/
 
 # Optional npm cache directory
