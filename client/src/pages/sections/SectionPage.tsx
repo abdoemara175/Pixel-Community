@@ -66,7 +66,9 @@ export default function SectionPage() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [sectionId]);
 
-  const section = pixelContent.sections.find((s) => s.id === sectionId);
+  const section = pixelContent.sections.find(
+    (s) => s.id === sectionId || (sectionId === 'ux-ui' && s.id === 'integration') || (sectionId === 'integration' && s.id === 'integration')
+  );
 
   if (!section) {
     return (
