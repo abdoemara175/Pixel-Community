@@ -12,6 +12,9 @@ import SectionPage from "./pages/sections/SectionPage";
 import TopicDetailPage from "./pages/topics/TopicDetailPage";
 import StudentDashboard from "./pages/StudentDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import SettingsPage from "./pages/SettingsPage";
+import CertificatesPage from "./pages/CertificatesPage";
+import BookmarksPage from "./pages/BookmarksPage";
 
 import { useEffect } from "react";
 import { useLocation } from "wouter";
@@ -38,6 +41,9 @@ function Router() {
         <Route path="/topics/:topicId" component={TopicDetailPage} />
         <Route path="/student-dashboard" component={StudentDashboard} />
         <Route path="/admin-dashboard" component={AdminDashboard} />
+        <Route path="/settings" component={SettingsPage} />
+        <Route path="/certificates" component={CertificatesPage} />
+        <Route path="/bookmarks" component={BookmarksPage} />
         <Route path="/404" component={NotFound} />
         {/* Final fallback route */}
         <Route component={NotFound} />

@@ -24,7 +24,8 @@ import {
   ChevronRight,
   Layers,
   List,
-  Edit3
+  Edit3,
+  Bookmark
 } from 'lucide-react';
 
 export default function TopicDetailPage() {
@@ -40,6 +41,42 @@ export default function TopicDetailPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [isPassed, setIsPassed] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  useEffect(() => {
+    if (!profile || !topicId) return;
+    const saved = localStorage.getItem(`pixel_bookmarks_${profile.id}`);
+    if (saved) {
+      try {
+        const list: string[] = JSON.parse(saved);
+        setIsBookmarked(list.includes(topicId));
+      } catch {
+        // ignore
+      }
+    }
+  }, [profile, topicId]);
+
+  const toggleBookmark = () => {
+    if (!profile) {
+      toast.error(isRtl ? 'يرجى تسجيل الدخول لحفظ الدرس' : 'Please sign in to bookmark topics');
+      return;
+    }
+    const saved = localStorage.getItem(`pixel_bookmarks_${profile.id}`);
+    let list: string[] = [];
+    if (saved) {
+      try { list = JSON.parse(saved); } catch {}
+    }
+    if (list.includes(topicId)) {
+      list = list.filter((id) => id !== topicId);
+      setIsBookmarked(false);
+      toast.success(isRtl ? 'تم إزالة الدرس من المحفوظات' : 'Removed from bookmarks');
+    } else {
+      list.push(topicId);
+      setIsBookmarked(true);
+      toast.success(isRtl ? 'تم حفظ الدرس بنجاح للمراجعة!' : 'Topic saved to bookmarks!');
+    }
+    localStorage.setItem(`pixel_bookmarks_${profile.id}`, JSON.stringify(list));
+  };
 
   // Find topic and its parent section
   let foundSection: typeof pixelContent.sections[0] | null = null;
@@ -335,6 +372,20 @@ export default function TopicDetailPage() {
                   {isRtl ? 'عرض قائمة' : 'List View'}
                 </button>
               </div>
+
+              {/* Bookmark Topic Button */}
+              <button
+                onClick={toggleBookmark}
+                title={isRtl ? 'حفظ الدرس للمراجعة' : 'Bookmark topic'}
+                className={`px-3 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer ${
+                  isBookmarked
+                    ? 'bg-emerald-500 text-white shadow-emerald-500/20'
+                    : 'bg-card border border-border text-foreground hover:bg-muted'
+                }`}
+              >
+                <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+                <span>{isBookmarked ? (isRtl ? 'محفوظ' : 'Saved') : (isRtl ? 'حفظ الدرس' : 'Save')}</span>
+              </button>
 
               {/* Admin In-Place CMS Edit Button */}
               {profile?.role === 'admin' && (

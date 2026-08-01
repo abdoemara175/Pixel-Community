@@ -5,6 +5,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import AuthModal from '@/components/AuthModal';
+import UserDropdown from '@/components/UserDropdown';
 import { getTranslation, type Translations } from '@/lib/i18n';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 
@@ -239,24 +240,9 @@ export default function Header() {
               </AnimatePresence>
             </motion.button>
 
-            {/* Auth / Dashboard Button */}
+            {/* User Dropdown / Auth Trigger */}
             {profile ? (
-              <div className="flex items-center gap-1.5 ms-1">
-                <button
-                  onClick={() => setLocation(profile.role === 'admin' ? '/admin-dashboard' : '/student-dashboard')}
-                  className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer"
-                >
-                  {profile.role === 'admin' ? <ShieldCheck className="w-4 h-4" /> : <LayoutDashboard className="w-4 h-4" />}
-                  <span className="hidden sm:inline">{profile.role === 'admin' ? (isRtl ? 'لوحة الأدمن' : 'Admin CMS') : (isRtl ? 'حسابي' : 'Dashboard')}</span>
-                </button>
-                <button
-                  onClick={signOut}
-                  title={isRtl ? 'تسجيل الخروج' : 'Sign Out'}
-                  className="p-2 text-muted-foreground hover:text-destructive transition-colors rounded-lg"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
+              <UserDropdown />
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
