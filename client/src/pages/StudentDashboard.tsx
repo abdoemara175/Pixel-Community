@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLocation } from 'wouter';
 import Header from '@/components/Header';
+import StudentShowcase from '@/components/StudentShowcase';
 import { educationalContent } from '@/lib/educationalContent';
 import { supabase, isSupabaseConfigured, type AssignmentItem, type NotificationItem } from '@/lib/supabase';
 import {
@@ -393,6 +394,9 @@ export default function StudentDashboard() {
                   </div>
                 )}
               </div>
+
+              {/* Community Student Showcase */}
+              <StudentShowcase />
             </div>
 
             {/* Right Column (1 Col): Notifications & Fast Track Progress */}

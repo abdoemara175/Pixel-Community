@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import TrackSection from '@/components/TrackSection';
+import LearningRoadmap from '@/components/LearningRoadmap';
 import { getTracks } from '@/lib/content';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslation, type Translations } from '@/lib/i18n';
@@ -33,7 +34,7 @@ export default function AllTracksPage() {
       </div>
 
       {/* Page Header */}
-      <section className="py-8 md:py-12 lg:py-16 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <section className="py-8 md:py-12 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -58,6 +59,13 @@ export default function AllTracksPage() {
               {t('selectTrackToLearn')}
             </motion.p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Interactive Learning Roadmap Banner */}
+      <section className="py-6 border-b border-border/50">
+        <div className="container">
+          <LearningRoadmap />
         </div>
       </section>
 

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Moon, Sun, Globe, User, LogOut, ShieldCheck, LayoutDashboard } from 'lucide-react';
+import { Menu, X, Moon, Sun, Globe, User, LogOut, ShieldCheck, LayoutDashboard, Search } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import AuthModal from '@/components/AuthModal';
 import UserDropdown from '@/components/UserDropdown';
+import CommandPalette from '@/components/CommandPalette';
 import { getTranslation, type Translations } from '@/lib/i18n';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 
@@ -18,6 +19,7 @@ interface NavItem {
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('#home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentPath, setCurrentPath] = useState('/');
@@ -190,6 +192,19 @@ export default function Header() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
+            {/* Command Palette Quick Search Button */}
+            <button
+              onClick={() => setIsCommandPaletteOpen(true)}
+              className="px-2.5 py-1.5 rounded-xl bg-muted/60 hover:bg-muted border border-border/80 text-foreground transition-all duration-200 flex items-center gap-2 text-xs font-bold shadow-sm cursor-pointer"
+              aria-label={isRtl ? 'البحث الذكي' : 'Search topics'}
+              title={isRtl ? 'البحث السريع (Ctrl + K)' : 'Quick Search (Ctrl + K)'}
+            >
+              <Search className="w-4 h-4 text-primary" />
+              <span className="hidden md:inline-block text-[11px] text-muted-foreground font-mono font-bold bg-background px-1.5 py-0.5 rounded border border-border/60">
+                Ctrl K
+              </span>
+            </button>
+
             <motion.button
               variants={iconButtonVariants}
               initial="rest"
@@ -318,6 +333,7 @@ export default function Header() {
       </div>
 
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+      <CommandPalette isOpen={isCommandPaletteOpen} onClose={() => setIsCommandPaletteOpen(false)} />
     </header>
   );
 }

@@ -55,7 +55,12 @@ export default function UserDropdown() {
   };
 
   return (
-    <div className="relative ms-1" ref={dropdownRef} dir={isRtl ? 'rtl' : 'ltr'}>
+    <div className="relative ms-1 flex items-center gap-2" ref={dropdownRef} dir={isRtl ? 'rtl' : 'ltr'}>
+      {/* Streak Badge */}
+      <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded-xl text-xs font-black shadow-sm" title={isRtl ? 'سلسلة الالتزام اليومي' : 'Daily Streak'}>
+        <span>🔥 3</span>
+      </div>
+
       {/* User Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -105,8 +110,8 @@ export default function UserDropdown() {
                   <span className={`px-2 py-0.5 rounded-md text-[10px] font-black border ${getRoleBadgeColor(profile.role)}`}>
                     {profile.role.toUpperCase()}
                   </span>
-                  <span className="text-[10px] text-muted-foreground font-bold truncate">
-                    {profile.team_title}
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-black bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
+                    ⚡ 150 XP
                   </span>
                 </div>
               </div>
